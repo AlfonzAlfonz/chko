@@ -1,0 +1,30 @@
+@tailwind utilities;
+@tailwind components;
+
+@layer components {
+  .info-table {
+    @apply popisky-13 uppercase;
+
+    & td {
+      @apply border-b-[1px] border-black;
+    }
+
+    & td:first-child {
+      @apply text-chkosearch h-6;
+    }
+  }
+
+  .ordered-list {
+    counter-reset: items;
+
+    & li {
+      @apply flex;
+
+      &::before {
+        @apply rounded-full bg-chkosearch w-8 h-8 inline-block text-center py-1 mr-7 flex-none;
+        counter-increment: items;
+        content: counter(items);
+      }
+    }
+  }
+}

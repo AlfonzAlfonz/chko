@@ -1,0 +1,29 @@
+@tailwind utilities;
+@tailwind components;
+
+@layer components {
+  .first {
+    @apply py-7;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: url("/static/XPR27533_zRAW.jpg");
+      background-size: cover;
+      filter: brightness(60%);
+    }
+  }
+
+  .search {
+    @apply block outline-none text-center w-full;
+
+    font-size: 100px;
+    border-bottom: 3px solid black;
+  }
+}
