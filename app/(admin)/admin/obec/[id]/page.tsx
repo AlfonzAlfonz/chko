@@ -2,7 +2,7 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { ObecTable, db } from "@/lib/db";
 import { Container } from "@mui/joy";
-import { ObecForm } from "./ObecForm";
+import { ObecForm } from "@/components/admin/ObecForm";
 
 const getData = async (id: number) => {
   return await db

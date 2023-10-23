@@ -17,6 +17,9 @@ export type ObecMetadata = {
   okres: string;
   kraj: string;
   position: [number, number];
+
+  category: "I" | "II" | "III" | "IV";
+  protectionZone: "A" | "B" | "C";
 };
 
 export type ObecData = {
@@ -26,6 +29,15 @@ export type ObecData = {
   terms: string[];
 
   links: [string, string][];
+
+  cover: FigureData;
+  characteristics: FigureData[];
+  buildings: FigureData[];
+};
+
+export type FigureData = {
+  caption: string;
+  url: string;
 };
 
 export type AdminTable = {

@@ -8,16 +8,30 @@ import {
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
 import * as React from "react";
 
+export type AutocompleteInnerProps = {
+  input?: JSX.IntrinsicElements["input"];
+  searchDecorator?: JSX.IntrinsicElements["svg"];
+};
+
 export const Autocomplete = React.forwardRef(function Autocomplete(
   props: UseAutocompleteProps<
     { label: string; value: number; slug: string },
     false,
     false,
     false
-  >,
+  > & {
+    inner?: AutocompleteInnerProps;
+    searchDecorator?: boolean;
+  },
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
-  const { disabled = false, readOnly = false, ...other } = props;
+  const {
+    disabled = false,
+    readOnly = false,
+    inner,
+    searchDecorator,
+    ...other
+  } = props;
 
   const {
     getRootProps,
@@ -45,11 +59,11 @@ export const Autocomplete = React.forwardRef(function Autocomplete(
         className={`flex gap-2 w-full ${focused ? "focused" : undefined}`}
       >
         <input
-          className="search"
           type="text"
           placeholder="Vyhledávání"
           id={id}
           {...getInputProps()}
+          {...inner?.input}
         />
       </div>
       {anchorEl ? (

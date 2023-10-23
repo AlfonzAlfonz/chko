@@ -1,18 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Autocomplete } from "./Autocomplete";
+import { AutocompleteInnerProps, Autocomplete } from "./Autocomplete";
+import { useContext } from "react";
+import { ObecListContext } from "../contexts";
 
-export const ObecSearch = ({
-  options,
-}: {
-  options: { value: number; label: string; slug: string }[];
+export const ObecSearch = (props: {
+  options?: { value: number; label: string; slug: string }[];
+  inner?: AutocompleteInnerProps;
+  searchDecorator?: boolean;
 }) => {
+  const obecList = useContext(ObecListContext);
   const router = useRouter();
 
   return (
     <Autocomplete
-      options={options}
+      {...props}
+      options={obecList.map((o) => ({
+        value: o.id,
+        label: o.metadata.name,
+        slug: o.slug,
+      }))}
       onChange={(_, val) => {
         if (!val) return;
 

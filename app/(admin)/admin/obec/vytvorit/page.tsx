@@ -1,7 +1,7 @@
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { ObecTable, db } from "@/lib/db";
 import { Container } from "@mui/joy";
-import { ObecForm } from "../[id]/ObecForm";
+import { ObecForm } from "../../../../../components/admin/ObecForm";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 
 const ObecDetail = async ({ params }: { params: { id: string } }) => {

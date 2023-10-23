@@ -52,6 +52,7 @@ const config: Config = {
           fontFamily: "Arial",
           fontSize: "13px",
           lineHeight: "17px",
+          letterSpacing: "2.86px",
         },
         ".mobil-popisky-11": {
           fontFamily: "Arial",

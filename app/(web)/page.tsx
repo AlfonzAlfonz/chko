@@ -1,21 +1,11 @@
 import { ObecSearch } from "@/components/Autocomplete/ObecSearch";
-import { db } from "@/lib/db";
 import krajraz1 from "@/public/static/Vinarice_nadhled 3.png";
 import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
 import logo from "@/public/static/logo.svg";
 import Image from "next/image";
 import "./home.css";
 
-const getData = async () => {
-  return await db
-    .selectFrom("cities")
-    .select(["id", "metadata", "slug"])
-    .execute();
-};
-
 const Home = async () => {
-  const data = await getData();
-
   return (
     <div>
       <div className="flex items-start container h-[100vh] first">
@@ -26,13 +16,7 @@ const Home = async () => {
       </div>
       <div className="container h-[100vh]">
         <div className="col-start-2 col-span-4 flex items-center justify-center flex-col">
-          <ObecSearch
-            options={data.map((o) => ({
-              value: o.id,
-              label: o.metadata.name,
-              slug: o.slug,
-            }))}
-          />
+          <ObecSearch inner={{ input: { className: "search" } }} />
           <button className="button mt-16">Vyhledat</button>
         </div>
       </div>

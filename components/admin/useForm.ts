@@ -102,11 +102,13 @@ export const useForm = <
 };
 
 type ObjectPath<T> = T extends object
-  ? {
-      [K in keyof T]-?: ObjectPath<T[K]> extends never
-        ? [K]
-        : [K] | [K, ...ObjectPath<T[K]>];
-    }[keyof T]
+  ? T extends File
+    ? never
+    : {
+        [K in keyof T]-?: ObjectPath<T[K]> extends never
+          ? [K]
+          : [K] | [K, ...ObjectPath<T[K]>];
+      }[keyof T]
   : never;
 
 type Errors<T> = T extends string | number | boolean

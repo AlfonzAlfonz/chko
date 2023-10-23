@@ -1,5 +1,18 @@
+import { ObecListProvider } from "@/components/contexts";
+import { db } from "@/lib/db";
 import { ReactNode } from "react";
 
-export default function Layout({ children }: { children: ReactNode }) {
-  return <div>{children}</div>;
-}
+const getData = async () => {
+  return await db
+    .selectFrom("cities")
+    .select(["id", "metadata", "slug"])
+    .execute();
+};
+
+const Layout = async ({ children }: { children: ReactNode }) => {
+  const obecList = await getData();
+
+  return <ObecListProvider value={obecList}>{children}</ObecListProvider>;
+};
+
+export default Layout;

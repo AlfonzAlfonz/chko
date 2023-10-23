@@ -54,6 +54,8 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           defaultView={obec.metadata.position}
           defaultZoom={16}
           options={{ scrollWheelZoom: false }}
+          category={obec.metadata.category}
+          protectionZone={obec.metadata.protectionZone}
         />
       </div>
       <div className="h-[150px] container items-center">

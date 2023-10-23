@@ -11,6 +11,8 @@ import {
   FormLabel,
   IconButton,
   Input,
+  Option,
+  Select,
   Stack,
   Table,
   Textarea,
@@ -19,6 +21,11 @@ import {
 import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import * as v from "valibot";
+import { upload } from "@vercel/blob/client";
+
+interface ObecFormValue extends ObecTable {
+  files: File[];
+}
 
 export const ObecForm = ({
   value: initialValue,
@@ -27,8 +34,12 @@ export const ObecForm = ({
   value?: ObecTable;
   onSubmit?: (obec: ObecTable) => Promise<unknown>;
 }) => {
-  const { value, errors, fieldProps, onSubmit } = useForm({
-    defaultValue: initialValue ?? (emptyObec as ObecTable),
+  const { value, errors, fieldProps, onSubmit } = useForm<
+    typeof obecScheme,
+    DeepPartial<ObecFormValue>,
+    ObecFormValue
+  >({
+    defaultValue: initialValue ?? emptyObec,
     scheme: obecScheme,
     onSubmit: async (v) => {
       await save?.(v);
@@ -39,7 +50,7 @@ export const ObecForm = ({
   return (
     <Stack className="mt-8" gap={4}>
       <Card>
-        <Typography level="h3">Obecné info</Typography>
+        <Typography level="h3">Obecné informace</Typography>
 
         <FormControl error={!!errors?.metadata?.name}>
           <FormLabel>Název obce</FormLabel>
@@ -47,17 +58,52 @@ export const ObecForm = ({
           <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
         </FormControl>
 
-        <FormControl error={!!errors?.metadata?.okres}>
-          <FormLabel>Okres</FormLabel>
-          <Input {...fieldProps<string>(["metadata", "okres"])} />
-          <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
-        </FormControl>
+        <div className="flex gap-4 w-full">
+          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
+            <FormLabel>Okres</FormLabel>
+            <Input fullWidth {...fieldProps<string>(["metadata", "okres"])} />
+            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          </FormControl>
 
-        <FormControl error={!!errors?.metadata?.kraj}>
-          <FormLabel>Kraj</FormLabel>
-          <Input {...fieldProps<string>(["metadata", "kraj"])} />
-          <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
-        </FormControl>
+          <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
+            <FormLabel>Kraj</FormLabel>
+            <Input fullWidth {...fieldProps<string>(["metadata", "kraj"])} />
+            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
+          </FormControl>
+        </div>
+
+        <div className="flex gap-4 w-full">
+          <FormControl className="flex-1" error={!!errors?.metadata?.category}>
+            <FormLabel>Kategorie sídla</FormLabel>
+            <Select
+              {...fieldProps(["metadata", "category"])}
+              onChange={(_, v) =>
+                fieldProps(["metadata", "category"]).setValue(v)
+              }
+            >
+              <Option value="I">I</Option>
+              <Option value="II">II</Option>
+              <Option value="III">III</Option>
+              <Option value="IV">IV</Option>
+            </Select>
+            <ErrorMessage>{errors?.metadata?.category}</ErrorMessage>
+          </FormControl>
+
+          <FormControl className="flex-1" error={!!errors?.metadata?.category}>
+            <FormLabel>Pásmo ochrany</FormLabel>
+            <Select
+              {...fieldProps(["metadata", "protectionZone"])}
+              onChange={(_, v) =>
+                fieldProps(["metadata", "protectionZone"]).setValue(v)
+              }
+            >
+              <Option value="A">A</Option>
+              <Option value="B">B</Option>
+              <Option value="C">C</Option>
+            </Select>
+            <ErrorMessage>{errors?.metadata?.category}</ErrorMessage>
+          </FormControl>
+        </div>
 
         <div className="flex gap-4">
           <FormControl
@@ -282,6 +328,7 @@ type DeepPartial<T> = T extends
   | boolean
   | null
   | undefined
+  | File
   ? T
   : { [K in keyof T]?: DeepPartial<T[K]> };
 
@@ -312,6 +359,13 @@ const obecScheme = v.object({
       v.coerce(v.number(), Number),
       v.coerce(v.number(), Number),
     ]),
+    category: v.union([
+      v.literal("I"),
+      v.literal("II"),
+      v.literal("III"),
+      v.literal("IV"),
+    ]),
+    protectionZone: v.union([v.literal("A"), v.literal("B"), v.literal("C")]),
   }),
   data: v.object({
     foundedYear: v.number(),
