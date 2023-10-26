@@ -1,5 +1,5 @@
 import { Footer } from "@/components/Footer";
-import { Map } from "@/components/Map/Map";
+import { MapControllerComponent } from "@/components/Map/Map";
 import { WithCaption } from "@/components/WithCaption";
 import { db } from "@/lib/db";
 import imga1 from "@/public/static/552187f7-7937-4f97-9d02-1ba38f32729d 1.png";
@@ -8,6 +8,7 @@ import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
 import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
 import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
 import Image from "next/image";
+import Link from "next/link";
 import "./obec.css";
 
 const getData = async (id: number) => {
@@ -48,17 +49,15 @@ const Detail = async ({ params }: { params: { id: string } }) => {
   if (!obec) return null;
 
   return (
-    <div>
-      <div className="h-[calc(100vh-150px)]">
-        <Map
-          defaultView={obec.metadata.position}
-          defaultZoom={16}
-          options={{ scrollWheelZoom: false }}
-          category={obec.metadata.category}
-          protectionZone={obec.metadata.protectionZone}
-        />
-      </div>
-      <div className="h-[150px] container items-center">
+    <div className="relative">
+      <MapControllerComponent {...obec.metadata} />
+      <Link
+        href="/mapa"
+        className="text-5xl absolute top-4 right-16 cursor-pointer font-bold"
+      >
+        ╳
+      </Link>
+      <div className="h-[150px] container items-center m">
         <h1 className="nadpis-50 col-span-3">{obec.metadata.name}</h1>
         <table className="info-table col-span-2">
           <tbody>

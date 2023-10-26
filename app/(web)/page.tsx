@@ -4,6 +4,7 @@ import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
 import logo from "@/public/static/logo.svg";
 import Image from "next/image";
 import "./home.css";
+import Link from "next/link";
 
 const Home = async () => {
   return (
@@ -14,8 +15,15 @@ const Home = async () => {
           Jak stavět v krajině
         </h1>
       </div>
-      <div className="container h-[100vh]">
+      <div className="relative container h-[100vh]">
         <div className="col-start-2 col-span-4 flex items-center justify-center flex-col">
+          <Link
+            href="/mapa"
+            className="button uppercase flex absolute top-0 right-0 mr-8 mt-8 items-center gap-2"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
+            Mapa <img src="/static/cz.svg" />
+          </Link>
           <ObecSearch inner={{ input: { className: "search" } }} />
           <button className="button mt-16">Vyhledat</button>
         </div>

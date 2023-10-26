@@ -6,7 +6,7 @@
   .map-geojson {
     @apply fill-chkogreen stroke-chkogreen stroke-[5];
   }
-  .map-detail10 .map-geojson {
+  .show-details .map-geojson {
     fill: none;
   }
 
@@ -18,7 +18,7 @@
     @apply absolute top-0 left-0 z-10 p-3 pointer-events-none;
   }
 
-  .map-detail10 .map-zones {
+  .show-details .map-zones {
     @apply block;
   }
 
@@ -27,7 +27,7 @@
   }
 
   .map-marker {
-    @apply flex items-center gap-1 whitespace-nowrap text-black;
+    @apply hidden items-center gap-1 whitespace-nowrap text-black;
     width: initial !important;
     height: initial !important;
     text-shadow: 0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white,
@@ -39,22 +39,22 @@
       @apply block w-6 h-6 rounded-full bg-black;
       content: "";
     }
+
+    &.map-marker-I::before {
+      @apply bg-chkored;
+    }
+    &.map-marker-II::before {
+      @apply bg-chkoorange;
+    }
+    &.map-marker-III::before {
+      @apply bg-chkoyellow;
+    }
+    &.map-marker-IV::before {
+      @apply bg-chkogreen;
+    }
+
+    .show-details & {
+      @apply flex;
+    }
   }
-}
-
-.map-detail13 .map-marker {
-  @apply hidden;
-}
-
-.map-marker.map-marker-I::before {
-  @apply bg-chkored;
-}
-.map-marker.map-marker-II::before {
-  @apply bg-chkoorange;
-}
-.map-marker.map-marker-III::before {
-  @apply bg-chkoyellow;
-}
-.map-marker.map-marker-IV::before {
-  @apply bg-chkogreen;
 }

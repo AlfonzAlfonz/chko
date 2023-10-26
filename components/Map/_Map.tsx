@@ -1,102 +1,52 @@
 "use client";
 
-import * as L from "leaflet/dist/leaflet-src.esm";
-import "leaflet/dist/leaflet.css";
-import { useContext, useLayoutEffect, useRef } from "react";
-import { ensureSimplifiedChkoGeo } from "./data";
-import "./mapa.css";
 import { ObecMetadata } from "@/lib/db";
-import { ObecSearch } from "../Autocomplete/ObecSearch";
+import "leaflet/dist/leaflet.css";
 import Link from "next/link";
-import { ObecListContext } from "../contexts";
+import { ObecSearch } from "../Autocomplete/ObecSearch";
+import { useLeaflet } from "./leaflet";
+import "./mapa.css";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 
-export const _Map = ({
-  defaultView,
-  defaultZoom,
-  options,
-  category,
-  protectionZone,
-}: {
-  defaultView?: [number, number];
+export interface MapProps {
+  defaultCenter?: [number, number];
   defaultZoom?: number;
+  scrollWheelZoom?: boolean;
 
-  options?: L.MapOptions;
+  mapRef?: RefObject<MapController>;
+}
 
-  category?: ObecMetadata["category"];
-  protectionZone?: ObecMetadata["protectionZone"];
-}) => {
-  const obecList = useContext(ObecListContext);
+export type MapController = {
+  leaflet: L.Map;
+  setCategory: Dispatch<SetStateAction<ObecMetadata["category"] | undefined>>;
+  setProtectionZone: Dispatch<
+    SetStateAction<ObecMetadata["protectionZone"] | undefined>
+  >;
+};
 
-  const once = useRef<boolean>(false);
-  const containerRef = useRef<HTMLDivElement>(null!);
-  const mapRef = useRef<HTMLDivElement>(null!);
-  const map = useRef<L.Map>();
+export const _Map = (props: MapProps) => {
+  const { map, mapRef, containerRef } = useLeaflet(props);
 
-  useLayoutEffect(() => {
-    if (!once.current) {
-      once.current = true;
-      (async () => {
-        map.current = L.map(mapRef.current, {
-          zoomControl: false,
-          maxBounds: [
-            [48.2, 11.8],
-            [51.2, 19],
-          ],
-          ...options,
-        }).setView(defaultView ?? [49.9695, 14.1306], defaultZoom ?? 10);
+  const [category, setCategory] = useState<ObecMetadata["category"]>();
+  const [protectionZone, setProtectionZone] =
+    useState<ObecMetadata["protectionZone"]>();
 
-        const tiles = L.tileLayer(url, {
-          attribution:
-            '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          minZoom: 8,
-          maxZoom: 20,
-        });
-        map.current.addLayer(tiles);
-
-        const geoData = await ensureSimplifiedChkoGeo();
-
-        const geojson = L.geoJSON(geoData, {
-          style: {
-            fillOpacity: 1,
-            className: "map-geojson",
-          },
-        });
-        map.current.addLayer(geojson);
-
-        const zoomHandler = (zoom: number) => {
-          if (zoom > 10) {
-            containerRef.current.classList.add("map-detail10");
-          } else {
-            containerRef.current.classList.remove("map-detail10");
-          }
-
-          if (zoom > 13) {
-            containerRef.current.classList.add("map-detail13");
-          } else {
-            containerRef.current.classList.remove("map-detail13");
-          }
-        };
-        map.current.addEventListener("zoomend", () => {
-          const zoom = map.current!.getZoom();
-
-          zoomHandler(zoom);
-        });
-        zoomHandler(defaultZoom ?? 10);
-
-        for (const obec of obecList) {
-          L.marker(obec.metadata.position, {
-            icon: L.divIcon({
-              className: `map-marker map-marker-${obec.metadata.category}`,
-              html: obec.metadata.name,
-            }),
-          }).addTo(map.current);
-        }
-      })();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useImperativeHandle(props.mapRef, () => {
+    return {
+      leaflet: map.current!,
+      setCategory,
+      setProtectionZone,
+    };
+  });
 
   return (
     <div ref={containerRef} className="h-full relative">
@@ -123,8 +73,8 @@ export const _Map = ({
               cy="5"
               r="4.25"
               stroke="black"
-              stroke-opacity="0.5"
-              stroke-width="1.5"
+              strokeOpacity="0.5"
+              strokeWidth="1.5"
             />
             <line
               x1="8.53033"
@@ -132,14 +82,14 @@ export const _Map = ({
               x2="12.7656"
               y2="12.705"
               stroke="black"
-              stroke-opacity="0.5"
-              stroke-width="1.5"
+              strokeOpacity="0.5"
+              strokeWidth="1.5"
             />
           </svg>
         </div>
       </div>
       <div className="absolute top-0 right-0 mr-10 mt-6 z-[410]">
-        <Link href="/mapa" className="button px-10">
+        <Link href="/" className="button px-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -197,14 +147,6 @@ export const _Map = ({
     </div>
   );
 };
-
-const url =
-  "https://api.mapbox.com/styles/v1/alfonz/clf6vgysg00cq01mlod7t0zro/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA";
-
-const ACCESS_TOKEN =
-  "pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA";
-
-// https://api.mapbox.com/styles/v1/alfonz/clf6vgysg00cq01mlod7t0zro/wmts?access_token=pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA
 
 const categories: Record<ObecMetadata["category"], string> = {
   I: "bg-chkored",
