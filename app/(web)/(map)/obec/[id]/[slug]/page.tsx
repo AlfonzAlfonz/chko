@@ -2,7 +2,6 @@ import { Footer } from "@/components/Footer";
 import { MapControllerComponent } from "@/components/Map/Map";
 import { WithCaption } from "@/components/WithCaption";
 import { db } from "@/lib/db";
-import imga1 from "@/public/static/552187f7-7937-4f97-9d02-1ba38f32729d 1.png";
 import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
 import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
 import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
@@ -58,6 +57,13 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       >
         ╳
       </Link>
+      <a
+        className="button fixed bottom-4 right-14 bg-chkogreen text-white popisky-13 uppercase"
+        target="_blank"
+        href="/static/svaty-jan-pod-skalou.pdf"
+      >
+        Stáhnout pdf
+      </a>
       <div className="h-[150px] container items-center m">
         <h1 className="nadpis-50 col-span-3">{obec.metadata.name}</h1>
         <table className="info-table col-span-2">
@@ -95,7 +101,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </p>
       </div>
 
-      <div className="container">
+      <div className="container mt-8">
         <div className="container-inner">
           <h2 className="container-content col-span-4 nadpis-50">
             {chko.name}
@@ -118,7 +124,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="container">
+      <div className="container mt-8">
         <div className="container-inner popisky-13">
           <WithCaption
             className="col-span-2"
@@ -159,7 +165,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="container">
+      <div className="container mt-8">
         <div className="container-inner">
           <h2 className="container-content col-span-full nadpis-50">
             Převažující charakter výstavby
@@ -187,7 +193,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="container">
+      <div className="container mt-8">
         <div className="container-inner">
           <h2 className="container-content col-span-full nadpis-50">
             Přítomnost památkově chráněných objektů
@@ -215,9 +221,9 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="container">
-        <div className="container-inner pb-7 bg-[rgba(46,204,113,0.25)]">
-          <h2 className="container-content col-span-full nadpis-50">
+      <div className="container mt-8">
+        <div className=" container-inner pb-7 bg-[rgba(46,204,113,0.25)]">
+          <h2 className="container-content col-span-full nadpis-50 pt-4">
             Podmínky ochrany a doplňující doporučení
           </h2>
           <ol className="ordered-list col-span-full">
@@ -249,7 +255,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         <div className="container-inner">
           <div className="container-content flex gap-5 py-9">
             {obec.data.links.map(([label, href], i) => (
-              <a key={i} className="button" href={href}>
+              <a key={i} className="button" href={href} target="_blank">
                 {label}
               </a>
             ))}
