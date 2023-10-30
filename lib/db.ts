@@ -10,6 +10,7 @@ export type ObecTable = {
   slug: string;
   metadata: ObecMetadata;
   data: ObecData;
+  published: boolean;
 };
 
 export type ObecMetadata = {
@@ -23,21 +24,39 @@ export type ObecMetadata = {
 };
 
 export type ObecData = {
+  /** Intro table */
   foundedYear: number;
-  housesIn: Record<string, number[]>;
+  /** Intro table */
+  censuses: [year: number, population: number, houses: number][];
 
+  /** Intro */
+  cover: FigureData;
+  /** Intro */
+  intro: string;
+
+  /** Převažující charakter výstavby */
+  characteristics: [
+    FigureData | undefined,
+    FigureData | undefined,
+    FigureData | undefined
+  ];
+
+  /**  Přítomnost památkově chráněných objektů */
+  buildings: [
+    FigureData | undefined,
+    FigureData | undefined,
+    FigureData | undefined
+  ];
+
+  /** Podmínky ochrany a doplňující doporučení */
   terms: string[];
 
   links: [string, string][];
-
-  cover: FigureData;
-  characteristics: FigureData[];
-  buildings: FigureData[];
 };
 
 export type FigureData = {
-  caption: string;
   url: string;
+  caption: string;
 };
 
 export type AdminTable = {

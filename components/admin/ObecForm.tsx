@@ -1,11 +1,17 @@
 "use client";
 
-import { useForm } from "@/components/admin/useForm";
-import { ObecData, ObecTable } from "@/lib/db";
+import {
+  DeepPartial,
+  mapValibotResult,
+  useForm,
+} from "@/components/admin/useForm";
+import { FigureData, ObecData, ObecTable } from "@/lib/db";
 import Delete from "@mui/icons-material/Delete";
 import {
   Button,
   Card,
+  Checkbox,
+  CircularProgress,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -18,58 +24,125 @@ import {
   Textarea,
   Typography,
 } from "@mui/joy";
-import { ReactNode } from "react";
-import { twMerge } from "tailwind-merge";
+import { put } from "@vercel/blob";
+import { useState } from "react";
+import getSlug from "speakingurl";
 import * as v from "valibot";
-import { upload } from "@vercel/blob/client";
-
-interface ObecFormValue extends ObecTable {
-  files: File[];
-}
+import { ErrorMessage } from "./ErrorMessage";
+import { FigureControl, FigureControlValue } from "./FigureControl";
 
 export const ObecForm = ({
   value: initialValue,
   onSubmit: save,
 }: {
   value?: ObecTable;
-  onSubmit?: (obec: ObecTable) => Promise<unknown>;
+  onSubmit?: (obec: ObecTable) => Promise<void>;
 }) => {
+  const [state, setState] = useState<"posting" | "ready">("ready");
   const { value, errors, fieldProps, onSubmit } = useForm<
     typeof obecScheme,
-    DeepPartial<ObecFormValue>,
-    ObecFormValue
+    DeepPartial<ObecTable>
   >({
     defaultValue: initialValue ?? emptyObec,
-    scheme: obecScheme,
+    validate: (val) => {
+      return val.published
+        ? mapValibotResult(v.safeParse(obecScheme, val))
+        : [undefined, val as v.Output<typeof obecScheme>];
+    },
     onSubmit: async (v) => {
-      await save?.(v);
+      setState("posting");
+      const {
+        data: { cover, characteristics, buildings, ...data },
+        ...value
+      } = v;
+
+      if (!save) return;
+
+      const prefix = "obec/" + initialValue?.id;
+
+      const [coverImg, cImages, bImages] = await Promise.all([
+        cover?.blob && upload(prefix + "/cover", cover?.blob),
+        Promise.all(
+          characteristics.map(
+            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c.blob)
+          )
+        ),
+        Promise.all(
+          buildings.map(
+            (b, i) => b?.blob && upload(`${prefix}/buildings/${i}`, b.blob)
+          )
+        ),
+      ]);
+
+      await save({
+        ...value,
+        id: value.id!,
+        slug: getSlug(value.metadata.name),
+        published: false,
+        data: {
+          ...data,
+          cover: {
+            url: coverImg?.url ?? cover.url,
+            caption: cover?.caption!,
+          },
+          characteristics: characteristics.map((c, i) =>
+            !c
+              ? undefined
+              : {
+                  caption: c.caption,
+                  url: cImages[i]?.url ?? c?.url,
+                }
+          ) satisfies (FigureData | undefined)[] as any,
+          buildings: characteristics.map((b, i) =>
+            !b
+              ? undefined
+              : {
+                  caption: b.caption,
+                  url: bImages[i]?.url ?? b?.url,
+                }
+          ) satisfies (FigureData | undefined)[] as any,
+        },
+      });
+
+      setState("ready");
       alert("Uloženo");
     },
   });
 
   return (
-    <Stack className="mt-8" gap={4}>
+    <Stack
+      className="mt-8"
+      gap={4}
+      sx={
+        state === "posting"
+          ? { userSelect: "none", pointerEvents: "none", opacity: 0.5 }
+          : {}
+      }
+    >
       <Card>
         <Typography level="h3">Obecné informace</Typography>
 
-        <FormControl error={!!errors?.metadata?.name}>
-          <FormLabel>Název obce</FormLabel>
-          <Input {...fieldProps<string>(["metadata", "name"])} />
-          <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
-        </FormControl>
-
         <div className="flex gap-4 w-full">
-          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
-            <FormLabel>Okres</FormLabel>
-            <Input fullWidth {...fieldProps<string>(["metadata", "okres"])} />
-            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          <FormControl className="flex-1" error={!!errors?.metadata?.name}>
+            <FormLabel>Název obce</FormLabel>
+            <Input {...fieldProps<string>(["metadata", "name"])} />
+            <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
           </FormControl>
-
-          <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
-            <FormLabel>Kraj</FormLabel>
-            <Input fullWidth {...fieldProps<string>(["metadata", "kraj"])} />
-            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
-          </FormControl>
+          <div className="mt-8 flex">
+            <Checkbox
+              label={
+                <>
+                  Publikovat obec
+                  <br />
+                  <i>
+                    (Pokud je pole zaškrtnuté bude obec viditelná na stránce)
+                  </i>
+                </>
+              }
+              {...fieldProps<string>(["published"])}
+            />
+            <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
+          </div>
         </div>
 
         <div className="flex gap-4 w-full">
@@ -136,8 +209,23 @@ export const ObecForm = ({
           </FormControl>
         </div>
       </Card>
+
       <Card>
-        <Typography level="h3">Obsah</Typography>
+        <Typography level="h3">Tabulka obce</Typography>
+
+        <div className="flex gap-4 w-full">
+          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
+            <FormLabel>Okres</FormLabel>
+            <Input fullWidth {...fieldProps<string>(["metadata", "okres"])} />
+            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          </FormControl>
+
+          <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
+            <FormLabel>Kraj</FormLabel>
+            <Input fullWidth {...fieldProps<string>(["metadata", "kraj"])} />
+            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
+          </FormControl>
+        </div>
 
         <FormControl error={!!errors?.data?.foundedYear}>
           <FormLabel>Obec založena</FormLabel>
@@ -145,8 +233,74 @@ export const ObecForm = ({
           <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
         </FormControl>
 
-        <FormLabel>Domů v letech</FormLabel>
-        {Object.entries(value.data?.housesIn ?? {}).map(([year, numbers]) => (
+        <FormLabel>Počet obyvatel / domů</FormLabel>
+        <div className="flex gap-4 w-full items-center">
+          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
+            <Input
+              fullWidth
+              type="number"
+              startDecorator="V roce"
+              slotProps={{ input: { style: { appearance: "textfield" } } }}
+              {...fieldProps<string>(["data", "censuses", "0", "0"])}
+            />
+            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          </FormControl>
+          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
+            <Input
+              fullWidth
+              type="number"
+              endDecorator="obyvatel"
+              slotProps={{ input: { style: { appearance: "textfield" } } }}
+              {...fieldProps<string>(["data", "censuses", "0", "1"])}
+            />
+            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          </FormControl>
+          <div className="mb-7">/</div>
+          <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
+            <Input
+              fullWidth
+              type="number"
+              endDecorator="domů"
+              slotProps={{ input: { style: { appearance: "textfield" } } }}
+              {...fieldProps<string>(["data", "censuses", "0", "2"])}
+            />
+            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
+          </FormControl>
+        </div>
+        <div className="flex gap-4 w-full items-center">
+          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
+            <Input
+              fullWidth
+              type="number"
+              startDecorator="V roce"
+              slotProps={{ input: { style: { appearance: "textfield" } } }}
+              {...fieldProps<string>(["data", "censuses", "1", "0"])}
+            />
+            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          </FormControl>
+          <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
+            <Input
+              fullWidth
+              type="number"
+              endDecorator="obyvatel"
+              slotProps={{ input: { style: { appearance: "textfield" } } }}
+              {...fieldProps<string>(["data", "censuses", "1", "1"])}
+            />
+            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+          </FormControl>
+          <div className="mb-7">/</div>
+          <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
+            <Input
+              fullWidth
+              type="number"
+              endDecorator="domů"
+              slotProps={{ input: { style: { appearance: "textfield" } } }}
+              {...fieldProps<string>(["data", "censuses", "1", "2"])}
+            />
+            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
+          </FormControl>
+        </div>
+        {/* {Object.entries(value.data?.housesIn ?? {}).map(([year, numbers]) => (
           <>
             <Input
               startDecorator={<div>{year}:</div>}
@@ -167,8 +321,8 @@ export const ObecForm = ({
             />
             <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
           </>
-        ))}
-        <div className="flex justify-center">
+        ))} */}
+        {/* <div className="flex justify-center">
           <Button
             size="sm"
             onClick={() =>
@@ -180,9 +334,84 @@ export const ObecForm = ({
           >
             Přidat rok
           </Button>
+        </div> */}
+      </Card>
+
+      <Card>
+        <Typography level="h3">Úvod</Typography>
+
+        <FormLabel component="div">Úvodní foto</FormLabel>
+        <div className="px-12 flex flex-col gap-4">
+          <FigureControl
+            {...fieldProps<FigureControlValue>(["data", "cover"])}
+          />
         </div>
 
-        <FormControl>
+        <FormControl error={!!errors?.data?.intro}>
+          <FormLabel>Popis vesnice</FormLabel>
+          <Textarea {...fieldProps<string>(["data", "intro"])} />
+          <ErrorMessage>{errors?.data?.intro}</ErrorMessage>
+        </FormControl>
+      </Card>
+
+      <Card>
+        <Typography level="h3">Převažující charakter výstavby</Typography>
+
+        <div className="px-12 flex flex-col gap-4">
+          <FigureControl
+            {...fieldProps<FigureControlValue>([
+              "data",
+              "characteristics",
+              "0",
+            ])}
+          />
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <FigureControl
+                {...fieldProps<FigureControlValue>([
+                  "data",
+                  "characteristics",
+                  "1",
+                ])}
+              />
+            </div>
+            <div className="flex-1">
+              <FigureControl
+                {...fieldProps<FigureControlValue>([
+                  "data",
+                  "characteristics",
+                  "2",
+                ])}
+              />
+            </div>
+          </div>
+        </div>
+      </Card>
+      <Card>
+        <Typography level="h3">
+          Přítomnost památkově chráněných objektů
+        </Typography>
+
+        <div className="px-12 flex flex-col gap-4">
+          <FigureControl
+            {...fieldProps<FigureControlValue>(["data", "buildings", "0"])}
+          />
+
+          <FigureControl
+            {...fieldProps<FigureControlValue>(["data", "buildings", "1"])}
+          />
+          <FigureControl
+            {...fieldProps<FigureControlValue>(["data", "buildings", "2"])}
+          />
+        </div>
+      </Card>
+
+      <Card>
+        <Typography level="h3">
+          Podmínky ochrany a doplňující doporučení
+        </Typography>
+
+        <div className="flex flex-col">
           <FormLabel>Podmínky</FormLabel>
           <div className="flex flex-col gap-3">
             {value.data?.terms?.map((t, i) => (
@@ -227,82 +456,81 @@ export const ObecForm = ({
             Přidat podmínku
           </Button>
           <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
-        </FormControl>
+        </div>
+      </Card>
 
-        <FormControl>
-          <FormLabel>Odkazy</FormLabel>
-          <Table>
-            <tbody>
-              <tr>
-                <th className="w-[calc(50%-24px)]">Text</th>
-                <th className="w-[calc(50%-24px)]">Link</th>
-                <th className="w-[48px]"></th>
+      <Card>
+        <Typography level="h3">Odkazy</Typography>
+        <Table>
+          <tbody>
+            <tr>
+              <th className="w-[calc(50%-24px)]">Text</th>
+              <th className="w-[calc(50%-24px)]">Link</th>
+              <th className="w-[48px]"></th>
+            </tr>
+            {value.data?.links?.map(([text, href] = [], i) => (
+              <tr key={i}>
+                <td>
+                  <Input
+                    key={i}
+                    {...fieldProps<string>(["data", "links", i, 0])}
+                    slotProps={{
+                      root: { className: "!flex-row" },
+                      endDecorator: { className: "!my-0" },
+                    }}
+                  />
+                  <ErrorMessage>{errors?.data?.links?.[i]?.[0]}</ErrorMessage>
+                </td>
+                <td>
+                  <Input
+                    key={i}
+                    {...fieldProps<string>(["data", "links", i, 1])}
+                    slotProps={{
+                      root: { className: "!flex-row" },
+                      endDecorator: { className: "!my-0" },
+                    }}
+                  />
+                  <ErrorMessage>{errors?.data?.links?.[i]?.[1]}</ErrorMessage>
+                </td>
+                <td>
+                  <IconButton
+                    color="danger"
+                    onClick={() =>
+                      fieldProps<ObecData["links"]>(["data", "links"]).setValue(
+                        (s) => s.filter((_, ii) => i !== ii)
+                      )
+                    }
+                  >
+                    <Delete />
+                  </IconButton>
+                </td>
               </tr>
-              {value.data?.links?.map(([text, href], i) => (
-                <tr key={i}>
-                  <td>
-                    <Input
-                      key={i}
-                      {...fieldProps<string>(["data", "links", i, 0])}
-                      slotProps={{
-                        root: { className: "!flex-row" },
-                        endDecorator: { className: "!my-0" },
-                      }}
-                    />
-                    <ErrorMessage>{errors?.data?.links?.[i]?.[0]}</ErrorMessage>
-                  </td>
-                  <td>
-                    <Input
-                      key={i}
-                      {...fieldProps<string>(["data", "links", i, 1])}
-                      slotProps={{
-                        root: { className: "!flex-row" },
-                        endDecorator: { className: "!my-0" },
-                      }}
-                    />
-                    <ErrorMessage>{errors?.data?.links?.[i]?.[1]}</ErrorMessage>
-                  </td>
-                  <td>
-                    <IconButton
-                      color="danger"
-                      onClick={() =>
-                        fieldProps<ObecData["links"]>([
-                          "data",
-                          "links",
-                        ]).setValue((s) => s.filter((_, ii) => i !== ii))
-                      }
-                    >
-                      <Delete />
-                    </IconButton>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+            ))}
+          </tbody>
+        </Table>
 
-          <Button
-            onClick={() =>
-              fieldProps<ObecData["links"]>(["data", "links"]).setValue((s) => [
-                ...s,
-                ["", ""],
-              ])
-            }
-            size="sm"
-            color="neutral"
-            className="self-center !mt-6"
-          >
-            Přidat odkaz
-          </Button>
-          <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
-        </FormControl>
+        <Button
+          onClick={() =>
+            fieldProps<ObecData["links"]>(["data", "links"]).setValue((s) => [
+              ...s,
+              ["", ""],
+            ])
+          }
+          size="sm"
+          color="neutral"
+          className="self-center !mt-6"
+        >
+          Přidat odkaz
+        </Button>
       </Card>
 
       <Card className="mb-16">
         <Button
           size="lg"
-          disabled={!!errors}
+          disabled={!!errors && state === "ready"}
           className="self-center !px-20"
           onClick={onSubmit}
+          startDecorator={state === "posting" && <CircularProgress />}
         >
           Uložit
         </Button>
@@ -316,41 +544,26 @@ export const ObecForm = ({
   );
 };
 
-const emptyObec = {
+const emptyObec: DeepPartial<ObecTable> = {
   metadata: {},
-  data: {},
-};
-
-type DeepPartial<T> = T extends
-  | string
-  | number
-  | unknown[]
-  | boolean
-  | null
-  | undefined
-  | File
-  ? T
-  : { [K in keyof T]?: DeepPartial<T[K]> };
-
-const ErrorMessage = ({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) => {
-  return (
-    <FormHelperText
-      className={twMerge("!text-chkored min-h-[18px] !text-xs", className)}
-    >
-      {children}
-    </FormHelperText>
-  );
+  data: {
+    censuses: [
+      [1869, undefined, undefined],
+      [2011, undefined, undefined],
+    ],
+  },
 };
 
 const required = v.minLength<string>(1, "Pole je povinné");
+const figure = v.object({
+  caption: v.string([required]),
+  blob: v.union([v.undefinedType(), v.blob()]),
+  url: v.string(),
+});
+const optionalFigure = v.union([v.undefinedType(), figure]);
 
 const obecScheme = v.object({
+  published: v.boolean(),
   metadata: v.object({
     name: v.string([required]),
     okres: v.string([required]),
@@ -369,7 +582,11 @@ const obecScheme = v.object({
   }),
   data: v.object({
     foundedYear: v.number(),
-    housesIn: v.record(v.array(v.number())),
+    censuses: v.array(v.tuple([v.number(), v.number(), v.number()])),
+    cover: figure,
+    intro: v.string([required]),
+    characteristics: v.tuple([optionalFigure, optionalFigure, optionalFigure]),
+    buildings: v.tuple([optionalFigure, optionalFigure, optionalFigure]),
     terms: v.array(v.string([required])),
     links: v.array(
       v.tuple([
@@ -379,3 +596,9 @@ const obecScheme = v.object({
     ),
   }),
 });
+
+export const upload = (path: string, file: Blob) =>
+  put(path + file.name, file, {
+    access: "public",
+    token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
+  });

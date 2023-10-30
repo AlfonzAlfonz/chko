@@ -73,10 +73,12 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               <td>První písemná zmínka</td>
               <td>{obec.data.foundedYear}</td>
             </tr>
-            {Object.entries(obec.data.housesIn).map(([year, value]) => (
+            {obec.data.censuses.map(([year, people, houses]) => (
               <tr key={year}>
                 <td>POČET OBYVATEL/DOMŮ V R. {year}</td>
-                <td>{value.join("/")}</td>
+                <td>
+                  {people}/{houses}
+                </td>
               </tr>
             ))}
           </tbody>
