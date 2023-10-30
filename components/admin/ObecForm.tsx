@@ -137,21 +137,6 @@ export const ObecForm = ({
             <Input {...fieldProps<string>(["metadata", "name"])} />
             <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
           </FormControl>
-          <div className="mt-8 flex">
-            <Checkbox
-              label={
-                <>
-                  Publikovat obec
-                  <br />
-                  <i>
-                    (Pokud je pole zaškrtnuté bude obec viditelná na stránce)
-                  </i>
-                </>
-              }
-              {...fieldProps<string>(["published"])}
-            />
-            <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
-          </div>
         </div>
 
         <div className="flex gap-4 w-full">
@@ -498,7 +483,21 @@ export const ObecForm = ({
         </Button>
       </Card>
 
-      <Card className="mb-16">
+      <Card className="mb-16 flex flex-col items-center">
+        <div className="flex">
+          <Checkbox
+            label={
+              <>
+                Publikovat obec
+                <br />
+              </>
+            }
+            {...fieldProps<string>(["published"])}
+          />
+        </div>
+        <i>(Pokud je pole zaškrtnuté bude obec viditelná na stránce)</i>
+        <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
+
         <Button
           size="lg"
           disabled={!!errors && state === "ready"}
