@@ -10,6 +10,7 @@ import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
+import { FigureImage } from "@/components/FigureImage";
 
 const getData = async (id: number) => {
   return await db
@@ -87,18 +88,10 @@ const Detail = async ({ params }: { params: { id: string } }) => {
 
       <div className="container">
         <div className="col-start-2 col-end-6">
-          <Image src={imga1} alt="img1" />
+          <FigureImage figure={obec.data.cover} />
         </div>
         <p className="container-content whitespace-pre-line col-start-2 col-end-6">
-          {`Menší sídlo situované v sevřeném údolí Loděnice, do jednoho z krajinářsky nejcennějších prostorů v rámci CHKO s velmi markantně vnímatelnými znaky fenoménu krasového reliéfu. Vizuální uplatnění zástavby sídla nastává v dílčím úseku údolí.
-
-Nepříliš rozlehlou zástavbu v sevřeném prostoru ovládá dominanta barokního areálu benediktinského kláštera sestávající z budovy konventu, kostela Narození sv. Jana Křtitele, klášterní zahrady a ohradní zdi, lokalizovaná pod vysokou obnaženou vápencovou stěnou. V dolní části zástavby stojí, převážně na pravém břehu, větší hmoty objektů bývalé školy (dnes hotelu), patrový dům (součást hospodářského zázemí kláštera) či obecního úřadu doplněné dalšími objekty menšího měřítka.
-
-Výše položená část sídla má charakter nesouvislé údolní zástavby převážně přízemních objektů většinou s podélnou orientací. Tato část zástavby prošla z větší části zřetelnými rekonstrukcemi, část objektů si uchovala původní výraz. Dominantním prvkem zde je neogotická hřbitovní kaple. Zástavbu na horním konci uzavírá patrová vilová hmota.
-
-Cennou historickou stavbou je barokní kaple nacházející se na vyvýšenině severně od kostela.
-
-Kromě výše uvedené jedinečné morfologie projev sídla spoluutváří souvislá lesní zeleň navazující na zástavbu prakticky po celém obvodu.`}
+          {obec.data.intro}
         </p>
       </div>
 
@@ -171,6 +164,26 @@ Kromě výše uvedené jedinečné morfologie projev sídla spoluutváří souvi
           <h2 className="container-content col-span-full nadpis-50">
             Převažující charakter výstavby
           </h2>
+
+          {obec.data.characteristics[0] && (
+            <FigureImage
+              className="col-span-full aspect-[2/1]"
+              figure={obec.data.characteristics[0]}
+            />
+          )}
+
+          <div className="flex col-span-full gap-4">
+            <div className="flex-1">
+              {obec.data.characteristics[1] && (
+                <FigureImage figure={obec.data.characteristics[1]} />
+              )}
+            </div>
+            <div className="flex-1">
+              {obec.data.characteristics[2] && (
+                <FigureImage figure={obec.data.characteristics[2]} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -179,6 +192,26 @@ Kromě výše uvedené jedinečné morfologie projev sídla spoluutváří souvi
           <h2 className="container-content col-span-full nadpis-50">
             Přítomnost památkově chráněných objektů
           </h2>
+
+          {obec.data.buildings[0] && (
+            <FigureImage
+              className="col-span-full aspect-[2/1]"
+              figure={obec.data.buildings[0]}
+            />
+          )}
+
+          {/* <div className="flex col-span-full gap-4">
+            <div className="flex-1">
+              {obec.data.buildings[1] && (
+                <FigureImage figure={obec.data.buildings[1]} />
+              )}
+            </div>
+            <div className="flex-1">
+              {obec.data.buildings[2] && (
+                <FigureImage figure={obec.data.buildings[2]} />
+              )}
+            </div>
+          </div> */}
         </div>
       </div>
 
@@ -230,7 +263,7 @@ Kromě výše uvedené jedinečné morfologie projev sídla spoluutváří souvi
 č. p. 85, 267 18 Karlštejn
 
 Úřední hodiny všech pracovišť
-pondělí, středa: 8–17 hod​​​​​
+pondělí, středa: 8–17 hod
 
 951 42 4552, 951 42 4554
 stredni.cechy@nature.cz

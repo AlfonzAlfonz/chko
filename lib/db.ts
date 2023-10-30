@@ -57,6 +57,8 @@ export type ObecData = {
 export type FigureData = {
   url: string;
   caption: string;
+  width: number;
+  height: number;
 };
 
 export type AdminTable = {

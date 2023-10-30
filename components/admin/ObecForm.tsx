@@ -52,7 +52,12 @@ export const ObecForm = ({
     onSubmit: async (v) => {
       setState("posting");
       const {
-        data: { cover, characteristics, buildings, ...data },
+        data: {
+          cover: { blob: coverBlob, ...cover },
+          characteristics,
+          buildings,
+          ...data
+        },
         ...value
       } = v;
 
@@ -61,10 +66,10 @@ export const ObecForm = ({
       const prefix = "obec/" + initialValue?.id;
 
       const [coverImg, cImages, bImages] = await Promise.all([
-        cover?.blob && upload(prefix + "/cover", cover?.blob),
+        coverBlob && upload(prefix + "/cover", coverBlob),
         Promise.all(
           characteristics.map(
-            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c.blob)
+            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c?.blob)
           )
         ),
         Promise.all(
@@ -82,23 +87,27 @@ export const ObecForm = ({
         data: {
           ...data,
           cover: {
-            url: coverImg?.url ?? cover.url,
-            caption: cover?.caption!,
+            ...cover,
+            ...coverImg,
           },
           characteristics: characteristics.map((c, i) =>
             !c
               ? undefined
               : {
-                  caption: c.caption,
                   url: cImages[i]?.url ?? c?.url,
+                  width: cImages[i]?.width ?? c?.width,
+                  height: cImages[i]?.height ?? c?.height,
+                  caption: c?.caption,
                 }
           ) satisfies (FigureData | undefined)[] as any,
-          buildings: characteristics.map((b, i) =>
+          buildings: buildings.map((b, i) =>
             !b
               ? undefined
               : {
-                  caption: b.caption,
                   url: bImages[i]?.url ?? b?.url,
+                  width: bImages[i]?.width ?? b?.width,
+                  height: bImages[i]?.height ?? b?.height,
+                  caption: b?.caption,
                 }
           ) satisfies (FigureData | undefined)[] as any,
         },
@@ -300,41 +309,6 @@ export const ObecForm = ({
             <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
           </FormControl>
         </div>
-        {/* {Object.entries(value.data?.housesIn ?? {}).map(([year, numbers]) => (
-          <>
-            <Input
-              startDecorator={<div>{year}:</div>}
-              endDecorator={
-                <IconButton
-                  color="danger"
-                  onClick={() =>
-                    fieldProps<ObecData["housesIn"]>([
-                      "data",
-                      "housesIn",
-                    ]).setValue(({ [year]: _, ...s }) => ({ ...s }))
-                  }
-                >
-                  <Delete />
-                </IconButton>
-              }
-              {...fieldProps<string>(["data", "housesIn", year])}
-            />
-            <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
-          </>
-        ))} */}
-        {/* <div className="flex justify-center">
-          <Button
-            size="sm"
-            onClick={() =>
-              fieldProps<ObecData["housesIn"]>(["data", "housesIn"]).setValue(
-                (s) => ({ ...s, [prompt("Rok?") ?? ""]: [] })
-              )
-            }
-            color="neutral"
-          >
-            Přidat rok
-          </Button>
-        </div> */}
       </Card>
 
       <Card>
@@ -442,20 +416,20 @@ export const ObecForm = ({
             ))}
           </div>
 
-          <Button
-            onClick={() =>
-              fieldProps<ObecData["terms"]>(["data", "terms"]).setValue((s) => [
-                ...s,
-                "",
-              ])
-            }
-            size="sm"
-            color="neutral"
-            className="self-center !mt-6"
-          >
-            Přidat podmínku
-          </Button>
-          <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
+          {(value.data?.terms?.length ?? 0) <= 8 && (
+            <Button
+              onClick={() =>
+                fieldProps<ObecData["terms"]>(["data", "terms"]).setValue(
+                  (s) => [...s, ""]
+                )
+              }
+              size="sm"
+              color="neutral"
+              className="self-center !mt-6"
+            >
+              Přidat podmínku
+            </Button>
+          )}
         </div>
       </Card>
 
@@ -559,6 +533,8 @@ const figure = v.object({
   caption: v.string([required]),
   blob: v.union([v.undefinedType(), v.blob()]),
   url: v.string(),
+  width: v.number(),
+  height: v.number(),
 });
 const optionalFigure = v.union([v.undefinedType(), figure]);
 
@@ -597,8 +573,50 @@ const obecScheme = v.object({
   }),
 });
 
-export const upload = (path: string, file: Blob) =>
-  put(path + file.name, file, {
+export const upload = async (path: string, file: Blob) => {
+  console.log("????????");
+  const size = await getImageSize(file);
+  console.log(size);
+
+  if (!size) throw new Error("Invalid file");
+
+  const result = await put(path + file.name, file, {
     access: "public",
     token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
+  });
+  return {
+    url: result.url,
+    width: size[0],
+    height: size[1],
+  };
+};
+
+const getImageSize = (blob: Blob) =>
+  new Promise<[number, number] | null>((resolve) => {
+    console.log("loaded");
+    const img = document.createElement("img");
+
+    img.onload = () => {
+      resolve([img.naturalWidth, img.naturalHeight]);
+    };
+
+    img.onerror = () => {
+      console.log("error img");
+      resolve(null);
+    };
+
+    img.src = URL.createObjectURL(blob);
+    // const reader = new FileReader();
+    // console.log("start");
+
+    // reader.addEventListener("load", () => {
+
+    // });
+
+    // reader.addEventListener("error", () => {
+    //   console.log("error read");
+    //   resolve(null);
+    // });
+
+    // reader.readAsDataURL(blob);
   });
