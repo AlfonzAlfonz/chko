@@ -1,23 +1,34 @@
-import { ObecSearch } from "@/components/Autocomplete/ObecSearch";
+import { HomepageSearch } from "@/components/HomepageSearch";
 import krajraz1 from "@/public/static/Vinarice_nadhled 3.png";
 import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
-import logo from "@/public/static/logo_hp.svg";
+import logoLand from "@/public/static/logo_land.svg";
+import logoTitle from "@/public/static/logo_title.svg";
 import Image from "next/image";
-import "./home.css";
 import Link from "next/link";
-import { HomepageSearch } from "@/components/HomepageSearch";
+import "./home.css";
 
 const Home = async () => {
   return (
-    <div>
-      <div className="flex items-start container h-[100vh] first">
-        <h1 className="flex w-full items-center justify-between text-[70px] xl:text-[130px] 3xl:text-[180px] text-white col-span-full">
-          <Image src={logo} alt="Jak stavět v krajině" className="w-full" />
+    <div className="homepage">
+      <div className="flex items-start container h-[100vh] first px-0 lg:px-10">
+        <h1
+          className={`
+            col-span-full lg:h-[208px]
+            flex flex-col lg:flex-row gap-9 w-full items-center justify-between  
+            text-white`}
+        >
+          <span className="flex lg:hidden text-[70px] text-center">
+            Jak stavět{"\n"} v krajině
+          </span>
+          <Image src={logoLand} alt="logo" className="h-full" />
+          <div className="h-full items-center pt-8 hidden lg:flex">
+            <Image src={logoTitle} alt="Jak stavět v krajině" />
+          </div>
         </h1>
       </div>
 
       <div className="relative container h-[100vh] bg-chkobg">
-        <div className="col-start-2 col-span-4 flex items-center justify-center flex-col">
+        <div className="col-span-full lg:col-start-2 lg:col-span-4 flex items-center justify-center flex-col">
           <Link
             href="/mapa"
             className="button uppercase flex absolute top-0 right-0 mr-8 mt-8 items-center gap-2"

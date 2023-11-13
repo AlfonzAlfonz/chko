@@ -13,7 +13,11 @@ const Template = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="h-screen">
-      <div className={map ? "h-full" : "h-[calc(100%-150px)]"}>
+      <div
+        className={
+          map ? "h-full" : "h-[calc(100%-85px)] lg:h-[calc(100%-150px)]"
+        }
+      >
         <Map scrollWheelZoom={map} mapRef={mapRef} />
       </div>
       <MapContext.Provider value={mapRef}>{children}</MapContext.Provider>

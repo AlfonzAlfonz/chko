@@ -1,4 +1,11 @@
+import {
+  Accordion,
+  AccordionButton,
+  AccordionContent,
+} from "@/components/Accordion";
+import { FigureImage } from "@/components/FigureImage";
 import { Footer } from "@/components/Footer";
+import { Gallery } from "@/components/Gallery";
 import { MapControllerComponent } from "@/components/Map/Map";
 import { WithCaption } from "@/components/WithCaption";
 import { db } from "@/lib/db";
@@ -10,14 +17,6 @@ import chkoimg from "@/public/static/cesky_kras_logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
-import { FigureImage } from "@/components/FigureImage";
-import {
-  Accordion,
-  AccordionButton,
-  AccordionContent,
-} from "@/components/Accordion";
-import { LightBox } from "@/components/LightBox/LightBox";
-import { Gallery } from "@/components/Gallery";
 
 const getData = async (id: number) => {
   return await db
@@ -42,15 +41,17 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         ╳
       </Link>
       <a
-        className="button fixed bottom-4 right-14 bg-chkogreen text-white popisky-13 uppercase"
+        className="button hidden lg:block fixed bottom-4 right-14 bg-[#2ECC71] text-white popisky-13 uppercase z-50"
         target="_blank"
         href="/static/svaty-jan-pod-skalou.pdf"
       >
         Stáhnout pdf
       </a>
-      <div className="h-[150px] container items-center m">
-        <h1 className="nadpis-50 col-span-3">{obec.metadata.name}</h1>
-        <table className="info-table col-span-2">
+      <div className="lg:h-[150px] lg:container  items-center m">
+        <h1 className="col-span-full lg:col-span-3 text-[30px] lg:text-[50px] shadow-lg lg:shadow-none px-4 py-5 lg:p-0">
+          {obec.metadata.name}
+        </h1>
+        <table className="info-table col-span-full lg:col-span-2 mx-4 my-5 lg:m-0">
           <tbody>
             <tr>
               <td>Okres</td>
@@ -198,8 +199,8 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               charakteristického pohledu ukazujícího její působení v krajině.
             </p>
 
-            <div className="container-content col-span-full flex">
-              <a className="button" href="https://example.com">
+            <div className="container-content col-span-full flex mt-9 px-4 lg:p-0">
+              <a className="button flex-auto" href="https://example.com">
                 DALŠÍ INFORMACE KE STAVEBNÍ ČINNOSTI
               </a>
             </div>
@@ -209,7 +210,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
 
       <div className="container">
         <div className="container-inner">
-          <div className="container-content flex gap-5 py-9">
+          <div className="container-content flex flex-col lg:flex-row col-span-full items-center gap-5 py-9">
             {obec.data.links.map(([label, href], i) => (
               <a key={i} className="button" href={href} target="_blank">
                 {label}
@@ -217,6 +218,16 @@ const Detail = async ({ params }: { params: { id: string } }) => {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="flex justify-center mb-12">
+        <a
+          className="button lg:hidden bg-[#2ECC71] text-white popisky-13 uppercase z-50"
+          target="_blank"
+          href="/static/svaty-jan-pod-skalou.pdf"
+        >
+          Stáhnout pdf
+        </a>
       </div>
 
       <Footer>

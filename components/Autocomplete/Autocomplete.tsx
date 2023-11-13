@@ -11,6 +11,7 @@ import * as React from "react";
 export type AutocompleteInnerProps = {
   input?: JSX.IntrinsicElements["input"];
   searchDecorator?: JSX.IntrinsicElements["svg"];
+  popperRoot?: { className?: string };
 };
 
 export const Autocomplete = React.forwardRef(function Autocomplete(
@@ -81,7 +82,10 @@ export const Autocomplete = React.forwardRef(function Autocomplete(
           }}
           slotProps={{
             root: {
-              className: "relative z-[1001] w-[62.5vw] shadow-lg",
+              ...inner?.popperRoot,
+              className: `${
+                inner?.popperRoot?.className ?? ""
+              } relative z-[1001] shadow-lg`,
             },
           }}
           modifiers={[

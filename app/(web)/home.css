@@ -21,9 +21,12 @@
   }
 
   .search {
-    @apply block outline-none text-center w-full;
+    @apply block outline-none text-center w-full text-[40px] lg:text-[100px];
 
-    font-size: 100px;
     border-bottom: 3px solid black;
+  }
+
+  .search-results {
+    @apply w-[90vw] lg:w-[62vw];
   }
 }

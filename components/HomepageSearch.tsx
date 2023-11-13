@@ -14,7 +14,10 @@ export const HomepageSearch = () => {
   return (
     <>
       <ObecSearch
-        inner={{ input: { className: "search bg-chkobg" } }}
+        inner={{
+          input: { className: "search bg-chkobg" },
+          popperRoot: { className: "search-results" },
+        }}
         onChange={() => setLoading(true)}
         onInputChange={setInput}
       />

@@ -50,15 +50,10 @@ const config: Config = {
           fontSize: "18px",
         },
         ".popisky-13": {
-          fontFamily: "Arial",
-          fontSize: "13px",
-          lineHeight: "17px",
-          letterSpacing: "2.86px",
+          textAlign: "left",
         },
         ".mobil-popisky-11": {
-          fontFamily: "Arial",
           fontSize: "11px",
-          lineHeight: "15px",
         },
       });
     }),
