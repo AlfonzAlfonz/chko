@@ -6,7 +6,7 @@ import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
 import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
 import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
 import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
-import chkoimg from "@/public/static/česká kras_bez pozadio 1.png";
+import chkoimg from "@/public/static/cesky_kras_logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
