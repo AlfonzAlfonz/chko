@@ -2,10 +2,12 @@
 
 import {
   DeepPartial,
+  FieldProps,
   mapValibotResult,
   useForm,
 } from "@/components/admin/useForm";
 import { FigureData, ObecData, ObecTable } from "@/lib/db";
+import { obecScheme } from "@/lib/schemas";
 import Delete from "@mui/icons-material/Delete";
 import {
   Button,
@@ -29,7 +31,11 @@ import { useState } from "react";
 import getSlug from "speakingurl";
 import * as v from "valibot";
 import { ErrorMessage } from "./ErrorMessage";
-import { FigureControl, FigureControlValue } from "./FigureControl";
+import {
+  AddFigureControl,
+  FigureControl,
+  FigureControlValue,
+} from "./FigureControl/FigureControl";
 
 export const ObecForm = ({
   value: initialValue,
@@ -47,17 +53,12 @@ export const ObecForm = ({
     validate: (val) => {
       return val.published
         ? mapValibotResult(v.safeParse(obecScheme, val))
-        : [undefined, val as v.Output<typeof obecScheme>];
+        : [undefined, val as any as v.Output<typeof obecScheme>];
     },
     onSubmit: async (v) => {
       setState("posting");
       const {
-        data: {
-          cover: { blob: coverBlob, ...cover },
-          characteristics,
-          buildings,
-          ...data
-        },
+        data: { cover, characteristics, buildings, ...data },
         ...value
       } = v;
 
@@ -66,15 +67,15 @@ export const ObecForm = ({
       const prefix = "obec/" + initialValue?.id;
 
       const [coverImg, cImages, bImages] = await Promise.all([
-        coverBlob && upload(prefix + "/cover", coverBlob),
+        cover.blob && upload(prefix + "/cover", cover),
         Promise.all(
           characteristics.map(
-            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c?.blob)
+            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c)
           )
         ),
         Promise.all(
           buildings.map(
-            (b, i) => b?.blob && upload(`${prefix}/buildings/${i}`, b.blob)
+            (b, i) => b?.blob && upload(`${prefix}/buildings/${i}`, b)
           )
         ),
       ]);
@@ -117,6 +118,8 @@ export const ObecForm = ({
       alert("Uloženo");
     },
   });
+
+  value.data?.characteristics;
 
   return (
     <Stack
@@ -303,6 +306,7 @@ export const ObecForm = ({
         <div className="px-12 flex flex-col gap-4">
           <FigureControl
             {...fieldProps<FigureControlValue>(["data", "cover"])}
+            onDelete={() => fieldProps(["data", "cover"]).setValue(undefined)}
           />
         </div>
 
@@ -316,34 +320,35 @@ export const ObecForm = ({
       <Card>
         <Typography level="h3">Převažující charakter výstavby</Typography>
 
-        <div className="px-12 flex flex-col gap-4">
-          <FigureControl
-            {...fieldProps<FigureControlValue>([
-              "data",
-              "characteristics",
-              "0",
-            ])}
-          />
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <FigureControl
-                {...fieldProps<FigureControlValue>([
-                  "data",
-                  "characteristics",
-                  "1",
-                ])}
-              />
-            </div>
-            <div className="flex-1">
-              <FigureControl
-                {...fieldProps<FigureControlValue>([
-                  "data",
-                  "characteristics",
-                  "2",
-                ])}
-              />
-            </div>
-          </div>
+        <div className="flex gap-4 w-full overflow-scroll">
+          {fieldProps(
+            ["data", "characteristics"],
+            ({ value, setValue }: FieldProps<DeepPartial<FigureData>[]>) => (
+              <>
+                {value.map((x, i) => (
+                  <FigureControl
+                    key={i}
+                    {...fieldProps(
+                      ["data", "characteristics", i.toString()],
+                      (props: FieldProps<DeepPartial<FigureData>>) => ({
+                        ...props,
+                        onDelete: () => {
+                          setValue(value.filter((_, ii) => i !== ii));
+                        },
+                      })
+                    )}
+                  />
+                ))}
+                <AddFigureControl
+                  setValue={(s) => {
+                    const fig =
+                      typeof s === "function" ? s({ width: 0, height: 0 }) : s;
+                    setValue([...value, fig]);
+                  }}
+                />
+              </>
+            )
+          )}
         </div>
       </Card>
       <Card>
@@ -351,17 +356,35 @@ export const ObecForm = ({
           Přítomnost památkově chráněných objektů
         </Typography>
 
-        <div className="px-12 flex flex-col gap-4">
-          <FigureControl
-            {...fieldProps<FigureControlValue>(["data", "buildings", "0"])}
-          />
-
-          <FigureControl
-            {...fieldProps<FigureControlValue>(["data", "buildings", "1"])}
-          />
-          <FigureControl
-            {...fieldProps<FigureControlValue>(["data", "buildings", "2"])}
-          />
+        <div className="flex gap-4 w-full overflow-scroll">
+          {fieldProps(
+            ["data", "buildings"],
+            ({ value, setValue }: FieldProps<DeepPartial<FigureData>[]>) => (
+              <>
+                {value.map((x, i) => (
+                  <FigureControl
+                    key={i}
+                    {...fieldProps(
+                      ["data", "buildings", i.toString()],
+                      (props: FieldProps<DeepPartial<FigureData>>) => ({
+                        ...props,
+                        onDelete: () => {
+                          setValue(value.filter((_, ii) => i !== ii));
+                        },
+                      })
+                    )}
+                  />
+                ))}
+                <AddFigureControl
+                  setValue={(s) => {
+                    const fig =
+                      typeof s === "function" ? s({ width: 0, height: 0 }) : s;
+                    setValue([...value, fig]);
+                  }}
+                />
+              </>
+            )
+          )}
         </div>
       </Card>
 
@@ -527,59 +550,19 @@ const emptyObec: DeepPartial<ObecTable> = {
   },
 };
 
-const required = v.minLength<string>(1, "Pole je povinné");
-const figure = v.object({
-  caption: v.string([required]),
-  blob: v.union([v.undefinedType(), v.blob()]),
-  url: v.string(),
-  width: v.number(),
-  height: v.number(),
-});
-const optionalFigure = v.union([v.undefinedType(), figure]);
+export const upload = async (
+  path: string,
+  { blob, url }: FigureControlValue
+) => {
+  if (!blob) return;
 
-const obecScheme = v.object({
-  published: v.boolean(),
-  metadata: v.object({
-    name: v.string([required]),
-    okres: v.string([required]),
-    kraj: v.string([required]),
-    position: v.tuple([
-      v.coerce(v.number(), Number),
-      v.coerce(v.number(), Number),
-    ]),
-    category: v.union([
-      v.literal("I"),
-      v.literal("II"),
-      v.literal("III"),
-      v.literal("IV"),
-    ]),
-    protectionZone: v.union([v.literal("A"), v.literal("B"), v.literal("C")]),
-  }),
-  data: v.object({
-    foundedYear: v.number(),
-    censuses: v.array(v.tuple([v.number(), v.number(), v.number()])),
-    cover: figure,
-    intro: v.string([required]),
-    characteristics: v.tuple([optionalFigure, optionalFigure, optionalFigure]),
-    buildings: v.tuple([optionalFigure, optionalFigure, optionalFigure]),
-    terms: v.array(v.string([required])),
-    links: v.array(
-      v.tuple([
-        v.string([required]),
-        v.string([required, v.url("Špatný formát odkazu")]),
-      ])
-    ),
-  }),
-});
+  url && URL.revokeObjectURL(url);
 
-export const upload = async (path: string, file: Blob) => {
-  console.log("????????");
-  const size = await getImageSize(file);
-  console.log(size);
+  const size = await getImageSize(blob);
 
   if (!size) throw new Error("Invalid file");
 
-  const result = await put(path + file.name, file, {
+  const result = await put(path + blob.name, blob, {
     access: "public",
     token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
   });
@@ -597,25 +580,14 @@ const getImageSize = (blob: Blob) =>
 
     img.onload = () => {
       resolve([img.naturalWidth, img.naturalHeight]);
+      URL.revokeObjectURL(img.src);
     };
 
     img.onerror = () => {
       console.log("error img");
       resolve(null);
+      URL.revokeObjectURL(img.src);
     };
 
     img.src = URL.createObjectURL(blob);
-    // const reader = new FileReader();
-    // console.log("start");
-
-    // reader.addEventListener("load", () => {
-
-    // });
-
-    // reader.addEventListener("error", () => {
-    //   console.log("error read");
-    //   resolve(null);
-    // });
-
-    // reader.readAsDataURL(blob);
   });

@@ -13,6 +13,14 @@ interface Options<
   onSubmit: (value: v.Output<TSchema> & TIn) => unknown | Promise<unknown>;
 }
 
+export type FieldProps<T> = {
+  value: T;
+  setValue: (val: T | ((old: T) => T)) => unknown;
+  onChange: (e: {
+    target: { value: T; type?: string; checked?: boolean };
+  }) => unknown;
+};
+
 export const useForm = <
   TSchema extends v.BaseSchema,
   TIn extends DeepPartial<v.Output<TSchema>>
@@ -23,19 +31,51 @@ export const useForm = <
 }: Options<TSchema, TIn>) => {
   type TOut = v.Output<TSchema>;
 
-  const [errors, setErrors] = useState<Errors<TOut>>();
-  const [state, setState] = useState<DeepPartial<TOut>>(defaultValue);
+  const [state, setState] = useState<{
+    errors: Errors<TOut> | undefined;
+    value: DeepPartial<TOut>;
+  }>({
+    errors: undefined,
+    value: defaultValue,
+  });
 
-  const fieldProps = <T>(keys: ObjectPath<TOut>) => {
-    let value: any = state;
+  const setRootValue = (
+    value: DeepPartial<TOut> | ((old: DeepPartial<TOut>) => DeepPartial<TOut>)
+  ) => {
+    setState((old) => {
+      const newValue =
+        typeof value === "function"
+          ? (value as (old: DeepPartial<TOut>) => DeepPartial<TOut>)(old.value)
+          : value;
+
+      const [errors, output] = validate(newValue);
+      if (errors) {
+        return {
+          value: newValue,
+          errors,
+        };
+      } else {
+        return {
+          value: output as DeepPartial<TOut>,
+          errors: undefined,
+        };
+      }
+    });
+  };
+
+  const fieldProps = <T, TReturn = FieldProps<T>>(
+    keys: ObjectPath<TOut>,
+    transform?: (x: FieldProps<T>) => TReturn
+  ) => {
+    let value: any = state.value;
     for (const k of keys ?? []) {
       value = value?.[k];
     }
 
-    const setValue = (value: T | ((old: T) => T)) => {
-      const newStateRoot = { ...state };
+    const setValue: FieldProps<T>["setValue"] = (value) => {
+      const newStateRoot = { ...state.value };
 
-      let oldState: any = state;
+      let oldState: any = state.value;
       let newState: any = newStateRoot;
 
       for (const [i, k] of keys.map((k, i) => [i, k])) {
@@ -67,17 +107,10 @@ export const useForm = <
         oldState = oldState[k];
       }
 
-      const [errors, output] = validate(newStateRoot);
-      if (errors) {
-        setState(newStateRoot);
-        setErrors(errors);
-      } else {
-        setState(output as DeepPartial<TOut>);
-        setErrors(undefined);
-      }
+      setRootValue(newStateRoot);
     };
 
-    return {
+    const fieldProps = {
       value: value as T,
       setValue,
       onChange: (e: {
@@ -90,18 +123,23 @@ export const useForm = <
         }
       },
     };
+
+    return transform ? transform(fieldProps) : (fieldProps as TReturn);
   };
 
-  const onSubmitHandler = async () => {
-    if (!!errors) return;
+  const onSubmitHandler = async (e?: { preventDefault: () => unknown }) => {
+    e?.preventDefault();
 
-    await onSubmit?.(state as any as TOut);
+    if (!!state.errors) return;
+
+    await onSubmit?.(state.value as any as TOut);
   };
 
   return {
-    value: state,
+    value: state.value,
+    setValue: setRootValue,
     fieldProps,
-    errors: errors,
+    errors: state.errors,
     onSubmit: onSubmitHandler,
   };
 };
