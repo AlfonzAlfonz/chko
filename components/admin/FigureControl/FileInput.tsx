@@ -26,7 +26,7 @@ export const FileInput = ({
     >
       {url ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt="file" />
+        <img src={url} alt="file" className="max-h-[30vh]" />
       ) : (
         <div className="flex flex-col items-center justify-center w-[250px]">
           <CloudUploadIcon sx={{ width: "32px", height: "32px", mb: 2 }} />

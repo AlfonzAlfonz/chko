@@ -45,22 +45,24 @@ export const EditFigureModal = ({
 
   return (
     <Modal open={open} onClose={onCancel}>
-      <ModalDialog sx={{ width: "60vw" }}>
+      <ModalDialog sx={{ width: "70vw" }}>
         <ModalClose />
         <Typography>Upravit obrázek</Typography>
 
         <form onSubmit={onSubmit}>
-          <FileInput
-            url={value.url}
-            error={errors?.blob}
-            onChange={(blob) =>
-              setValue((s) => ({
-                ...s,
-                url: URL.createObjectURL(blob),
-                blob,
-              }))
-            }
-          />
+          <div>
+            <FileInput
+              url={value.url}
+              error={errors?.blob}
+              onChange={(blob) =>
+                setValue((s) => ({
+                  ...s,
+                  url: URL.createObjectURL(blob),
+                  blob,
+                }))
+              }
+            />
+          </div>
 
           <FormControl error={!!errors?.caption}>
             <FormLabel>Popisek fotky</FormLabel>
