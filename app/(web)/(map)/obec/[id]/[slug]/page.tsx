@@ -6,10 +6,18 @@ import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
 import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
 import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
 import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
+import chkoimg from "@/public/static/česká kras_bez pozadio 1.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
 import { FigureImage } from "@/components/FigureImage";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionContent,
+} from "@/components/Accordion";
+import { LightBox } from "@/components/LightBox/LightBox";
+import { Gallery } from "@/components/Gallery";
 
 const getData = async (id: number) => {
   return await db
@@ -17,30 +25,6 @@ const getData = async (id: number) => {
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
-};
-
-const chko = {
-  name: "CHKO Český kras",
-  lists: [
-    {
-      title: "CO JE TYPICKÉ?",
-      values: [
-        "Okolo vesnic volná zemědělská krajina pastvin, luk, polí, sadů, polních cest, lesů",
-        "Sevřené menší vesnice posazené mezi kopci se zděnými podélnými statky a střechami z pálených tašek",
-        "Bez roztroušených staveb po okolí (mlýny, hájovny apod. výjimečně)",
-        "Dominanty kostelů, hradu",
-      ],
-    },
-    {
-      title: "NAVAZUJEME NA TRADICE",
-      values: [
-        "Nezastavět horizonty",
-        "Stavět (vymezovat zastavitelná území) jen v přímé návaznosti na obce",
-        "Nezakrýt historické dominanty",
-        "Opravy starých domů nebo novostavby držící tvar a vzhled statků, které jsou ve vesnicích okolo",
-      ],
-    },
-  ],
 };
 
 const Detail = async ({ params }: { params: { id: string } }) => {
@@ -101,12 +85,18 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </p>
       </div>
 
-      <div className="container mt-8">
-        <div className="container-inner">
-          <h2 className="container-content col-span-4 nadpis-50">
-            {chko.name}
-          </h2>
-
+      <Accordion className="container mt-8">
+        <div className="col-span-1 relative">
+          <Image
+            src={chkoimg}
+            alt="Logo CHKO Český Kras"
+            className="absolute"
+          />
+        </div>
+        <AccordionButton className="container-inner text-left">
+          <h2 className="leading-none">{chko.name}</h2>
+        </AccordionButton>
+        <AccordionContent className="container-inner mb-8">
           {chko.lists.map((l, i) => (
             <div key={i} className="col-span-4 text-18">
               <h3 className="container-content uppercase p-5 border-b-[1px] border-black tracking-[4px]">
@@ -121,11 +111,6 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               </ol>
             </div>
           ))}
-        </div>
-      </div>
-
-      <div className="container mt-8">
-        <div className="container-inner popisky-13">
           <WithCaption
             className="col-span-2"
             caption="SKALNATÁ ÚDOLÍ A ZALESNĚNÉ VRCHY BEZ STAVEB"
@@ -162,94 +147,65 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               alt="SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVINY OKOLO"
             />
           </WithCaption>
-        </div>
-      </div>
+        </AccordionContent>
+      </Accordion>
 
-      <div className="container mt-8">
-        <div className="container-inner">
-          <h2 className="container-content col-span-full nadpis-50">
-            Převažující charakter výstavby
-          </h2>
+      <Accordion className="container">
+        <AccordionButton className="container-inner text-left">
+          <h2 className="leading-none">Převažující charakter výstavby</h2>
+        </AccordionButton>
+        <AccordionContent className="container-inner mb-8">
+          <Gallery
+            figures={obec.data.characteristics}
+            className="col-span-full"
+          />
+        </AccordionContent>
+      </Accordion>
 
-          {obec.data.characteristics[0] && (
-            <FigureImage
-              className="col-span-full aspect-[2/1]"
-              figure={obec.data.characteristics[0]}
-            />
-          )}
-
-          <div className="flex col-span-full gap-4">
-            <div className="flex-1">
-              {obec.data.characteristics[1] && (
-                <FigureImage figure={obec.data.characteristics[1]} />
-              )}
-            </div>
-            <div className="flex-1">
-              {obec.data.characteristics[2] && (
-                <FigureImage figure={obec.data.characteristics[2]} />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mt-8">
-        <div className="container-inner">
-          <h2 className="container-content col-span-full nadpis-50">
+      <Accordion className="container">
+        <AccordionButton className="container-inner text-left">
+          <h2 className="leading-none">
             Přítomnost památkově chráněných objektů
           </h2>
+        </AccordionButton>
+        <AccordionContent className="container-inner mb-8">
+          <Gallery figures={obec.data.buildings} className="col-span-full" />
+        </AccordionContent>
+      </Accordion>
 
-          {obec.data.buildings[0] && (
-            <FigureImage
-              className="col-span-full aspect-[2/1]"
-              figure={obec.data.buildings[0]}
-            />
-          )}
+      <Accordion className="container">
+        <div className="container-inner flex flex-col bg-[rgba(46,204,113,0.25)] border-b-[1px] border-black">
+          <AccordionButton className="text-left">
+            <h2 className="leading-none">
+              Podmínky ochrany a doplňující doporučení
+            </h2>
+          </AccordionButton>
+          <AccordionContent className="pb-7 mb-8">
+            <ol className="ordered-list col-span-full">
+              {obec.data.terms.map((v, ii) => (
+                <li key={ii} className="p-5 border-b-[1px] border-black">
+                  {v}
+                </li>
+              ))}
+            </ol>
+            <p className="container-content col-span-full">
+              Je dobré si předem zjistit, zda zamýšlený stavební záměr je v
+              souladu s územním plánem (viz webové stránky obce). Zároveň
+              doporučujeme ještě před započetím projekčních prací konzultovat
+              svůj záměr na správě CHKO – je vhodné mít s sebou alespoň zákres
+              půdorysu do situace, tj. umístění stavby v katastrální mapě, a
+              hmotovou skicu, tj. siluetu stavby ve vybrané fotografii z
+              charakteristického pohledu ukazujícího její působení v krajině.
+            </p>
 
-          {/* <div className="flex col-span-full gap-4">
-            <div className="flex-1">
-              {obec.data.buildings[1] && (
-                <FigureImage figure={obec.data.buildings[1]} />
-              )}
+            <div className="container-content col-span-full flex">
+              <a className="button" href="https://example.com">
+                DALŠÍ INFORMACE KE STAVEBNÍ ČINNOSTI
+              </a>
             </div>
-            <div className="flex-1">
-              {obec.data.buildings[2] && (
-                <FigureImage figure={obec.data.buildings[2]} />
-              )}
-            </div>
-          </div> */}
+          </AccordionContent>
         </div>
-      </div>
-
-      <div className="container mt-8">
-        <div className=" container-inner pb-7 bg-[rgba(46,204,113,0.25)]">
-          <h2 className="container-content col-span-full nadpis-50 pt-4">
-            Podmínky ochrany a doplňující doporučení
-          </h2>
-          <ol className="ordered-list col-span-full">
-            {obec.data.terms.map((v, ii) => (
-              <li key={ii} className="p-5 border-b-[1px] border-black">
-                {v}
-              </li>
-            ))}
-          </ol>
-          <p className="container-content col-span-full">
-            Je dobré si předem zjistit, zda zamýšlený stavební záměr je v
-            souladu s územním plánem (viz webové stránky obce). Zároveň
-            doporučujeme ještě před započetím projekčních prací konzultovat svůj
-            záměr na správě CHKO – je vhodné mít s sebou alespoň zákres půdorysu
-            do situace, tj. umístění stavby v katastrální mapě, a hmotovou
-            skicu, tj. siluetu stavby ve vybrané fotografii z charakteristického
-            pohledu ukazujícího její působení v krajině.
-          </p>
-
-          <div className="container-content col-span-full flex">
-            <a className="button" href="https://example.com">
-              DALŠÍ INFORMACE KE STAVEBNÍ ČINNOSTI
-            </a>
-          </div>
-        </div>
-      </div>
+      </Accordion>
 
       <div className="container">
         <div className="container-inner">
@@ -281,3 +237,27 @@ www.nature.cz/web/chko-cesky-kras`}
 };
 
 export default Detail;
+
+const chko = {
+  name: "CHKO Český kras",
+  lists: [
+    {
+      title: "CO JE TYPICKÉ?",
+      values: [
+        "Okolo vesnic volná zemědělská krajina pastvin, luk, polí, sadů, polních cest, lesů",
+        "Sevřené menší vesnice posazené mezi kopci se zděnými podélnými statky a střechami z pálených tašek",
+        "Bez roztroušených staveb po okolí (mlýny, hájovny apod. výjimečně)",
+        "Dominanty kostelů, hradu",
+      ],
+    },
+    {
+      title: "NAVAZUJEME NA TRADICE",
+      values: [
+        "Nezastavět horizonty",
+        "Stavět (vymezovat zastavitelná území) jen v přímé návaznosti na obce",
+        "Nezakrýt historické dominanty",
+        "Opravy starých domů nebo novostavby držící tvar a vzhled statků, které jsou ve vesnicích okolo",
+      ],
+    },
+  ],
+};

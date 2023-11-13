@@ -21,6 +21,7 @@ const config: Config = {
         chkoorange: "#F39C12",
         chkosearch: "#AAAAAA",
         chkoyellow: "#F1C40F",
+        chkobg: "#EFEFEF",
       },
     },
   },

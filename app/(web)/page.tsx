@@ -1,21 +1,22 @@
 import { ObecSearch } from "@/components/Autocomplete/ObecSearch";
 import krajraz1 from "@/public/static/Vinarice_nadhled 3.png";
 import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
-import logo from "@/public/static/logo.svg";
+import logo from "@/public/static/logo_hp.svg";
 import Image from "next/image";
 import "./home.css";
 import Link from "next/link";
+import { HomepageSearch } from "@/components/HomepageSearch";
 
 const Home = async () => {
   return (
     <div>
       <div className="flex items-start container h-[100vh] first">
         <h1 className="flex w-full items-center justify-between text-[70px] xl:text-[130px] 3xl:text-[180px] text-white col-span-full">
-          <Image src={logo} alt="logo" />
-          Jak stavět v krajině
+          <Image src={logo} alt="Jak stavět v krajině" className="w-full" />
         </h1>
       </div>
-      <div className="relative container h-[100vh]">
+
+      <div className="relative container h-[100vh] bg-chkobg">
         <div className="col-start-2 col-span-4 flex items-center justify-center flex-col">
           <Link
             href="/mapa"
@@ -24,8 +25,7 @@ const Home = async () => {
             {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
             Mapa <img src="/static/cz.svg" />
           </Link>
-          <ObecSearch inner={{ input: { className: "search" } }} />
-          <button className="button mt-16">Vyhledat</button>
+          <HomepageSearch />
         </div>
       </div>
 

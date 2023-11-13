@@ -51,6 +51,12 @@ export const Autocomplete = React.forwardRef(function Autocomplete(
 
   const rootRef = useForkRef(ref, setAnchorEl);
 
+  React.useEffect(() => {
+    if (anchorEl) {
+      // debugger;
+    }
+  });
+
   return (
     <React.Fragment>
       <div
@@ -75,7 +81,7 @@ export const Autocomplete = React.forwardRef(function Autocomplete(
           }}
           slotProps={{
             root: {
-              className: "relative z-[1001] w-[60vw]",
+              className: "relative z-[1001] w-[62.5vw] shadow-lg",
             },
           }}
           modifiers={[

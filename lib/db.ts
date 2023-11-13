@@ -35,18 +35,10 @@ export type ObecData = {
   intro: string;
 
   /** Převažující charakter výstavby */
-  characteristics: [
-    FigureData | undefined,
-    FigureData | undefined,
-    FigureData | undefined
-  ];
+  characteristics: FigureData[];
 
   /**  Přítomnost památkově chráněných objektů */
-  buildings: [
-    FigureData | undefined,
-    FigureData | undefined,
-    FigureData | undefined
-  ];
+  buildings: FigureData[];
 
   /** Podmínky ochrany a doplňující doporučení */
   terms: string[];

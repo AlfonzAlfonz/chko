@@ -446,8 +446,8 @@ export const ObecForm = ({
         <Table>
           <tbody>
             <tr>
-              <th className="w-[calc(50%-24px)]">Text</th>
-              <th className="w-[calc(50%-24px)]">Link</th>
+              <th>Text</th>
+              <th>Link</th>
               <th className="w-[48px]"></th>
             </tr>
             {value.data?.links?.map(([text, href] = [], i) => (
@@ -474,7 +474,7 @@ export const ObecForm = ({
                   />
                   <ErrorMessage>{errors?.data?.links?.[i]?.[1]}</ErrorMessage>
                 </td>
-                <td>
+                <td className="align-top">
                   <IconButton
                     color="danger"
                     onClick={() =>

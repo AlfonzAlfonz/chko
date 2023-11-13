@@ -9,6 +9,8 @@ export const ObecSearch = (props: {
   options?: { value: number; label: string; slug: string }[];
   inner?: AutocompleteInnerProps;
   searchDecorator?: boolean;
+  onChange?: () => unknown;
+  onInputChange?: (val: string) => unknown;
 }) => {
   const obecList = useContext(ObecListContext);
   const router = useRouter();
@@ -25,6 +27,10 @@ export const ObecSearch = (props: {
         if (!val) return;
 
         router.push(`/obec/${val.value}/${val.slug}`);
+        props.onChange?.();
+      }}
+      onInputChange={(_, val) => {
+        props.onInputChange?.(val);
       }}
     />
   );

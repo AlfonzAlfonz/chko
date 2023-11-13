@@ -1,14 +1,14 @@
 import { FigureData } from "@/lib/db";
 import Image from "next/image";
 import { WithCaption } from "./WithCaption";
+import { ComponentProps } from "react";
 
 export const FigureImage = ({
   figure,
-  className,
+  ...divProps
 }: {
   figure: FigureData;
-  className?: string;
-}) => {
+} & ComponentProps<"div">) => {
   const image = (
     <Image
       src={figure.url}
@@ -20,11 +20,9 @@ export const FigureImage = ({
   );
 
   return (
-    <div className={className}>
+    <div {...divProps}>
       {figure.caption ? (
-        <WithCaption className={className} caption={figure.caption}>
-          {image}
-        </WithCaption>
+        <WithCaption caption={figure.caption}>{image}</WithCaption>
       ) : (
         image
       )}
