@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 import { twMerge } from "tailwind-merge";
-import { Chevron } from "./Chevron";
+import { Chevron } from "./icons/Chevron";
 
 interface Props {
   children: ReactNode;

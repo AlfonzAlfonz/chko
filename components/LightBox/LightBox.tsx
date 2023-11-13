@@ -3,26 +3,27 @@
 import { FigureData } from "@/lib/db";
 import { Modal } from "@mui/base";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { Chevron } from "../Chevron";
-import "./lightbox.css";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { WithCaption } from "../WithCaption";
+import { Chevron } from "../icons/Chevron";
+import "./lightbox.css";
 
 interface Props {
-  data?: FigureData[];
-  initialIndex: number;
-  onClose: () => unknown;
+  open: boolean;
+  onClose: (index: number) => unknown;
+
+  data: FigureData[];
+
+  index: number;
 }
 
-export const LightBox = ({ data, initialIndex, onClose }: Props) => {
-  const [index, setIndex] = useState(0);
-  const open = !!data;
-
-  useEffect(() => {
-    setIndex(data ? initialIndex % data.length : 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
+export const LightBox = ({
+  open,
+  data,
+  index: initialIndex,
+  onClose,
+}: Props) => {
+  const [index, setIndex] = useState(initialIndex);
   const activeFigure = data?.[index];
 
   return (
@@ -30,7 +31,7 @@ export const LightBox = ({ data, initialIndex, onClose }: Props) => {
       className="lightbox"
       aria-labelledby={activeFigure?.caption}
       open={open}
-      onClose={onClose}
+      onClose={() => onClose(index)}
       slots={{ backdrop: Backdrop }}
       slotProps={{ backdrop: { className: "lightbox-backdrop" } }}
     >
@@ -47,24 +48,7 @@ export const LightBox = ({ data, initialIndex, onClose }: Props) => {
             />
           </WithCaption>
 
-          <div className="absolute w-full h-full flex justify-between items-center p-2">
-            <Chevron
-              style={{
-                transform: "rotate(-90deg) scale(1.4)",
-                cursor: "pointer",
-              }}
-              onClick={() =>
-                setIndex((s) => (s === 0 ? data.length - 1 : s - 1))
-              }
-            />
-            <Chevron
-              style={{
-                transform: "rotate(90deg) scale(1.4)",
-                cursor: "pointer",
-              }}
-              onClick={() => setIndex((s) => (s + 1) % data.length)}
-            />
-          </div>
+          <SliderOverlay length={data.length} setIndex={setIndex} />
         </div>
       ) : (
         <div />
@@ -89,21 +73,29 @@ const Backdrop = React.forwardRef<
 
 Backdrop.displayName = "Backdrop";
 
-export const useGallery = () => {
-  const [state, setState] = useState<Props>({
-    data: undefined,
-    initialIndex: 0,
-    onClose: () => {},
-  });
-
-  return [
-    state,
-    (data: FigureData[] | undefined, initialIndex: number) =>
-      setState({
-        data,
-        initialIndex,
-        onClose: () =>
-          setState({ data: undefined, initialIndex: 0, onClose: () => {} }),
-      }),
-  ] as const;
+export const SliderOverlay = ({
+  setIndex,
+  length,
+}: {
+  setIndex: Dispatch<SetStateAction<number>>;
+  length: number;
+}) => {
+  return (
+    <div className="absolute w-full h-full flex justify-between items-center p-2 inset-0 slider-overlay">
+      <Chevron
+        style={{
+          transform: "rotate(-90deg) scale(1.4)",
+          cursor: "pointer",
+        }}
+        onClick={() => setIndex((s) => (s === 0 ? length - 1 : s - 1))}
+      />
+      <Chevron
+        style={{
+          transform: "rotate(90deg) scale(1.4)",
+          cursor: "pointer",
+        }}
+        onClick={() => setIndex((s) => (s + 1) % length)}
+      />
+    </div>
+  );
 };

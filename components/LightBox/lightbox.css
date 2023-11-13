@@ -5,12 +5,6 @@
 @layer components {
   .lightbox {
     @apply fixed z-[1300] inset-0 flex items-center justify-center;
-
-    & line {
-      @apply shadow-lg;
-      stroke: white !important;
-
-    }
   }
 
   .lightbox-content {
@@ -21,5 +15,12 @@
     @apply -z-10 fixed inset-0;
     background-color: rgb(0 0 0 / 0.5);
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .slider-overlay {
+    & line {
+      @apply shadow-lg;
+      stroke: white !important;
+    }
   }
 }

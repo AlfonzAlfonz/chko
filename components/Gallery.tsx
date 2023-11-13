@@ -2,8 +2,9 @@
 
 import { FigureData } from "@/lib/db";
 import { FigureImage } from "./FigureImage";
-import { LightBox, useGallery } from "./LightBox/LightBox";
+import { LightBox, SliderOverlay } from "./LightBox/LightBox";
 import { twMerge } from "tailwind-merge";
+import { useState } from "react";
 
 interface Props {
   figures: FigureData[];
@@ -11,17 +12,29 @@ interface Props {
 }
 
 export const Gallery = ({ figures, className }: Props) => {
-  const [gallery, open] = useGallery();
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
 
   return (
     !!figures.length && (
       <>
         <FigureImage
-          figure={figures[0]}
-          className={twMerge("cursor-pointer", className)}
-          onClick={() => open(figures, 0)}
+          figure={figures[index]}
+          className={twMerge("cursor-pointer relative", className)}
+          // onClick={() => setOpen(true)}
+        >
+          <SliderOverlay length={figures.length} setIndex={setIndex} />
+        </FigureImage>
+
+        <LightBox
+          open={open}
+          data={figures}
+          index={index}
+          onClose={(i) => {
+            setIndex(i);
+            setOpen(false);
+          }}
         />
-        <LightBox {...gallery} />
       </>
     )
   );

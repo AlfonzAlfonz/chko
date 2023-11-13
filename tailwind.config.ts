@@ -50,6 +50,7 @@ const config: Config = {
           fontSize: "18px",
         },
         ".popisky-13": {
+          fontSize: "13px",
           textAlign: "left",
         },
         ".mobil-popisky-11": {

@@ -11,11 +11,12 @@ export const FigureImage = ({
 } & ComponentProps<"div">) => {
   const image = (
     <Image
+      key={figure.url}
       src={figure.url}
       width={figure.width}
       height={figure.height}
       alt={figure.caption}
-      className="w-full"
+      className="w-full bg-black aspect-[3/2] object-contain"
     />
   );
 
@@ -26,6 +27,7 @@ export const FigureImage = ({
       ) : (
         image
       )}
+      {divProps.children}
     </div>
   );
 };

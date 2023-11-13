@@ -17,6 +17,7 @@ import chkoimg from "@/public/static/cesky_kras_logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
+import { Close } from "@/components/icons/Close";
 
 const getData = async (id: number) => {
   return await db
@@ -36,9 +37,9 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       <MapControllerComponent {...obec.metadata} />
       <Link
         href="/mapa"
-        className="text-5xl absolute top-4 right-16 cursor-pointer font-bold"
+        className="text-5xl absolute top-4 right-4 lg:right-16 cursor-pointer font-bold shadow-lg rounded-full h-12 w-12 flex items-center justify-center"
       >
-        ╳
+        <Close />
       </Link>
       <a
         className="button hidden lg:block fixed bottom-4 right-14 bg-[#2ECC71] text-white popisky-13 uppercase z-50"
@@ -199,8 +200,11 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               charakteristického pohledu ukazujícího její působení v krajině.
             </p>
 
-            <div className="container-content col-span-full flex mt-9 px-4 lg:p-0">
-              <a className="button flex-auto" href="https://example.com">
+            <div className="container-content col-span-full flex mt-9 px-4">
+              <a
+                className="button flex-auto lg:flex-initial"
+                href="https://example.com"
+              >
                 DALŠÍ INFORMACE KE STAVEBNÍ ČINNOSTI
               </a>
             </div>
@@ -212,7 +216,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         <div className="container-inner">
           <div className="container-content flex flex-col lg:flex-row col-span-full items-center gap-5 py-9">
             {obec.data.links.map(([label, href], i) => (
-              <a key={i} className="button" href={href} target="_blank">
+              <a key={i} className="button lg:flex" href={href} target="_blank">
                 {label}
               </a>
             ))}

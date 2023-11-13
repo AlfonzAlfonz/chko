@@ -13,7 +13,7 @@ export const WithCaption = ({
   return (
     <figure className={twMerge("relative", className)}>
       {children}
-      <figcaption className="absolute bottom-0 left-0 right-0 bg-chkobg p-3 m-4 mobil-popisky-11">
+      <figcaption className="absolute bottom-0 left-0 right-0 bg-chkobg p-3 m-4 mobil-popisky-11 lg:popisky-13">
         {caption}
       </figcaption>
     </figure>
