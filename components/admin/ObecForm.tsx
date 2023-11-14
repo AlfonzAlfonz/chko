@@ -507,7 +507,7 @@ export const ObecForm = ({
       </Card>
 
       <Card className="mb-16 flex flex-col items-center">
-        <div className="flex">
+        {/* <div className="flex">
           <Checkbox
             label={
               <>
@@ -519,7 +519,7 @@ export const ObecForm = ({
           />
         </div>
         <i>(Pokud je pole zaškrtnuté bude obec viditelná na stránce)</i>
-        <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
+        <ErrorMessage>{errors?.metadata?.name}</ErrorMessage> */}
 
         <Button
           size="lg"
