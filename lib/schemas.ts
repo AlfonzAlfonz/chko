@@ -1,9 +1,14 @@
 import * as v from "valibot";
 
+const optional = <T extends v.BaseSchema>(x: T) =>
+  v.union([v.undefinedType(), x]);
+
+const number = () => v.coerce(v.number(), Number);
+
 export const requiredSchema = v.minLength<string>(1, "Pole je povinné");
 
 export const figureSchema = v.object({
-  caption: v.string(),
+  caption: v.union([v.string(), v.undefinedType()]),
   blob: v.union([v.undefinedType(), v.blob()]),
   url: v.string(),
   width: v.number(),
@@ -16,10 +21,7 @@ export const obecScheme = v.object({
     name: v.string([requiredSchema]),
     okres: v.string([requiredSchema]),
     kraj: v.string([requiredSchema]),
-    position: v.tuple([
-      v.coerce(v.number(), Number),
-      v.coerce(v.number(), Number),
-    ]),
+    position: v.tuple([number(), number()]),
     category: v.union([
       v.literal("I"),
       v.literal("II"),
@@ -29,9 +31,11 @@ export const obecScheme = v.object({
     protectionZone: v.union([v.literal("A"), v.literal("B"), v.literal("C")]),
   }),
   data: v.object({
-    foundedYear: v.number(),
-    censuses: v.array(v.tuple([v.number(), v.number(), v.number()])),
-    cover: figureSchema,
+    foundedYear: optional(number()),
+    censuses: v.array(
+      v.tuple([optional(number()), optional(number()), optional(number())])
+    ),
+    cover: optional(figureSchema),
     intro: v.string([requiredSchema]),
     characteristics: v.coerce(v.array(figureSchema, [v.maxLength(8)]), (x) =>
       Array.isArray(x) ? x.filter(Boolean) : []

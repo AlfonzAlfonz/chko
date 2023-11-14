@@ -129,9 +129,17 @@ export const useForm = <
   const onSubmitHandler = async (e?: { preventDefault: () => unknown }) => {
     e?.preventDefault();
 
-    if (!!state.errors) return;
+    const [errors, value] = validate(state.value);
 
-    await onSubmit?.(state.value as any as TOut);
+    if (errors) {
+      setState({
+        errors,
+        value: state.value,
+      });
+      window.scrollTo({ top: 0 });
+    } else {
+      await onSubmit?.(state.value as any as TOut);
+    }
   };
 
   return {

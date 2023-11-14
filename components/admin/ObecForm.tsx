@@ -52,11 +52,7 @@ export const ObecForm = ({
     DeepPartial<ObecTable>
   >({
     defaultValue: initialValue ?? emptyObec,
-    validate: (val) => {
-      return val.published
-        ? mapValibotResult(v.safeParse(obecScheme, val))
-        : [undefined, val as any as v.Output<typeof obecScheme>];
-    },
+    validate: (val) => mapValibotResult(v.safeParse(obecScheme, val)),
     onSubmit: async (v) => {
       setState("posting");
       const {
@@ -91,7 +87,7 @@ export const ObecForm = ({
           ...data,
           cover: {
             ...cover,
-            ...coverImg,
+            ...(coverImg as any),
           },
           characteristics: characteristics.map((c, i) =>
             !c
@@ -124,6 +120,8 @@ export const ObecForm = ({
       }
     },
   });
+
+  console.log({ errors, value });
 
   value.data?.characteristics;
 
@@ -246,7 +244,7 @@ export const ObecForm = ({
               slotProps={{ input: { style: { appearance: "textfield" } } }}
               {...fieldProps<string>(["data", "censuses", "0", "0"])}
             />
-            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+            <ErrorMessage>{errors?.data?.censuses?.[0]?.[0]}</ErrorMessage>
           </FormControl>
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
             <Input
@@ -256,7 +254,7 @@ export const ObecForm = ({
               slotProps={{ input: { style: { appearance: "textfield" } } }}
               {...fieldProps<string>(["data", "censuses", "0", "1"])}
             />
-            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+            <ErrorMessage>{errors?.data?.censuses?.[0]?.[1]}</ErrorMessage>
           </FormControl>
           <div className="mb-7">/</div>
           <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
@@ -267,7 +265,7 @@ export const ObecForm = ({
               slotProps={{ input: { style: { appearance: "textfield" } } }}
               {...fieldProps<string>(["data", "censuses", "0", "2"])}
             />
-            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
+            <ErrorMessage>{errors?.data?.censuses?.[0]?.[2]}</ErrorMessage>
           </FormControl>
         </div>
         <div className="flex gap-4 w-full items-center">
@@ -279,7 +277,7 @@ export const ObecForm = ({
               slotProps={{ input: { style: { appearance: "textfield" } } }}
               {...fieldProps<string>(["data", "censuses", "1", "0"])}
             />
-            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+            <ErrorMessage>{errors?.data?.censuses?.[1]?.[0]}</ErrorMessage>
           </FormControl>
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
             <Input
@@ -289,7 +287,7 @@ export const ObecForm = ({
               slotProps={{ input: { style: { appearance: "textfield" } } }}
               {...fieldProps<string>(["data", "censuses", "1", "1"])}
             />
-            <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
+            <ErrorMessage>{errors?.data?.censuses?.[1]?.[1]}</ErrorMessage>
           </FormControl>
           <div className="mb-7">/</div>
           <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
@@ -300,7 +298,7 @@ export const ObecForm = ({
               slotProps={{ input: { style: { appearance: "textfield" } } }}
               {...fieldProps<string>(["data", "censuses", "1", "2"])}
             />
-            <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
+            <ErrorMessage>{errors?.data?.censuses?.[1]?.[2]}</ErrorMessage>
           </FormControl>
         </div>
       </Card>
@@ -547,7 +545,10 @@ export const ObecForm = ({
 };
 
 const emptyObec: DeepPartial<ObecTable> = {
-  metadata: {},
+  published: true,
+  metadata: {
+    position: [],
+  },
   data: {
     censuses: [
       [1869, undefined, undefined],
@@ -555,6 +556,8 @@ const emptyObec: DeepPartial<ObecTable> = {
     ],
     characteristics: [],
     buildings: [],
+    terms: [],
+    links: [],
   },
 };
 
