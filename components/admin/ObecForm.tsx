@@ -36,14 +36,16 @@ import {
   FigureControl,
   FigureControlValue,
 } from "./FigureControl/FigureControl";
+import { useRouter } from "next/navigation";
 
 export const ObecForm = ({
   value: initialValue,
   onSubmit: save,
 }: {
   value?: ObecTable;
-  onSubmit?: (obec: ObecTable) => Promise<void>;
+  onSubmit?: (obec: ObecTable) => Promise<number | undefined>;
 }) => {
+  const router = useRouter();
   const [state, setState] = useState<"posting" | "ready">("ready");
   const { value, errors, fieldProps, onSubmit } = useForm<
     typeof obecScheme,
@@ -67,20 +69,20 @@ export const ObecForm = ({
       const prefix = "obec/" + initialValue?.id;
 
       const [coverImg, cImages, bImages] = await Promise.all([
-        cover.blob && upload(prefix + "/cover", cover),
+        cover?.blob && upload(prefix + "/cover", cover),
         Promise.all(
           characteristics.map(
             (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c)
-          )
+          ) ?? []
         ),
         Promise.all(
           buildings.map(
             (b, i) => b?.blob && upload(`${prefix}/buildings/${i}`, b)
-          )
+          ) ?? []
         ),
       ]);
 
-      await save({
+      const insertedId = await save({
         ...value,
         id: value.id!,
         slug: getSlug(value.metadata.name),
@@ -116,6 +118,10 @@ export const ObecForm = ({
 
       setState("ready");
       alert("Uloženo");
+
+      if (insertedId) {
+        router.push(`/admin/obec/${insertedId}`);
+      }
     },
   });
 
@@ -325,7 +331,7 @@ export const ObecForm = ({
             ["data", "characteristics"],
             ({ value, setValue }: FieldProps<DeepPartial<FigureData>[]>) => (
               <>
-                {value.map((x, i) => (
+                {value?.map((x, i) => (
                   <FigureControl
                     key={i}
                     {...fieldProps(
@@ -361,7 +367,7 @@ export const ObecForm = ({
             ["data", "buildings"],
             ({ value, setValue }: FieldProps<DeepPartial<FigureData>[]>) => (
               <>
-                {value.map((x, i) => (
+                {value?.map((x, i) => (
                   <FigureControl
                     key={i}
                     {...fieldProps(
@@ -547,6 +553,8 @@ const emptyObec: DeepPartial<ObecTable> = {
       [1869, undefined, undefined],
       [2011, undefined, undefined],
     ],
+    characteristics: [],
+    buildings: [],
   },
 };
 

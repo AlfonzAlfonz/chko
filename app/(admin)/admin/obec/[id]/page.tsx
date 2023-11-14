@@ -17,13 +17,13 @@ const ObecDetail = async ({ params }: { params: { id: string } }) => {
 
   const saveData = async (obec: ObecTable) => {
     "use server";
-    const { id } = await db
+    await db
       .updateTable("cities")
       .where("id", "=", +params.id)
       .set(obec)
       .returning("id")
       .executeTakeFirstOrThrow();
-
+    return undefined;
   };
 
   return (

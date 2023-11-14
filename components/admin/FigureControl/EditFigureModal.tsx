@@ -23,7 +23,7 @@ export const EditFigureModal = ({
   value: defaultValue,
 }: {
   open: boolean;
-  value: FigureControlValue;
+  value?: FigureControlValue;
   onCancel: () => unknown;
   onOk: (value: FigureControlValue) => unknown;
   onDelete: () => unknown;
@@ -32,7 +32,7 @@ export const EditFigureModal = ({
     typeof figureSchema,
     FigureControlValue
   >({
-    defaultValue,
+    defaultValue: defaultValue ?? {},
     onSubmit: (value) => {
       onOk(value);
     },

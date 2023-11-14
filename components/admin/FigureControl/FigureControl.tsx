@@ -1,29 +1,16 @@
 import { FigureData } from "@/lib/db";
 import Edit from "@mui/icons-material/Edit";
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  IconButton,
-  Input,
-  Modal,
-  ModalClose,
-  ModalDialog,
-  Typography,
-  styled,
-} from "@mui/joy";
+import { IconButton } from "@mui/joy";
 import { Dispatch, SetStateAction, useState } from "react";
-import * as v from "valibot";
-import { ErrorMessage } from "../ErrorMessage";
-import { DeepPartial, Errors, mapValibotResult, useForm } from "../useForm";
-import { FileInput } from "./FileInput";
+import { DeepPartial, Errors } from "../useForm";
 import { EditFigureModal } from "./EditFigureModal";
+import { FileInput } from "./FileInput";
 
 export type FigureControlValue = DeepPartial<FigureData> & { blob?: Blob };
 
 interface Props {
   error?: Errors<FigureControlValue>;
-  value: FigureControlValue;
+  value?: FigureControlValue;
   setValue: Dispatch<SetStateAction<FigureControlValue>>;
   onDelete: () => unknown;
 }
@@ -35,7 +22,7 @@ export const FigureControl = ({ error, value, setValue, onDelete }: Props) => {
     <div className="relative flex-shrink-0">
       <FileInput
         error={!!error}
-        url={value.url}
+        url={value?.url}
         onChange={(blob) =>
           setValue((s) => ({
             ...s,
