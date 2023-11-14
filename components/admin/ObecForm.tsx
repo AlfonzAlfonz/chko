@@ -98,7 +98,7 @@ export const ObecForm = ({
                   height: cImages[i]?.height ?? c?.height,
                   caption: c?.caption,
                 }
-          ) satisfies (FigureData | undefined)[] as any,
+          ) as any satisfies (FigureData | undefined)[] as any,
           buildings: buildings.map((b, i) =>
             !b
               ? undefined
@@ -108,8 +108,8 @@ export const ObecForm = ({
                   height: bImages[i]?.height ?? b?.height,
                   caption: b?.caption,
                 }
-          ) satisfies (FigureData | undefined)[] as any,
-        },
+          ) as any satisfies (FigureData | undefined)[] as any,
+        } as any,
       });
 
       setState("ready");
