@@ -6,6 +6,7 @@
 @layer components {
   .info-table {
     @apply popisky-13 uppercase;
+    letter-spacing: 2.86px;
 
     & td {
       @apply border-b-[1px] border-black;

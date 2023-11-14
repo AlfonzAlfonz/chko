@@ -52,7 +52,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         <h1 className="col-span-full lg:col-span-3 text-[30px] lg:text-[50px] shadow-lg lg:shadow-none px-4 py-5 lg:p-0">
           {obec.metadata.name}
         </h1>
-        <table className="info-table col-span-full lg:col-span-2 mx-4 my-5 lg:m-0">
+        <table className="info-table col-span-full lg:col-span-2 mx-4 my-5 lg:m-0 popisky-13">
           <tbody>
             <tr>
               <td>Okres</td>
