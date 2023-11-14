@@ -40,7 +40,7 @@ const Home = async () => {
         </div>
       </div>
 
-      <div className="container h-[100vh]">
+      {/* <div className="container h-[100vh]">
         <div className="col-span-full">
           <h2 className="mt-32 nadpis-80 text-center">
             Proč a jak krajinný ráz?
@@ -62,7 +62,7 @@ const Home = async () => {
         <div className="col-span-3">
           <Image src={krajraz2} alt="TODO:" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

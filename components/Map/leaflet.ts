@@ -65,6 +65,15 @@ export const useLeaflet = (props: MapProps) => {
         });
         zoomHandler(leaflet.defaultZoom);
 
+        L.control
+          .scale({
+            metric: true,
+            imperial: false,
+            position: "bottomright",
+            maxWidth: 200,
+          })
+          .addTo(map);
+
         props.mapRef.current.ready = true;
         props.mapRef.current.queue.forEach((cb) => cb());
         props.mapRef.current.queue = [];

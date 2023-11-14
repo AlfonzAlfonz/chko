@@ -11,7 +11,7 @@
   }
 
   .map-search {
-    @apply relative rounded-full py-2 px-3 pl-8 border-2 border-solid border-chkosearch outline-none focus:border-[#808080] popisky-13;
+    @apply !w-full relative rounded-full py-2 px-3 pl-8 border-2 border-solid border-chkosearch outline-none focus:border-[#808080] popisky-13;
   }
 
   .map-search-decorator {
@@ -57,4 +57,13 @@
       @apply flex;
     }
   }
+}
+
+.leaflet-control-scale-line {
+  background: none;
+  text-align: right;
+  border-left: none;
+  border-color: black;
+  text-shadow: none;
+  margin: 1rem;
 }

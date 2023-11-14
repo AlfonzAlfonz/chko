@@ -22,8 +22,10 @@ export const HomepageSearch = () => {
         onInputChange={setInput}
       />
       <button
-        className="button mt-16"
+        className="button mt-16 uppercase bg-chkogreen text-white"
         onClick={() => {
+          if (!input) return;
+
           const o = obecList.find((x) => x.metadata.name.includes(input));
           if (o) {
             router.push(`/obec/${o.id}/${o.slug}`);
@@ -34,7 +36,7 @@ export const HomepageSearch = () => {
         {loading ? (
           <div className="rounded-full border-t-2 border-l-2 animate-spin h-6 w-6" />
         ) : (
-          "Vyhledat"
+          "Vyhledat obec"
         )}
       </button>
     </>

@@ -83,7 +83,7 @@ export const _Map = (props: MapProps) => {
         </div>
       </div>
       <div className="absolute top-0 right-0 mr-10 mt-6 z-[410]">
-        <Link href="/" className="button px-10">
+        <Link href="/" className="button px-10 py-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -116,7 +116,9 @@ export const _Map = (props: MapProps) => {
                 className={`w-[42px] h-[24px] flex items-center justify-center ${c} ${
                   v === category
                     ? "outline-black outline-2 outline z-10"
-                    : "opacity-50"
+                    : category
+                    ? "opacity-50"
+                    : ""
                 }`}
               >
                 {v}
@@ -136,7 +138,11 @@ export const _Map = (props: MapProps) => {
                     ? "outline-white text-white"
                     : "outline-black text-black"
                 } ${
-                  v === protectionZone ? "outline-2 outline z-10" : "opacity-50"
+                  v === protectionZone
+                    ? "outline-2 outline z-10"
+                    : protectionZone
+                    ? "opacity-50"
+                    : ""
                 }`}
               >
                 {v}
