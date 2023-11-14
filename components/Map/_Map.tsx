@@ -3,50 +3,44 @@
 import { ObecMetadata } from "@/lib/db";
 import "leaflet/dist/leaflet.css";
 import Link from "next/link";
-import { ObecSearch } from "../Autocomplete/ObecSearch";
-import { useLeaflet } from "./leaflet";
-import "./mapa.css";
 import {
   Dispatch,
-  RefObject,
+  MutableRefObject,
   SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
   useImperativeHandle,
   useState,
 } from "react";
+import { ObecSearch } from "../Autocomplete/ObecSearch";
+import { useLeaflet } from "./leaflet";
+import "./mapa.css";
 
 export interface MapProps {
   defaultCenter?: [number, number];
   defaultZoom?: number;
-  scrollWheelZoom?: boolean;
+  obecHidden?: boolean;
 
-  mapRef?: RefObject<MapController>;
+  mapRef: MutableRefObject<MapController>;
 }
 
 export type MapController = {
+  queue: (() => unknown)[];
+  ready: boolean;
   leaflet: L.Map;
   setCategory: Dispatch<SetStateAction<ObecMetadata["category"] | undefined>>;
   setProtectionZone: Dispatch<
     SetStateAction<ObecMetadata["protectionZone"] | undefined>
   >;
+  execute: (cb: () => unknown) => unknown;
 };
 
 export const _Map = (props: MapProps) => {
-  const { map, mapRef, containerRef } = useLeaflet(props);
+  const { mapRef, containerRef } = useLeaflet(props);
 
   const [category, setCategory] = useState<ObecMetadata["category"]>();
   const [protectionZone, setProtectionZone] =
     useState<ObecMetadata["protectionZone"]>();
-
-  useImperativeHandle(props.mapRef, () => {
-    return {
-      leaflet: map.current!,
-      setCategory,
-      setProtectionZone,
-    };
-  });
+  props.mapRef.current.setCategory = setCategory;
+  props.mapRef.current.setProtectionZone = setProtectionZone;
 
   return (
     <div ref={containerRef} className="h-full relative">
@@ -105,7 +99,14 @@ export const _Map = (props: MapProps) => {
         </Link>
       </div>
 
-      <div className="absolute bottom-0 left-0 z-[410] ml-10 mb-6 space-y-6 map-zones">
+      <div
+        className={`
+          absolute left-0 ${
+            props.obecHidden ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
+          }
+          z-[410] ml-10 mb-6 space-y-6 map-zones
+        `}
+      >
         <div className="cursor-pointer popisky-13">
           <div className="uppercase mb-2">Kategorie sídla</div>
           <div className="flex select-none">

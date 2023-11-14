@@ -33,7 +33,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
   if (!obec) return null;
 
   return (
-    <div className="relative">
+    <div className="relative -mt-[85px] lg:-mt-[150px] z-[1000] bg-white">
       <MapControllerComponent {...obec.metadata} />
       <Link
         href="/mapa"

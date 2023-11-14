@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 export const useLeaflet = (props: MapProps) => {
   const router = useRouter();
   const once = useRef<boolean>(false);
-  const mapRef = useRef<L.Map>();
 
   const obecList = useContext(ObecListContext);
 
@@ -16,13 +15,14 @@ export const useLeaflet = (props: MapProps) => {
   const containerRef = useRef<HTMLDivElement>(null!);
 
   const leaflet = {
-    scrollWheelZoom: props.scrollWheelZoom ?? true,
-    defaultCenter: props.defaultCenter ?? [49.9695, 14.1306],
-    defaultZoom: props.defaultZoom ?? 10,
+    scrollWheelZoom: props.obecHidden ?? true,
+    defaultCenter: props.defaultCenter ?? [49.74375, 15.338639],
+    defaultZoom: props.defaultZoom ?? 8,
   };
 
   useLayoutEffect(() => {
     if (!once.current) {
+      const mapRef = props.mapRef!;
       once.current = true;
       (async () => {
         const map = L.map(containerRef.current, {
@@ -35,7 +35,7 @@ export const useLeaflet = (props: MapProps) => {
           center: leaflet.defaultCenter,
           zoom: leaflet.defaultZoom,
         });
-        mapRef.current = map;
+        mapRef.current.leaflet = map;
 
         const tiles = L.tileLayer(url, {
           attribution:
@@ -59,11 +59,15 @@ export const useLeaflet = (props: MapProps) => {
           }
         };
         map.addEventListener("zoom", () => {
-          const zoom = mapRef.current!.getZoom();
+          const zoom = mapRef.current!.leaflet.getZoom();
 
           zoomHandler(zoom);
         });
         zoomHandler(leaflet.defaultZoom);
+
+        props.mapRef.current.ready = true;
+        props.mapRef.current.queue.forEach((cb) => cb());
+        props.mapRef.current.queue = [];
 
         const geoData = await ensureSimplifiedChkoGeo();
 
@@ -81,7 +85,7 @@ export const useLeaflet = (props: MapProps) => {
               className: `map-marker map-marker-${obec.metadata.category}`,
               html: obec.metadata.name,
             }),
-          }).addTo(mapRef.current);
+          }).addTo(mapRef.current.leaflet);
           m.addEventListener("click", () => {
             router.push(`/obec/${obec.id}/${obec.slug}`);
           });
@@ -92,17 +96,18 @@ export const useLeaflet = (props: MapProps) => {
   }, []);
 
   useEffect(() => {
+    const mapRef = props.mapRef!;
     if (
-      !!leaflet.scrollWheelZoom !== !!mapRef.current?.scrollWheelZoom.enabled()
+      !!leaflet.scrollWheelZoom !==
+      !!mapRef.current?.leaflet.scrollWheelZoom.enabled()
     ) {
       !!leaflet.scrollWheelZoom
-        ? mapRef.current?.scrollWheelZoom.enable()
-        : mapRef.current?.scrollWheelZoom.disable();
+        ? mapRef.current?.leaflet.scrollWheelZoom.enable()
+        : mapRef.current?.leaflet.scrollWheelZoom.disable();
     }
-  }, [leaflet.scrollWheelZoom]);
+  }, [leaflet.scrollWheelZoom, props.mapRef]);
 
   return {
-    map: mapRef,
     mapRef: containerRef,
     containerRef: wrapperRef,
   };

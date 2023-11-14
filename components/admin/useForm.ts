@@ -79,7 +79,6 @@ export const useForm = <
       let newState: any = newStateRoot;
 
       for (const [i, k] of keys.map((k, i) => [i, k])) {
-        console.log(k, value, oldState, newState);
         if (i === keys.length - 1) {
           newState[k] =
             typeof value === "function" ? (value as any)(oldState[k]) : value;

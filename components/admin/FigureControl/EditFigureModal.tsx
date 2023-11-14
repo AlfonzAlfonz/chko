@@ -41,8 +41,6 @@ export const EditFigureModal = ({
     },
   });
 
-  console.log(errors);
-
   return (
     <Modal open={open} onClose={onCancel}>
       <ModalDialog sx={{ width: "70vw" }}>

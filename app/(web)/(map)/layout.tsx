@@ -7,18 +7,14 @@ import { ReactNode, useRef } from "react";
 
 const Template = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const mapRef = useRef<MapController>(null!);
+  const mapRef = useRef<MapController>(createController());
 
   const map = pathname === "/mapa";
 
   return (
     <div className="h-screen">
-      <div
-        className={
-          map ? "h-full" : "h-[calc(100%-85px)] lg:h-[calc(100%-150px)]"
-        }
-      >
-        <Map scrollWheelZoom={map} mapRef={mapRef} />
+      <div className={"h-full"}>
+        <Map obecHidden={map} mapRef={mapRef} />
       </div>
       <MapContext.Provider value={mapRef}>{children}</MapContext.Provider>
     </div>
@@ -26,3 +22,20 @@ const Template = ({ children }: { children: ReactNode }) => {
 };
 
 export default Template;
+
+const createController = (): MapController => {
+  return {
+    queue: [],
+    ready: false,
+    leaflet: null!,
+    setCategory: null!,
+    setProtectionZone: null!,
+    execute: function (cb) {
+      if (this.ready) {
+        cb();
+      } else {
+        this.queue.push(cb);
+      }
+    },
+  };
+};

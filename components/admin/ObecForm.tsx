@@ -575,7 +575,6 @@ export const upload = async (
 
 const getImageSize = (blob: Blob) =>
   new Promise<[number, number] | null>((resolve) => {
-    console.log("loaded");
     const img = document.createElement("img");
 
     img.onload = () => {
@@ -584,7 +583,6 @@ const getImageSize = (blob: Blob) =>
     };
 
     img.onerror = () => {
-      console.log("error img");
       resolve(null);
       URL.revokeObjectURL(img.src);
     };

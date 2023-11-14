@@ -20,13 +20,17 @@ export const MapControllerComponent = ({
 
   useEffect(() => {
     const control = controller.current;
-    control?.leaflet.setView(position, 16, { animate: true });
-    control?.setCategory(category);
-    control?.setProtectionZone(protectionZone);
+    control?.execute(() => {
+      control?.leaflet.setView(position, 16, { animate: true });
+      control?.setCategory(category);
+      control?.setProtectionZone(protectionZone);
+    });
 
     return () => {
-      control?.setCategory(undefined);
-      control?.setProtectionZone(undefined);
+      control?.execute(() => {
+        control?.setCategory(undefined);
+        control?.setProtectionZone(undefined);
+      });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

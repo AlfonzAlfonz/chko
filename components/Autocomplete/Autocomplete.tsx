@@ -67,7 +67,7 @@ export const Autocomplete = React.forwardRef(function Autocomplete(
       >
         <input
           type="text"
-          placeholder="Vyhledávání"
+          placeholder="Svatý Jan pod Skalou"
           id={id}
           {...getInputProps()}
           {...inner?.input}
