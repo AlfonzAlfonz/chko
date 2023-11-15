@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { DeepPartial, Errors } from "../useForm";
 import { EditFigureModal } from "./EditFigureModal";
 import { FileInput } from "./FileInput";
+import { ErrorMessage } from "../ErrorMessage";
 
 export type FigureControlValue = DeepPartial<FigureData> & { blob?: Blob };
 
@@ -37,6 +38,13 @@ export const FigureControl = ({ error, value, setValue, onDelete }: Props) => {
           <Edit />
         </IconButton>
       </div>
+
+      {error && (
+        <div className="absolute bottom-3 w-full px-3">
+          <ErrorMessage>Pole musí být vyplněné</ErrorMessage>
+        </div>
+      )}
+
       <EditFigureModal
         open={state}
         onCancel={() => setState(false)}

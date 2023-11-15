@@ -27,7 +27,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { put } from "@vercel/blob";
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import getSlug from "speakingurl";
 import * as v from "valibot";
 import { ErrorMessage } from "./ErrorMessage";
@@ -121,9 +121,7 @@ export const ObecForm = ({
     },
   });
 
-  console.log({ errors, value });
-
-  value.data?.characteristics;
+  console.log({ errors }, value.data?.cover);
 
   return (
     <Stack
@@ -175,7 +173,7 @@ export const ObecForm = ({
               <Option value="B">B</Option>
               <Option value="C">C</Option>
             </Select>
-            <ErrorMessage>{errors?.metadata?.category}</ErrorMessage>
+            <ErrorMessage>{errors?.metadata?.protectionZone}</ErrorMessage>
           </FormControl>
         </div>
 
@@ -185,12 +183,12 @@ export const ObecForm = ({
             error={!!errors?.metadata?.position?.[0]}
           >
             <FormLabel>Zeměpisná délka</FormLabel>
-            <Input
+            <NumberInput
               placeholder="48.9441306"
-              {...fieldProps<string>(["metadata", "position", "0"])}
+              {...fieldProps<number>(["metadata", "position", "0"])}
             />
             <FormHelperText>
-              Desetiné číslo s tečkou, v rozmezí 45.5 - 51
+              Desetiné číslo s tečkou, v rozmezí 48.5 - 51
             </FormHelperText>
             <ErrorMessage>{errors?.metadata?.position?.[0]}</ErrorMessage>
           </FormControl>
@@ -199,9 +197,9 @@ export const ObecForm = ({
             error={!!errors?.metadata?.position?.[0]}
           >
             <FormLabel>Zeměpisná šířka</FormLabel>
-            <Input
+            <NumberInput
               placeholder="16.7348346"
-              {...fieldProps<string>(["metadata", "position", "1"])}
+              {...fieldProps<number>(["metadata", "position", "1"])}
             />
             <FormHelperText>
               Desetiné číslo s tečkou, v rozmezí 12 - 19
@@ -230,73 +228,67 @@ export const ObecForm = ({
 
         <FormControl error={!!errors?.data?.foundedYear}>
           <FormLabel>Obec založena</FormLabel>
-          <Input {...fieldProps<string>(["data", "foundedYear"])} />
+          <NumberInput {...fieldProps<number>(["data", "foundedYear"])} />
           <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
         </FormControl>
 
         <FormLabel>Počet obyvatel / domů</FormLabel>
         <div className="flex gap-4 w-full items-center">
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
-            <Input
+            <NumberInput
               fullWidth
-              type="number"
               startDecorator="V roce"
               slotProps={{ input: { style: { appearance: "textfield" } } }}
-              {...fieldProps<string>(["data", "censuses", "0", "0"])}
+              {...fieldProps<number>(["data", "censuses", "0", "0"])}
             />
             <ErrorMessage>{errors?.data?.censuses?.[0]?.[0]}</ErrorMessage>
           </FormControl>
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
-            <Input
+            <NumberInput
               fullWidth
-              type="number"
               endDecorator="obyvatel"
               slotProps={{ input: { style: { appearance: "textfield" } } }}
-              {...fieldProps<string>(["data", "censuses", "0", "1"])}
+              {...fieldProps<number>(["data", "censuses", "0", "1"])}
             />
             <ErrorMessage>{errors?.data?.censuses?.[0]?.[1]}</ErrorMessage>
           </FormControl>
           <div className="mb-7">/</div>
           <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
-            <Input
+            <NumberInput
               fullWidth
-              type="number"
               endDecorator="domů"
               slotProps={{ input: { style: { appearance: "textfield" } } }}
-              {...fieldProps<string>(["data", "censuses", "0", "2"])}
+              {...fieldProps<number>(["data", "censuses", "0", "2"])}
             />
             <ErrorMessage>{errors?.data?.censuses?.[0]?.[2]}</ErrorMessage>
           </FormControl>
         </div>
         <div className="flex gap-4 w-full items-center">
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
-            <Input
+            <NumberInput
               fullWidth
-              type="number"
               startDecorator="V roce"
               slotProps={{ input: { style: { appearance: "textfield" } } }}
-              {...fieldProps<string>(["data", "censuses", "1", "0"])}
+              {...fieldProps<number>(["data", "censuses", "1", "0"])}
             />
             <ErrorMessage>{errors?.data?.censuses?.[1]?.[0]}</ErrorMessage>
           </FormControl>
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
-            <Input
+            <NumberInput
               fullWidth
-              type="number"
               endDecorator="obyvatel"
               slotProps={{ input: { style: { appearance: "textfield" } } }}
-              {...fieldProps<string>(["data", "censuses", "1", "1"])}
+              {...fieldProps<number>(["data", "censuses", "1", "1"])}
             />
             <ErrorMessage>{errors?.data?.censuses?.[1]?.[1]}</ErrorMessage>
           </FormControl>
           <div className="mb-7">/</div>
           <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
-            <Input
+            <NumberInput
               fullWidth
-              type="number"
               endDecorator="domů"
               slotProps={{ input: { style: { appearance: "textfield" } } }}
-              {...fieldProps<string>(["data", "censuses", "1", "2"])}
+              {...fieldProps<number>(["data", "censuses", "1", "2"])}
             />
             <ErrorMessage>{errors?.data?.censuses?.[1]?.[2]}</ErrorMessage>
           </FormControl>
@@ -310,6 +302,7 @@ export const ObecForm = ({
         <div className="px-12 flex flex-col gap-4">
           <FigureControl
             {...fieldProps<FigureControlValue>(["data", "cover"])}
+            error={errors?.data?.cover}
             onDelete={() => fieldProps(["data", "cover"]).setValue(undefined)}
           />
         </div>
@@ -600,3 +593,17 @@ const getImageSize = (blob: Blob) =>
 
     img.src = URL.createObjectURL(blob);
   });
+
+const NumberInput = (
+  props: Omit<ComponentProps<typeof Input>, "onChange"> & {
+    onChange?: (x: { target: { value: number } }) => unknown;
+  }
+) => (
+  <Input
+    {...props}
+    type="number"
+    onChange={(e) =>
+      props.onChange?.({ target: { value: e.target.valueAsNumber } })
+    }
+  />
+);

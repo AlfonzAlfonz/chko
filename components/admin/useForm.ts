@@ -17,7 +17,12 @@ export type FieldProps<T> = {
   value: T;
   setValue: (val: T | ((old: T) => T)) => unknown;
   onChange: (e: {
-    target: { value: T; type?: string; checked?: boolean };
+    target: {
+      value: T;
+      type?: string;
+      checked?: boolean;
+      valueAsNumber?: number;
+    };
   }) => unknown;
 };
 
