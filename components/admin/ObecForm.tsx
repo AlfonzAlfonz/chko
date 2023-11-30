@@ -3,6 +3,8 @@
 import { DeepPartial, FieldProps } from "@/components/admin/useForm";
 import { FigureData, ObecData, ObecTable } from "@/lib/db";
 import Delete from "@mui/icons-material/Delete";
+import ArrowUpward from "@mui/icons-material/ArrowUpward";
+import ArrowDownward from "@mui/icons-material/ArrowDownward";
 import {
   Button,
   Card,
@@ -310,7 +312,33 @@ export const ObecForm = (props: {
                 {...fieldProps<string>(["data", "terms", i])}
                 startDecorator={<div className="px-2">{i + 1}.</div>}
                 endDecorator={
-                  <div>
+                  <div className="flex gap-4">
+                    <div className="flex flex-col">
+                      <IconButton
+                        color="neutral"
+                        disabled={i === 0}
+                        onClick={() =>
+                          fieldProps<ObecData["terms"]>([
+                            "data",
+                            "terms",
+                          ]).setValue((s) => reorder(s, i, i - 1))
+                        }
+                      >
+                        <ArrowUpward />
+                      </IconButton>
+                      <IconButton
+                        color="neutral"
+                        disabled={i === value.data?.terms?.length}
+                        onClick={() =>
+                          fieldProps<ObecData["terms"]>([
+                            "data",
+                            "terms",
+                          ]).setValue((s) => reorder(s, i, i + 1))
+                        }
+                      >
+                        <ArrowDownward />
+                      </IconButton>
+                    </div>
                     <IconButton
                       color="danger"
                       onClick={() =>
@@ -461,3 +489,11 @@ const NumberInput = (
     }
   />
 );
+
+const reorder = <T,>(list: T[], startIndex: number, endIndex: number) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};

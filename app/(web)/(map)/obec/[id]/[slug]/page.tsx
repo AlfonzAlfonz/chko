@@ -44,7 +44,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       <a
         className="button hidden lg:block fixed bottom-4 right-14 bg-[#2ECC71] text-white popisky-13 uppercase z-50"
         target="_blank"
-        href="/static/svaty-jan-pod-skalou.pdf"
+        href={`/api/pdf/${obec.id}`}
       >
         Stáhnout pdf
       </a>
