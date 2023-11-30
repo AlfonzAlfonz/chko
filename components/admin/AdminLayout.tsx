@@ -14,7 +14,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { LoginMenu } from "./LoginMenu";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/(admin)/api/auth/[...nextauth]/route";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export const AdminLayout = async ({ children }: { children: ReactNode }) => {
   const session = await getServerSession(authOptions);

@@ -1,0 +1,37 @@
+@import "../../../globals.css";
+
+@tailwind utilities;
+@tailwind components;
+
+@layer components {
+  .pdf {
+    counter-reset: page;
+  }
+
+  .page {
+    @apply p-8;
+    counter-increment: page;
+
+    width: 210mm;
+    min-height: 297mm;
+    break-after: page;
+
+    @media screen {
+      & {
+        @apply my-3;
+        outline: 1px solid red;
+        margin: auto;
+      }
+    }
+
+    &.exact {
+      height: 297mm;
+    }
+  }
+
+  .pageNo {
+    &::before {
+      content: counter(page);
+    }
+  }
+}

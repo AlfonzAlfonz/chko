@@ -2,13 +2,19 @@ import { FigureData } from "@/lib/db";
 import Image from "next/image";
 import { WithCaption } from "./WithCaption";
 import { ComponentProps } from "react";
+import { twMerge } from "tailwind-merge";
 
 export const FigureImage = ({
   figure,
+  noCaption,
+  imgClassName,
   ...divProps
 }: {
-  figure: FigureData;
+  figure?: FigureData;
+  noCaption?: boolean;
+  imgClassName?: string;
 } & ComponentProps<"div">) => {
+  if (!figure) return null;
   const image = (
     <Image
       key={figure.url}
@@ -16,13 +22,16 @@ export const FigureImage = ({
       width={figure.width}
       height={figure.height}
       alt={figure.caption}
-      className="w-full bg-black aspect-[3/2] object-contain"
+      className={twMerge(
+        "w-full bg-black aspect-[3/2] object-contain",
+        imgClassName
+      )}
     />
   );
 
   return (
     <div {...divProps}>
-      {figure.caption ? (
+      {figure.caption && !noCaption ? (
         <WithCaption caption={figure.caption}>{image}</WithCaption>
       ) : (
         image

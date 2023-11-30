@@ -3,7 +3,7 @@ import { Card, CardContent } from "@mui/joy";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { LoginForm } from "@/components/admin/LoginForm";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../pages/api/auth/[...nextauth]";
 
 const Login = async () => {
   const session = await getServerSession(authOptions);

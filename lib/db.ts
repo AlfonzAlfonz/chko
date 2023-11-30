@@ -43,7 +43,7 @@ export type ObecData = {
   /** Podmínky ochrany a doplňující doporučení */
   terms: string[];
 
-  links: [string, string][];
+  links: [label: string, link: string][];
 };
 
 export type FigureData = {

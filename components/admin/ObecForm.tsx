@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  DeepPartial,
-  FieldProps,
-  mapValibotResult,
-  useForm,
-} from "@/components/admin/useForm";
+import { DeepPartial, FieldProps } from "@/components/admin/useForm";
 import { FigureData, ObecData, ObecTable } from "@/lib/db";
-import { obecScheme } from "@/lib/schemas";
 import Delete from "@mui/icons-material/Delete";
 import {
   Button,
   Card,
-  Checkbox,
   CircularProgress,
   FormControl,
   FormHelperText,
@@ -26,102 +19,20 @@ import {
   Textarea,
   Typography,
 } from "@mui/joy";
-import { put } from "@vercel/blob";
-import { ComponentProps, useState } from "react";
-import getSlug from "speakingurl";
-import * as v from "valibot";
+import { ComponentProps } from "react";
 import { ErrorMessage } from "./ErrorMessage";
 import {
   AddFigureControl,
   FigureControl,
   FigureControlValue,
 } from "./FigureControl/FigureControl";
-import { useRouter } from "next/navigation";
+import { useObecForm } from "./useObecForm";
 
-export const ObecForm = ({
-  value: initialValue,
-  onSubmit: save,
-}: {
+export const ObecForm = (props: {
   value?: ObecTable;
   onSubmit?: (obec: ObecTable) => Promise<number | undefined>;
 }) => {
-  const router = useRouter();
-  const [state, setState] = useState<"posting" | "ready">("ready");
-  const { value, errors, fieldProps, onSubmit } = useForm<
-    typeof obecScheme,
-    DeepPartial<ObecTable>
-  >({
-    defaultValue: initialValue ?? emptyObec,
-    validate: (val) => mapValibotResult(v.safeParse(obecScheme, val)),
-    onSubmit: async (v) => {
-      setState("posting");
-      const {
-        data: { cover, characteristics, buildings, ...data },
-        ...value
-      } = v;
-
-      if (!save) return;
-
-      const prefix = "obec/" + initialValue?.id;
-
-      const [coverImg, cImages, bImages] = await Promise.all([
-        cover?.blob && upload(prefix + "/cover", cover),
-        Promise.all(
-          characteristics.map(
-            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c)
-          ) ?? []
-        ),
-        Promise.all(
-          buildings.map(
-            (b, i) => b?.blob && upload(`${prefix}/buildings/${i}`, b)
-          ) ?? []
-        ),
-      ]);
-
-      const insertedId = await save({
-        ...value,
-        id: value.id!,
-        slug: getSlug(value.metadata.name),
-        published: false,
-        data: {
-          ...data,
-          cover: {
-            ...cover,
-            ...(coverImg as any),
-          },
-          characteristics: characteristics.map((c, i) =>
-            !c
-              ? undefined
-              : {
-                  url: cImages[i]?.url ?? c?.url,
-                  width: cImages[i]?.width ?? c?.width,
-                  height: cImages[i]?.height ?? c?.height,
-                  caption: c?.caption,
-                }
-          ) as any satisfies (FigureData | undefined)[] as any,
-          buildings: buildings.map((b, i) =>
-            !b
-              ? undefined
-              : {
-                  url: bImages[i]?.url ?? b?.url,
-                  width: bImages[i]?.width ?? b?.width,
-                  height: bImages[i]?.height ?? b?.height,
-                  caption: b?.caption,
-                }
-          ) as any satisfies (FigureData | undefined)[] as any,
-        } as any,
-      });
-
-      setState("ready");
-      alert("Uloženo");
-
-      if (insertedId) {
-        router.push(`/admin/obec/${insertedId}`);
-      }
-    },
-  });
-
-  console.log({ errors }, value.data?.cover);
+  const { value, state, errors, fieldProps, onSubmit } = useObecForm(props);
 
   return (
     <Stack
@@ -536,63 +447,6 @@ export const ObecForm = ({
     </Stack>
   );
 };
-
-const emptyObec: DeepPartial<ObecTable> = {
-  published: true,
-  metadata: {
-    position: [],
-  },
-  data: {
-    censuses: [
-      [1869, undefined, undefined],
-      [2011, undefined, undefined],
-    ],
-    characteristics: [],
-    buildings: [],
-    terms: [],
-    links: [],
-  },
-};
-
-export const upload = async (
-  path: string,
-  { blob, url }: FigureControlValue
-) => {
-  if (!blob) return;
-
-  url && URL.revokeObjectURL(url);
-
-  const size = await getImageSize(blob);
-
-  if (!size) throw new Error("Invalid file");
-
-  const result = await put(path + blob.name, blob, {
-    access: "public",
-    token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
-  });
-  return {
-    url: result.url,
-    width: size[0],
-    height: size[1],
-  };
-};
-
-const getImageSize = (blob: Blob) =>
-  new Promise<[number, number] | null>((resolve) => {
-    const img = document.createElement("img");
-
-    img.onload = () => {
-      resolve([img.naturalWidth, img.naturalHeight]);
-      URL.revokeObjectURL(img.src);
-    };
-
-    img.onerror = () => {
-      resolve(null);
-      URL.revokeObjectURL(img.src);
-    };
-
-    img.src = URL.createObjectURL(blob);
-  });
 
 const NumberInput = (
   props: Omit<ComponentProps<typeof Input>, "onChange"> & {
