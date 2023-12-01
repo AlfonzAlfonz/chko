@@ -9,12 +9,33 @@
   }
 
   .page {
-    @apply p-8;
+    /* @apply py-7 px-14; */
+    padding: 36px 72px;
     counter-increment: page;
 
     width: 210mm;
     min-height: 297mm;
     break-after: page;
+
+    h1 {
+      font-size: 32px;
+    }
+
+    h1.page-title {
+      @apply pt-4 pb-3 border-b-[1px] border-black;
+    }
+
+    h2 {
+      font-size: 22px;
+    }
+
+    .label {
+      @apply uppercase text-[#808080] tracking-[2.2px];
+    }
+
+    .section-col {
+      @apply mt-4 gap-5 text-[14px] leading-tight;
+    }
 
     @media screen {
       & {
@@ -32,6 +53,27 @@
   .pageNo {
     &::before {
       content: counter(page);
+    }
+  }
+
+  .ordered-list {
+    @apply flex flex-col gap-3;
+    counter-reset: items;
+
+    &.white li::before {
+      background: white;
+    }
+
+    & li {
+      @apply flex;
+
+      
+
+      &::before {
+        @apply rounded-full bg-[#b9eed0] w-6 h-6 inline-block text-center mr-7 flex-none py-[5px] text-[12px];
+        counter-increment: items;
+        content: counter(items);
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import { FigureData } from "@/lib/db";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
@@ -23,9 +24,33 @@ export const PdfFigureImage = ({
         width={figure.width}
         height={figure.height}
         alt={figure.caption}
-        className={twMerge("w-full aspect-[3/2] object-contain", imgClassName)}
+        className={twMerge("w-full object-contain", imgClassName)}
       />
-      <figcaption>{figure.caption}</figcaption>
+      <figcaption className="text-[11px] leading-tight">
+        {figure.caption}
+      </figcaption>
+    </figure>
+  );
+};
+
+export const PdfImage = ({
+  img,
+  caption,
+  imgClassName,
+  ...divProps
+}: {
+  img: StaticImport;
+  caption?: string;
+  imgClassName?: string;
+} & ComponentProps<"figure">) => {
+  return (
+    <figure {...divProps}>
+      <Image
+        src={img}
+        alt={caption!}
+        className={twMerge("w-full object-contain", imgClassName)}
+      />
+      <figcaption className="text-[11px] leading-tight">{caption}</figcaption>
     </figure>
   );
 };

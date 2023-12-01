@@ -22,10 +22,7 @@ export const FigureImage = ({
       width={figure.width}
       height={figure.height}
       alt={figure.caption}
-      className={twMerge(
-        "w-full bg-black aspect-[3/2] object-contain",
-        imgClassName
-      )}
+      className={twMerge("w-full bg-black object-contain", imgClassName)}
     />
   );
 

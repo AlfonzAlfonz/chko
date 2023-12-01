@@ -13,6 +13,8 @@ import {
 import { ObecSearch } from "../Autocomplete/ObecSearch";
 import { useLeaflet } from "./leaflet";
 import "./mapa.css";
+import { CategoryBar } from "../CategoryBar";
+import { ProtectionBar } from "../ProtectionBar";
 
 export interface MapProps {
   defaultCenter?: [number, number];
@@ -109,61 +111,14 @@ export const _Map = (props: MapProps) => {
       >
         <div className="cursor-pointer popisky-13">
           <div className="uppercase mb-2">Kategorie sídla</div>
-          <div className="flex select-none">
-            {Object.entries(categories).map(([v, c]) => (
-              <div
-                key={v}
-                className={`w-[42px] h-[24px] flex items-center justify-center ${c} ${
-                  v === category
-                    ? "outline-black outline-2 outline z-10"
-                    : category
-                    ? "opacity-50"
-                    : ""
-                }`}
-              >
-                {v}
-              </div>
-            ))}
-          </div>
+          <CategoryBar category={category} />
         </div>
 
         <div className="cursor-pointer popisky-13">
           <div className="uppercase mb-2">Pásmo ochrany</div>
-          <div className="flex select-none">
-            {Object.entries(protectionZones).map(([v, c], i) => (
-              <div
-                key={v}
-                className={`w-[42px] h-[24px] flex items-center justify-center ${c} ${
-                  i < 2
-                    ? "outline-white text-white"
-                    : "outline-black text-black"
-                } ${
-                  v === protectionZone
-                    ? "outline-2 outline z-10"
-                    : protectionZone
-                    ? "opacity-50"
-                    : ""
-                }`}
-              >
-                {v}
-              </div>
-            ))}
-          </div>
+          <ProtectionBar protectionZone={protectionZone} />
         </div>
       </div>
     </div>
   );
-};
-
-const categories: Record<ObecMetadata["category"], string> = {
-  I: "bg-chkored",
-  II: "bg-chkoorange",
-  III: "bg-chkoyellow",
-  IV: "bg-chkogreen",
-};
-
-const protectionZones: Record<ObecMetadata["protectionZone"], string> = {
-  A: "bg-black",
-  B: "bg-[#1A1A1A]",
-  C: "bg-white",
 };

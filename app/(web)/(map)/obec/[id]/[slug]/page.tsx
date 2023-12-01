@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Gallery } from "@/components/Gallery";
 import { MapControllerComponent } from "@/components/Map/Map";
 import { WithCaption } from "@/components/WithCaption";
+import { Close } from "@/components/icons/Close";
 import { db } from "@/lib/db";
 import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
 import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
@@ -17,7 +18,6 @@ import chkoimg from "@/public/static/cesky_kras_logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
-import { Close } from "@/components/icons/Close";
 
 const getData = async (id: number) => {
   return await db
