@@ -14,6 +14,12 @@ import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
 import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
 import { CategoryBar } from "@/components/CategoryBar";
 import { ProtectionBar } from "@/components/ProtectionBar";
+import localFont from "next/font/local";
+
+const myFont = localFont({
+  src: "./arial.ttf",
+  display: "swap",
+});
 
 const Pdf = async ({ params }: { params: { id: string } }) => {
   const obec = await getData(+params.id);
@@ -27,7 +33,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
   );
 
   return (
-    <div className="pdf">
+    <div className={`pdf ${myFont.className}`}>
       <div className="page exact flex flex-col justify-between">
         <div>
           <h1>Jak stavět v krajině</h1>
@@ -229,44 +235,50 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
 
         <div className="flex gap-4 section-col items-start">
           <table className="mt-4 w-[50%] uppercase tracking-[2.2px] flex-1">
-            <tr>
-              <td className="label py-1 border-y-[1px] border-black">Okres</td>
-              <td className="border-y-[1px] border-black">
-                {obec.metadata.okres}
-              </td>
-            </tr>
-            <tr>
-              <td className="label py-1 border-y-[1px] border-black">Kraj</td>
-              <td className="border-y-[1px] border-black">
-                {obec.metadata.kraj}
-              </td>
-            </tr>
-            <tr>
-              <td className="label py-1 border-y-[1px] border-black">
-                První písemná zmínka
-              </td>
-              <td className="border-y-[1px] border-black">
-                {obec.data.foundedYear}
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td className="label py-1 border-y-[1px] border-black">
+                  Okres
+                </td>
+                <td className="border-y-[1px] border-black">
+                  {obec.metadata.okres}
+                </td>
+              </tr>
+              <tr>
+                <td className="label py-1 border-y-[1px] border-black">Kraj</td>
+                <td className="border-y-[1px] border-black">
+                  {obec.metadata.kraj}
+                </td>
+              </tr>
+              <tr>
+                <td className="label py-1 border-y-[1px] border-black">
+                  První písemná zmínka
+                </td>
+                <td className="border-y-[1px] border-black">
+                  {obec.data.foundedYear}
+                </td>
+              </tr>
+            </tbody>
           </table>
           <table className="mt-4 w-[50%] uppercase tracking-[2.2px] ">
-            <tr>
-              <td className="label py-1 border-y-[1px] border-black">
-                POČET OBYV./DOMŮ V R. {obec.data.censuses[0][0]}
-              </td>
-              <td className="border-y-[1px] border-black">
-                {obec.data.censuses[0][1]}
-              </td>
-            </tr>
-            <tr>
-              <td className="label py-1 border-y-[1px] border-black">
-                POČET OBYV./DOMŮ V R. {obec.data.censuses[1][0]}
-              </td>
-              <td className="border-y-[1px] border-black">
-                {obec.data.censuses[0][1]}
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td className="label py-1 border-y-[1px] border-black">
+                  POČET OBYV./DOMŮ V R. {obec.data.censuses[0][0]}
+                </td>
+                <td className="border-y-[1px] border-black">
+                  {obec.data.censuses[0][1]}
+                </td>
+              </tr>
+              <tr>
+                <td className="label py-1 border-y-[1px] border-black">
+                  POČET OBYV./DOMŮ V R. {obec.data.censuses[1][0]}
+                </td>
+                <td className="border-y-[1px] border-black">
+                  {obec.data.censuses[0][1]}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
 

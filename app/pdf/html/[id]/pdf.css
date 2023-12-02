@@ -6,6 +6,9 @@
 @layer components {
   .pdf {
     counter-reset: page;
+    & * {
+      font-family: inherit;
+    }
   }
 
   .page {
@@ -66,8 +69,6 @@
 
     & li {
       @apply flex;
-
-      
 
       &::before {
         @apply rounded-full bg-[#b9eed0] w-6 h-6 inline-block text-center mr-7 flex-none py-[5px] text-[12px];
