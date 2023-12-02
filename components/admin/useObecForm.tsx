@@ -81,6 +81,7 @@ export const useObecForm = ({
       });
 
       setState("ready");
+      fetch(`/api/prerender-pdf/${insertedId ?? v.id}`, { method: "HEAD" });
       alert("Uloženo");
 
       if (insertedId) {

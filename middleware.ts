@@ -7,15 +7,16 @@ const middleware: NextMiddleware = async (req) => {
   if (req.nextUrl.pathname.startsWith("/obec")) {
     const [, , id, slug] = req.nextUrl.pathname.split("/");
 
-    if (Object.is(+id, NaN)) {
+    if (Object.is(+id!, NaN)) {
       return NextResponse.next();
     }
 
-    const [{ slug: correctSlug }] = await db
-      .selectFrom("cities")
-      .where("id", "=", +id)
-      .select("slug")
-      .execute();
+    const { slug: correctSlug } =
+      (await db
+        .selectFrom("cities")
+        .where("id", "=", +id!)
+        .select("slug")
+        .executeTakeFirst()) ?? {};
 
     if (correctSlug !== slug) {
       const url = req.nextUrl.clone();

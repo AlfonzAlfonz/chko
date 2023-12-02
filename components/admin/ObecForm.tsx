@@ -30,11 +30,17 @@ import {
 } from "./FigureControl/FigureControl";
 import { useObecForm } from "./useObecForm";
 
-export const ObecForm = (props: {
+export const ObecForm = ({
+  value: initialValue,
+  onSubmit: save,
+}: {
   value?: ObecTable;
   onSubmit?: (obec: ObecTable) => Promise<number | undefined>;
 }) => {
-  const { value, state, errors, fieldProps, onSubmit } = useObecForm(props);
+  const { value, state, errors, fieldProps, onSubmit } = useObecForm({
+    initialValue,
+    onSubmit: save,
+  });
 
   return (
     <Stack
@@ -493,7 +499,7 @@ const NumberInput = (
 const reorder = <T,>(list: T[], startIndex: number, endIndex: number) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+  result.splice(endIndex, 0, removed!);
 
   return result;
 };

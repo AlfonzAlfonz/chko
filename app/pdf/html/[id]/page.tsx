@@ -282,18 +282,18 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
             <tbody>
               <tr>
                 <td className="label py-1 border-y-[1px] border-black">
-                  POČET OBYV./DOMŮ V R. {obec.data.censuses[0][0]}
+                  POČET OBYV./DOMŮ V R. {obec.data.censuses[0]![0]}
                 </td>
                 <td className="border-y-[1px] border-black">
-                  {obec.data.censuses[0][1]}
+                  {obec.data.censuses[0]![1]}
                 </td>
               </tr>
               <tr>
                 <td className="label py-1 border-y-[1px] border-black">
-                  POČET OBYV./DOMŮ V R. {obec.data.censuses[1][0]}
+                  POČET OBYV./DOMŮ V R. {obec.data.censuses[1]![0]}
                 </td>
                 <td className="border-y-[1px] border-black">
-                  {obec.data.censuses[1][1]}
+                  {obec.data.censuses[1]![1]}
                 </td>
               </tr>
             </tbody>
