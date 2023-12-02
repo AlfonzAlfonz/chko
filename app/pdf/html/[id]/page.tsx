@@ -15,6 +15,7 @@ import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
 import { CategoryBar } from "@/components/CategoryBar";
 import { ProtectionBar } from "@/components/ProtectionBar";
 import localFont from "next/font/local";
+import { twMerge } from "tailwind-merge";
 
 export const dynamic = "error";
 export const dynamicParams = true;
@@ -39,7 +40,10 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
 
   const qrcodes = await Promise.all(
     obec.data.links.map((l) =>
-      QRCode.toDataURL(l[1]).then((url) => [l[0], l[1], url] as const)
+      QRCode.toDataURL(l[1], {
+        margin: 0,
+        scale: 1,
+      }).then((url) => [l[0], l[1], url] as const)
     )
   );
 
@@ -104,7 +108,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
             className="w-full"
             alt=""
           />
-          <p className="text-[12px]">
+          <p className="text-[12px] leading-tight -mt-3">
             RŮZNÉ CHARAKTERY KRAJIN A TOMU ODPOVÍDAJÍCÍ URBANISTICKÉ STRUKTURY:
             <br />
             1) KOMPAKTNÍ VESNICE S NÁVSÍ V NÍŽINNÝCH OBLASTECH
@@ -145,7 +149,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
           </div>
           <figure>
             <img src="/static/chko_cr.svg" alt="" className="w-full -ml-4" />
-            <figcaption className="mt-16 text-[12px]">
+            <figcaption className="mt-16 text-[12px] leading-tight">
               CHRÁNĚNNÉ KRAJINÉ OBLASTI V ČESKÉ REPUBLICE
             </figcaption>
           </figure>
@@ -229,7 +233,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
             <p className="label">Kategorie sídla</p>
             <CategoryBar
               category={obec.metadata.category}
-              className="w-full h-[28px]"
+              className="w-full h-[28px] my-2"
             />
             <p className="text-[11px] my-2">
               Sídlo má mimořádně silný vliv na vznik výrazného rázu krajiny,
@@ -239,13 +243,16 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
           </div>
           <div className="flex-1 w-[50%]">
             <p className="label">Pásmo ochrany</p>
-            <ProtectionBar protectionZone={obec.metadata.protectionZone} />
+            <ProtectionBar
+              protectionZone={obec.metadata.protectionZone}
+              className="w-full h-[28px] my-2"
+            />
             <p className="text-[11px] my-2">Přísné ochrany krajinného rázu.</p>
           </div>
         </div>
 
         <div className="flex gap-4 section-col items-start">
-          <table className="mt-4 w-[50%] uppercase tracking-[2.2px] flex-1">
+          <table className="mt-4 w-[50%] uppercase tracking-[2.2px] flex-1 text-[10px]">
             <tbody>
               <tr>
                 <td className="label py-1 border-y-[1px] border-black">
@@ -271,7 +278,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
               </tr>
             </tbody>
           </table>
-          <table className="mt-4 w-[50%] uppercase tracking-[2.2px] ">
+          <table className="mt-4 w-[50%] uppercase tracking-[2.2px] text-[10px]">
             <tbody>
               <tr>
                 <td className="label py-1 border-y-[1px] border-black">
@@ -286,12 +293,18 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
                   POČET OBYV./DOMŮ V R. {obec.data.censuses[1][0]}
                 </td>
                 <td className="border-y-[1px] border-black">
-                  {obec.data.censuses[0][1]}
+                  {obec.data.censuses[1][1]}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <img
+          src={`https://api.mapbox.com/styles/v1/alfonz/clf6vgysg00cq01mlod7t0zro/static/${obec.metadata.position[1]},${obec.metadata.position[0]},16,0/1280x720?access_token=${ACCESS_TOKEN}&logo=false`}
+          alt="Mapa"
+          className="my-5"
+        />
 
         <p className="columns-2 section-col">{obec.data.intro}</p>
       </div>
@@ -309,13 +322,15 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
           <PdfFigureImage key={i} figure={f} />
         ))}
       </div>
-      <div className="page">
+      <div className="page exact">
         <Topbar>{obec.metadata.name}</Topbar>
-        <h1 className="page-title">Podmínky ochrany a doplňující doporučení</h1>
-        <div className="bg-[#b9eed0] -mx-8 -mt-[17px]">
-          <ul className="ordered-list white section-col col-span-full columns-2">
+        <div className="bg-[#b9eed0] -mx-8 -mt-[17px] px-7 h-[calc(100%-17px)]">
+          <h1 className="page-title">
+            Podmínky ochrany a doplňující doporučení
+          </h1>
+          <ul className="ordered-list white section-col col-span-full flex flex-col flex-wrap h-[45%]">
             {obec.data.terms.map((v, ii) => (
-              <li key={ii} className="p-5 border-b-[1px] border-black">
+              <li key={ii} className="p-1 w-[calc(50%-10px)]">
                 {v}
               </li>
             ))}
@@ -332,23 +347,43 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
           </p>
         </div>
       </div>
-      <div className="page">
+      <div
+        className="page flex flex-col w-full"
+        style={{ breakAfter: "avoid" }}
+      >
         <Topbar>{obec.metadata.name}</Topbar>
         <h1 className="page-title">Další informace</h1>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-between gap-5 py-5 text-[11px]">
           {qrcodes.map((l, i) => (
-            <div key={i}>
-              <img src={l[2]} alt={l[1]} />
+            <div key={i} className="w-[calc(50%-10px)]">
+              <img
+                src={l[2]}
+                alt={l[1]}
+                className="w-[50%] mb-2"
+                style={{ imageRendering: "pixelated" }}
+              />
               <div>{l[0]}</div>
-              <div>{l[1]}</div>
+              <a
+                href={l[1]}
+                className="uppercase text-[#808080] tracking-normal underline"
+              >
+                {l[1].replace("https://", "")}
+              </a>
             </div>
           ))}
         </div>
+        {qrcodes.length <= 4 && (
+          <div className="flex-auto flex items-end">
+            <Contact />
+          </div>
+        )}
       </div>
-      <div className="page">
-        <Topbar>{obec.metadata.name}</Topbar>
-        Kontakt
-      </div>
+      {qrcodes.length > 4 && (
+        <div className="page flex flex-col justify-between">
+          <Topbar>{obec.metadata.name}</Topbar>
+          <Contact />
+        </div>
+      )}
     </div>
   );
 };
@@ -387,3 +422,34 @@ const Topbar = ({ children }: { children: string }) => {
     </div>
   );
 };
+
+const Contact = () => {
+  return (
+    <div className="relative w-full text-[12px]">
+      <img
+        src={"/static/pdf/cesky_kras_logo.png"}
+        alt="CHKO Český kras logo"
+        className="absolute right-0 bottom-0"
+      />
+      <h2>Kontakt</h2>
+      <p>
+        Správa CHKO Český kras
+        <br />
+        č. p. 85, 267 18 Karlštejn
+        <br />
+        Úřední hodiny všech pracovišť
+        <br />
+        pondělí, středa: 8–17 hod
+        <br />
+        951 42 4552, 951 42 4554
+        <br />
+        stredni.cechy@nature.cz
+        <br />
+        www.nature.cz/web/chko-cesky-kras
+      </p>
+    </div>
+  );
+};
+
+const ACCESS_TOKEN =
+  "pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA";

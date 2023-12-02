@@ -1,16 +1,19 @@
 import { ObecMetadata } from "@/lib/db";
+import { twMerge } from "tailwind-merge";
 
 export const ProtectionBar = ({
   protectionZone,
+  className,
 }: {
   protectionZone?: keyof typeof protectionZones;
+  className?: string;
 }) => {
   return (
-    <div className="flex select-none">
+    <div className={twMerge("flex select-none w-[126px] h-[24px]", className)}>
       {Object.entries(protectionZones).map(([v, c], i) => (
         <div
           key={v}
-          className={`w-[42px] h-[24px] flex items-center justify-center ${c} ${
+          className={`flex-1 flex items-center justify-center ${c} ${
             i < 2 ? "outline-white text-white" : "outline-black text-black"
           } ${
             v === protectionZone
