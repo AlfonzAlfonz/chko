@@ -245,6 +245,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
             <p className="label">Pásmo ochrany</p>
             <ProtectionBar
               protectionZone={obec.metadata.protectionZone}
+              outline="outline-black"
               className="w-full h-[28px] my-2"
             />
             <p className="text-[11px] my-2">Přísné ochrany krajinného rázu.</p>
