@@ -2,6 +2,10 @@ import { ObecListProvider } from "@/components/contexts";
 import { db } from "@/lib/db";
 import { ReactNode } from "react";
 
+export const dynamic = "error";
+export const dynamicParams = true;
+export const revalidate = 30;
+
 const getData = async () => {
   return await db
     .selectFrom("cities")

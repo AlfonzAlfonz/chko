@@ -19,6 +19,23 @@ import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
 
+export const dynamic = "error";
+export const dynamicParams = true;
+export const revalidate = 30;
+
+export const generateStaticParams = async () => {
+  return await db
+    .selectFrom("cities")
+    .select(["id", "slug"])
+    .execute()
+    .then((ids) =>
+      ids.map((i) => ({
+        id: String(i.id),
+        slug: i.slug,
+      }))
+    );
+};
+
 const getData = async (id: number) => {
   return await db
     .selectFrom("cities")

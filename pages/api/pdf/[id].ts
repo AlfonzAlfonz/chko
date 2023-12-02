@@ -37,8 +37,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       const page = await browser.newPage();
+      await page.setJavaScriptEnabled(false);
 
-      await page.goto(joinUri(baseurl, `/pdf/html/${+req.query.id!}`));
+      await page.goto(joinUri(baseurl, `/pdf/html/${+req.query.id!}`), {
+        waitUntil: "networkidle0",
+      });
       const pdf = await page.pdf({
         scale: 1,
         displayHeaderFooter: false,

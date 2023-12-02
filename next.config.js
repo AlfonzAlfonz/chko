@@ -2,7 +2,6 @@
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["puppeteer-core"],
-    serverActions: true,
   },
   images: {
     remotePatterns: [

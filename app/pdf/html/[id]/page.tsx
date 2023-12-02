@@ -16,10 +16,21 @@ import { CategoryBar } from "@/components/CategoryBar";
 import { ProtectionBar } from "@/components/ProtectionBar";
 import localFont from "next/font/local";
 
-const myFont = localFont({
-  src: "./arial.ttf",
-  display: "swap",
-});
+export const dynamic = "error";
+export const dynamicParams = true;
+export const revalidate = 30;
+
+export const generateStaticParams = async () => {
+  return await db
+    .selectFrom("cities")
+    .select("id")
+    .execute()
+    .then((ids) =>
+      ids.map((i) => ({
+        id: String(i.id),
+      }))
+    );
+};
 
 const Pdf = async ({ params }: { params: { id: string } }) => {
   const obec = await getData(+params.id);
@@ -343,6 +354,11 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
 };
 
 export default Pdf;
+
+const myFont = localFont({
+  src: "./arial.ttf",
+  display: "swap",
+});
 
 const getData = async (id: number) => {
   return await db
