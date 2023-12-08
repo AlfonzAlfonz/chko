@@ -2,13 +2,13 @@
 import createCache, { Options } from "@emotion/cache";
 import { useServerInsertedHTML } from "next/navigation";
 import { CacheProvider } from "@emotion/react";
-import { CssVarsProvider, Theme } from "@mui/joy/styles";
+import { CssVarsProvider, Theme, extendTheme } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import { ReactNode, useState } from "react";
 
 interface Props {
   children: ReactNode;
-  theme?: Theme;
+  theme?: "web";
 }
 
 // This implementation is from emotion-js
@@ -54,12 +54,26 @@ export const ThemeRegistry = ({ children, theme }: Props) => {
     );
   });
 
+  console.log(webTheme);
+
   return (
     <CacheProvider value={cache}>
-      <CssVarsProvider theme={theme}>
+      <CssVarsProvider theme={theme === "web" ? webTheme : undefined}>
         <CssBaseline />
         {children}
       </CssVarsProvider>
     </CacheProvider>
   );
 };
+
+const webTheme = extendTheme({
+  components: {
+    JoyAutocomplete: {
+      styleOverrides: {
+        input: {
+          fontSize: undefined,
+        },
+      },
+    },
+  },
+});

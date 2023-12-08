@@ -18,8 +18,17 @@ export const HomepageSearch = () => {
         onInputChange={(_, v) => setInput(v)}
         className="bg-transparent shadow-none border-none"
         slotProps={{
-          root: { className: "!rounded-none" },
-          input: { className: "text-[100px] text-[#AAA] text-center" },
+          root: {
+            className: "!rounded-none",
+            sx: {
+              backgroundColor: "transparent",
+              border: "none",
+              borderBottom: "3px solid black",
+              boxShadow: "none",
+            },
+          },
+          input: { className: "text-center outline-none" },
+          wrapper: { className: "text-[100px] text-[#AAA]" },
           listbox: { className: "!text-[1rem]" },
         }}
         placeholder="Svatý Jan pod Skalou"

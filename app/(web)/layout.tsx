@@ -1,3 +1,4 @@
+import { ThemeRegistry } from "@/components/admin/ThemeRegistry";
 import { ObecListProvider } from "@/components/contexts";
 import { db } from "@/lib/db";
 import { ReactNode } from "react";
@@ -16,7 +17,11 @@ const getData = async () => {
 const Layout = async ({ children }: { children: ReactNode }) => {
   const obecList = await getData();
 
-  return <ObecListProvider value={obecList}>{children}</ObecListProvider>;
+  return (
+    <ThemeRegistry theme={"web"}>
+      <ObecListProvider value={obecList}>{children}</ObecListProvider>
+    </ThemeRegistry>
+  );
 };
 
 export default Layout;
