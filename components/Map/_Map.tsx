@@ -9,6 +9,8 @@ import { CategoryBar } from "../CategoryBar";
 import { ProtectionBar } from "../ProtectionBar";
 import { getTileLayer, toggleTileUrl, useLeaflet } from "./leaflet";
 import "./mapa.css";
+import { Plus } from "@/components/icons/Plus";
+import { Minus } from "@/components/icons/Minus";
 
 export interface MapProps {
   defaultCenter?: [number, number];
@@ -63,36 +65,49 @@ export const _Map = (props: MapProps) => {
       </div>
 
       <div
-        className={`
-          absolute left-0 ${
-            !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
-          }
-          z-[410] ml-10 mb-6 space-y-6
-        `}
+        className={`absolute left-0 right-0 ${
+          !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
+        } z-[410] flex justify-between mx-10 mb-6 pointer-events-none`}
       >
-        <div className="cursor-pointer popisky-13 map-zones">
-          <div className="uppercase mb-2">Kategorie sídla</div>
-          <CategoryBar category={category} />
-        </div>
+        <div className="space-y-6">
+          <div className="cursor-pointer popisky-13 map-zones pointer-events-auto">
+            <div className="uppercase mb-2">Kategorie sídla</div>
+            <CategoryBar category={category} />
+          </div>
 
-        <div className="cursor-pointer popisky-13 map-zones">
-          <div className="uppercase mb-2">Pásmo ochrany</div>
-          <ProtectionBar protectionZone={protectionZone} />
-        </div>
+          <div className="cursor-pointer popisky-13 map-zones pointer-events-auto">
+            <div className="uppercase mb-2">Pásmo ochrany</div>
+            <ProtectionBar protectionZone={protectionZone} />
+          </div>
 
-        <div
-          className="w-12 h-12 bg-black border-[3px] border-white border-solid rounded-sm shadow-lg"
-          onClick={() => switchTileLayer(toggleTileUrl())}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={
-              getTileLayer() === "topo"
-                ? "/static/map/photo.jpeg"
-                : "/static/map/topo.png"
-            }
-            alt="podklad"
-          />
+          <div
+            className="w-12 h-12 bg-black border-[3px] border-white border-solid rounded-sm shadow-lg pointer-events-auto"
+            onClick={() => switchTileLayer(toggleTileUrl())}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={
+                getTileLayer() === "topo"
+                  ? "/static/map/photo.jpeg"
+                  : "/static/map/topo.png"
+              }
+              alt="podklad"
+            />
+          </div>
+        </div>
+        <div className="space-y-6 mb-12 ">
+          <button
+            className="button w-12 h-12 pointer-events-auto text-[32px] leading-none flex items-center text-center shadow-md"
+            onClick={() => props.mapRef.current.leaflet.zoomIn()}
+          >
+            <Plus />
+          </button>
+          <button
+            className="button w-12 h-12 pointer-events-auto text-[32px] leading-none flex items-center text-center shadow-md"
+            onClick={() => props.mapRef.current.leaflet.zoomOut()}
+          >
+            <Minus />
+          </button>
         </div>
       </div>
     </div>
