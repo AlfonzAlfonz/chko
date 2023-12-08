@@ -1,16 +1,16 @@
 "use client";
 
+import { Minus } from "@/components/icons/Minus";
+import { Plus } from "@/components/icons/Plus";
 import { ObecMetadata } from "@/lib/db";
 import "leaflet/dist/leaflet.css";
 import Link from "next/link";
 import { Dispatch, MutableRefObject, SetStateAction, useState } from "react";
-import { ObecSearch } from "../ObecSearch";
 import { CategoryBar } from "../CategoryBar";
+import { ObecSearch } from "../ObecSearch";
 import { ProtectionBar } from "../ProtectionBar";
 import { getTileLayer, toggleTileUrl, useLeaflet } from "./leaflet";
 import "./mapa.css";
-import { Plus } from "@/components/icons/Plus";
-import { Minus } from "@/components/icons/Minus";
 
 export interface MapProps {
   defaultCenter?: [number, number];
@@ -67,7 +67,7 @@ export const _Map = (props: MapProps) => {
       <div
         className={`absolute left-0 right-0 ${
           !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
-        } z-[410] flex justify-between mx-10 mb-6 pointer-events-none`}
+        } z-[410] flex items-end justify-between mx-10 mb-6 pointer-events-none`}
       >
         <div className="space-y-6">
           <div className="cursor-pointer popisky-13 map-zones pointer-events-auto">

@@ -1,7 +1,7 @@
 import * as L from "leaflet/dist/leaflet-src.esm";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useLayoutEffect, useRef } from "react";
-import { ObecListContext } from "../contexts";
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { ChkoListContext, ObecListContext } from "../contexts";
 import { MapProps } from "./_Map";
 import { ensureSimplifiedChkoGeo } from "./data";
 
@@ -10,6 +10,12 @@ export const useLeaflet = (props: MapProps) => {
   const once = useRef<boolean>(false);
 
   const obecList = useContext(ObecListContext);
+  const chkoList = useContext(ChkoListContext);
+
+  const chkoKodDic = useMemo(
+    () => Object.fromEntries(chkoList.map((ch) => [ch.data.kod, ch])),
+    [chkoList]
+  );
 
   const wrapperRef = useRef<HTMLDivElement>(null!);
   const containerRef = useRef<HTMLDivElement>(null!);
@@ -73,22 +79,45 @@ export const useLeaflet = (props: MapProps) => {
         const geoData = await ensureSimplifiedChkoGeo();
 
         const geojson = L.geoJSON(geoData, {
-          style: {
+          style: (f) => ({
             fillOpacity: 1,
-            className: "map-geojson",
-          },
+            className: `map-geojson ${
+              f?.properties.KOD && !(f?.properties.KOD in chkoKodDic)
+                ? "chko-inactive"
+                : ""
+            }`,
+          }),
+        });
+        geojson.addEventListener("click", (e) => {
+          const data = e.propagatedFrom.feature?.properties;
+          console.log(data.KOD, chkoKodDic);
+          if (data && data.KOD && chkoKodDic[data.KOD]) {
+            map.flyTo(chkoKodDic[data.KOD]!.data.position, 11);
+          }
         });
         map.addLayer(geojson);
 
         for (const obec of obecList) {
           const m = L.marker(obec.metadata.position, {
             icon: L.divIcon({
-              className: `map-marker map-marker-${obec.metadata.category}`,
+              className: `map-marker map-obec-marker map-marker-${obec.metadata.category}`,
               html: obec.metadata.name,
             }),
           }).addTo(mapRef.current.leaflet);
           m.addEventListener("click", () => {
             router.push(`/obec/${obec.id}/${obec.slug}`);
+          });
+        }
+
+        for (const chko of chkoList) {
+          const m = L.marker(chko.data.position, {
+            icon: L.divIcon({
+              className: `map-marker map-chko-marker`,
+              html: chko.name,
+            }),
+          }).addTo(mapRef.current.leaflet);
+          m.addEventListener("click", () => {
+            map.flyTo(chko.data.position, 11);
           });
         }
       })();

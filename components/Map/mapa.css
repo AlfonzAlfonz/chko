@@ -5,6 +5,10 @@
 @layer components {
   .map-geojson {
     @apply fill-chkogreen stroke-chkogreen stroke-[5];
+
+    &.chko-inactive {
+      @apply fill-[#79ad8f] stroke-[#79ad8f];
+    }
   }
   .show-details .map-geojson {
     fill: none;
@@ -27,13 +31,17 @@
   }
 
   .map-marker {
-    @apply hidden items-center gap-1 whitespace-nowrap text-black;
+    @apply items-center gap-1 whitespace-nowrap text-black;
     width: initial !important;
     height: initial !important;
     text-shadow: 0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white,
       0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white,
       0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white,
       0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white;
+  }
+
+  .map-obec-marker {
+    @apply hidden;
 
     &::before {
       @apply block w-6 h-6 rounded-full bg-black;
@@ -55,6 +63,14 @@
 
     .show-details & {
       @apply flex;
+    }
+  }
+
+  .map-chko-marker {
+    @apply text-[16px];
+
+    .show-details & {
+      @apply hidden;
     }
   }
 }

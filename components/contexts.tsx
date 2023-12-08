@@ -1,7 +1,7 @@
 "use client";
 
-import { ObecMetadata } from "@/lib/db";
-import { ReactNode, createContext } from "react";
+import { ChkoTable, ObecMetadata } from "@/lib/db";
+import { ComponentProps, createContext } from "react";
 
 export type ConciseObec = {
   metadata: ObecMetadata;
@@ -10,13 +10,12 @@ export type ConciseObec = {
 };
 
 export const ObecListContext = createContext<ConciseObec[]>([]);
+export const ChkoListContext = createContext<ChkoTable[]>([]);
 
-export const ObecListProvider = ({
-  value,
-  children,
-}: {
-  value: ConciseObec[];
-  children: ReactNode;
-}) => (
-  <ObecListContext.Provider value={value}>{children}</ObecListContext.Provider>
-);
+export const ObecListProvider = (
+  props: ComponentProps<typeof ObecListContext.Provider>
+) => <ObecListContext.Provider {...props} />;
+
+export const ChkoListProvider = (
+  props: ComponentProps<typeof ChkoListContext.Provider>
+) => <ChkoListContext.Provider {...props} />;

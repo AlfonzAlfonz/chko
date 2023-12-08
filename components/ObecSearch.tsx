@@ -1,8 +1,11 @@
 "use client";
 
-import Autocomplete, { AutocompleteProps } from "@mui/joy/Autocomplete";
+import Autocomplete, {
+  AutocompleteProps,
+  createFilterOptions,
+} from "@mui/joy/Autocomplete";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { ConciseObec, ObecListContext } from "./contexts";
 
@@ -15,9 +18,10 @@ export const ObecSearch = ({
 }: Partial<AutocompleteProps<ConciseObec, false, false, false>> & {
   defaultId?: number;
 }) => {
-  const ref = useRef();
   const obecList = useContext(ObecListContext);
   const router = useRouter();
+
+  const [inputValue, setInputValue] = useState("");
 
   const slotProps:
     | { [K in keyof NonNullable<typeof _slotProps>]?: any }
@@ -30,6 +34,8 @@ export const ObecSearch = ({
       getOptionLabel={(o) => o.metadata.name}
       placeholder="VYHLEDAT OBEC"
       className={twMerge("!rounded-full", className)}
+      inputValue={inputValue}
+      filterOptions={filterOptions}
       autoComplete
       defaultValue={
         defaultId ? obecList.find((o) => o.id === defaultId) : undefined
@@ -79,7 +85,22 @@ export const ObecSearch = ({
 
         router.push(`/obec/${o.id}/${o.slug}`);
       }}
+      onInputChange={(_, v) => {
+        setInputValue(v);
+      }}
+      onKeyUp={(e) => {
+        if (e.key === "Enter") {
+          const filtered = filterOptions(obecList, {
+            inputValue,
+            getOptionLabel: (o) => o.metadata.name,
+          });
+          const o = filtered[0];
+          if (o) router.push(`/obec/${o.id}/${o.slug}`);
+        }
+      }}
       {...props}
     />
   );
 };
+
+const filterOptions = createFilterOptions<ConciseObec>({});

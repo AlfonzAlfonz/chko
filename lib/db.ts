@@ -3,6 +3,7 @@ import { createKysely } from "@vercel/postgres-kysely";
 interface Database {
   cities: ObecTable;
   admins: AdminTable;
+  chkos: ChkoTable;
 }
 
 export type ObecTable = {
@@ -57,6 +58,15 @@ export type AdminTable = {
   id: number;
   username: string;
   password_hash: string;
+};
+
+export type ChkoTable = {
+  id: number;
+  name: string;
+  data: {
+    kod: number;
+    position: [lat: number, long: number];
+  };
 };
 
 export const db = createKysely<Database>();
