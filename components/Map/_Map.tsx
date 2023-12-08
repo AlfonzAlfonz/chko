@@ -3,23 +3,17 @@
 import { ObecMetadata } from "@/lib/db";
 import "leaflet/dist/leaflet.css";
 import Link from "next/link";
-import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { ObecSearch } from "../Autocomplete/ObecSearch";
-import { useLeaflet } from "./leaflet";
-import "./mapa.css";
+import { Dispatch, MutableRefObject, SetStateAction, useState } from "react";
+import { ObecSearch } from "../ObecSearch";
 import { CategoryBar } from "../CategoryBar";
 import { ProtectionBar } from "../ProtectionBar";
+import { getTileLayer, toggleTileUrl, useLeaflet } from "./leaflet";
+import "./mapa.css";
 
 export interface MapProps {
   defaultCenter?: [number, number];
   defaultZoom?: number;
-  obecHidden?: boolean;
+  activeObec?: number;
 
   mapRef: MutableRefObject<MapController>;
 }
@@ -36,7 +30,7 @@ export type MapController = {
 };
 
 export const _Map = (props: MapProps) => {
-  const { mapRef, containerRef } = useLeaflet(props);
+  const { mapRef, containerRef, switchTileLayer } = useLeaflet(props);
 
   const [category, setCategory] = useState<ObecMetadata["category"]>();
   const [protectionZone, setProtectionZone] =
@@ -49,40 +43,7 @@ export const _Map = (props: MapProps) => {
       <div ref={mapRef} className="h-full" />
 
       <div className="absolute top-0 left-0 w-[320px] ml-10 mt-6 z-[410]">
-        <ObecSearch
-          options={[]}
-          searchDecorator
-          inner={{
-            input: { className: "map-search", placeholder: "VYHLEDAT OBEC" },
-          }}
-        />
-        <div className="map-search-decorator">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-          >
-            <circle
-              cx="5"
-              cy="5"
-              r="4.25"
-              stroke="black"
-              strokeOpacity="0.5"
-              strokeWidth="1.5"
-            />
-            <line
-              x1="8.53033"
-              y1="8.46967"
-              x2="12.7656"
-              y2="12.705"
-              stroke="black"
-              strokeOpacity="0.5"
-              strokeWidth="1.5"
-            />
-          </svg>
-        </div>
+        <ObecSearch className="!popisky-13" defaultId={props.activeObec} />
       </div>
       <div className="absolute top-0 right-0 mr-10 mt-6 z-[410]">
         <Link href="/" className="button px-10 py-2">
@@ -104,19 +65,34 @@ export const _Map = (props: MapProps) => {
       <div
         className={`
           absolute left-0 ${
-            props.obecHidden ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
+            !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
           }
-          z-[410] ml-10 mb-6 space-y-6 map-zones
+          z-[410] ml-10 mb-6 space-y-6
         `}
       >
-        <div className="cursor-pointer popisky-13">
+        <div className="cursor-pointer popisky-13 map-zones">
           <div className="uppercase mb-2">Kategorie sídla</div>
           <CategoryBar category={category} />
         </div>
 
-        <div className="cursor-pointer popisky-13">
+        <div className="cursor-pointer popisky-13 map-zones">
           <div className="uppercase mb-2">Pásmo ochrany</div>
           <ProtectionBar protectionZone={protectionZone} />
+        </div>
+
+        <div
+          className="w-12 h-12 bg-black border-[3px] border-white border-solid rounded-sm shadow-lg"
+          onClick={() => switchTileLayer(toggleTileUrl())}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={
+              getTileLayer() === "topo"
+                ? "/static/map/photo.jpeg"
+                : "/static/map/topo.png"
+            }
+            alt="podklad"
+          />
         </div>
       </div>
     </div>

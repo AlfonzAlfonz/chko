@@ -1,9 +1,9 @@
-import { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import * as L from "leaflet/dist/leaflet-src.esm";
-import { ensureSimplifiedChkoGeo } from "./data";
-import { MapProps } from "./_Map";
-import { ObecListContext } from "../contexts";
 import { useRouter } from "next/navigation";
+import { useContext, useEffect, useLayoutEffect, useRef } from "react";
+import { ObecListContext } from "../contexts";
+import { MapProps } from "./_Map";
+import { ensureSimplifiedChkoGeo } from "./data";
 
 export const useLeaflet = (props: MapProps) => {
   const router = useRouter();
@@ -15,7 +15,7 @@ export const useLeaflet = (props: MapProps) => {
   const containerRef = useRef<HTMLDivElement>(null!);
 
   const leaflet = {
-    scrollWheelZoom: props.obecHidden ?? true,
+    scrollWheelZoom: !props.activeObec ?? true,
     defaultCenter: props.defaultCenter ?? [49.74375, 15.338639],
     defaultZoom: props.defaultZoom ?? 8,
   };
@@ -37,15 +37,7 @@ export const useLeaflet = (props: MapProps) => {
         });
         mapRef.current.leaflet = map;
 
-        const tiles = L.tileLayer(url, {
-          attribution:
-            '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          minZoom: 8,
-          maxZoom: 20,
-        });
-        map.addLayer(tiles);
+        setTileLayerUrl(map);
 
         const zoomHandler = (zoom: number) => {
           if (zoom > 10) {
@@ -119,9 +111,54 @@ export const useLeaflet = (props: MapProps) => {
   return {
     mapRef: containerRef,
     containerRef: wrapperRef,
+    switchTileLayer: (v: "photo" | "topo") =>
+      props.mapRef.current && setTileLayerUrl(props.mapRef.current.leaflet, v),
   };
 };
 
-const url =
+const topoUrl =
   "https://api.mapbox.com/styles/v1/alfonz/clf6vgysg00cq01mlod7t0zro/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA";
 
+const photoUrl =
+  "https://api.mapbox.com/styles/v1/alfonz/clf6ywx3p000z01l9lruz0y7r/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA";
+
+const isTileLayer = (layer: L.Layer): layer is L.TileLayer => {
+  return "getTileUrl" in layer;
+};
+
+const localStorageKey = "chko.map.tileLayer";
+
+export const toggleTileUrl = () => {
+  const state = localStorage.getItem(localStorageKey) ?? "topo";
+  return state === "topo" ? "photo" : ("topo" as const);
+};
+
+export const getTileLayer = () => {
+  return (localStorage.getItem(localStorageKey) as "photo" | "topo") ?? "topo";
+};
+
+const setTileLayerUrl = (map: L.Map, value?: "photo" | "topo") => {
+  if (value) {
+    localStorage.setItem(localStorageKey, value);
+  }
+
+  value ??= getTileLayer();
+
+  const url = value === "photo" ? photoUrl : topoUrl;
+
+  map.eachLayer((l) => {
+    if (isTileLayer(l)) {
+      map.removeLayer(l);
+    }
+  });
+
+  const tiles = L.tileLayer(url, {
+    attribution:
+      '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    tileSize: 512,
+    zoomOffset: -1,
+    minZoom: 8,
+    maxZoom: 20,
+  });
+  map.addLayer(tiles);
+};

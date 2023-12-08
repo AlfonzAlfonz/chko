@@ -2,13 +2,18 @@
 import createCache, { Options } from "@emotion/cache";
 import { useServerInsertedHTML } from "next/navigation";
 import { CacheProvider } from "@emotion/react";
-import { CssVarsProvider } from "@mui/joy/styles";
+import { CssVarsProvider, Theme } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import { ReactNode, useState } from "react";
 
+interface Props {
+  children: ReactNode;
+  theme?: Theme;
+}
+
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
-export const ThemeRegistry = ({ children }: { children: ReactNode }) => {
+export const ThemeRegistry = ({ children, theme }: Props) => {
   const [{ cache, flush }] = useState(() => {
     const cache = createCache({ key: "joy" });
     cache.compat = true;
@@ -51,7 +56,7 @@ export const ThemeRegistry = ({ children }: { children: ReactNode }) => {
 
   return (
     <CacheProvider value={cache}>
-      <CssVarsProvider>
+      <CssVarsProvider theme={theme}>
         <CssBaseline />
         {children}
       </CssVarsProvider>

@@ -31,3 +31,7 @@
 body {
   font-family: Arial;
 }
+
+.MuiTooltip-arrow::before {
+  border-color: white !important;
+}

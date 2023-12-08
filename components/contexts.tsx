@@ -3,7 +3,7 @@
 import { ObecMetadata } from "@/lib/db";
 import { ReactNode, createContext } from "react";
 
-type ConciseObec = {
+export type ConciseObec = {
   metadata: ObecMetadata;
   id: number;
   slug: string;

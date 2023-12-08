@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { ObecSearch } from "./Autocomplete/ObecSearch";
+import { ObecSearch } from "./ObecSearch";
 import { ObecListContext } from "./contexts";
 import { useRouter } from "next/navigation";
 
@@ -14,12 +14,17 @@ export const HomepageSearch = () => {
   return (
     <>
       <ObecSearch
-        inner={{
-          input: { className: "search bg-chkobg" },
-          popperRoot: { className: "search-results" },
-        }}
         onChange={() => setLoading(true)}
-        onInputChange={setInput}
+        onInputChange={(_, v) => setInput(v)}
+        className="bg-transparent shadow-none border-none"
+        slotProps={{
+          root: { className: "!rounded-none" },
+          input: { className: "text-[100px] text-[#AAA] text-center" },
+          listbox: { className: "!text-[1rem]" },
+        }}
+        placeholder="Svatý Jan pod Skalou"
+        startDecorator={undefined}
+        popupIcon={null}
       />
       <button
         className="button mt-16 uppercase bg-chkogreen text-white"

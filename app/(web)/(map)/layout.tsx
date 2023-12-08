@@ -2,11 +2,12 @@
 
 import { Map, MapContext } from "@/components/Map/Map";
 import type { MapController } from "@/components/Map/_Map";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ReactNode, useRef } from "react";
 
 const Template = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const { id } = useParams() ?? {};
   const mapRef = useRef<MapController>(createController());
 
   const map = pathname === "/mapa";
@@ -14,7 +15,7 @@ const Template = ({ children }: { children: ReactNode }) => {
   return (
     <div className="h-screen">
       <div className={"h-full"}>
-        <Map obecHidden={map} mapRef={mapRef} />
+        <Map activeObec={id ? +[id].flat()[0]! : undefined} mapRef={mapRef} />
       </div>
       <MapContext.Provider value={mapRef}>{children}</MapContext.Provider>
     </div>
