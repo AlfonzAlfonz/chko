@@ -4,7 +4,7 @@ import krajraz1 from "@/public/static/Vinarice_nadhled 3.png";
 import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
 import logoLand from "@/public/static/logo_land.svg";
 import logoTitle from "@/public/static/logo_title.svg";
-import pexelsJaro from "@/public/static/pexels-jarosław-miś-103137 2.png";
+import pexelsJaro from "@/public/static/pexels-jaro.png";
 import pexelsThimm from "@/public/static/pexels-volker-thimm-9957840.png";
 import Image from "next/image";
 import Link from "next/link";
