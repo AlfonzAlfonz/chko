@@ -1,13 +1,12 @@
-import { useState } from "react";
-import { DeepPartial, useForm } from "./useForm";
-import { obecScheme } from "@/lib/schemas";
 import { FigureData, ObecTable } from "@/lib/db";
-import { FigureControlValue } from "./FigureControl/FigureControl";
+import { obecScheme } from "@/lib/schemas";
 import { put } from "@vercel/blob";
-import { mapValibotResult } from "./useForm";
-import * as v from "valibot";
-import getSlug from "speakingurl";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import getSlug from "speakingurl";
+import * as v from "valibot";
+import { FigureControlValue } from "./FigureControl/FigureControl";
+import { DeepPartial, mapValibotResult, useForm } from "./useForm";
 
 export const useObecForm = ({
   initialValue,
@@ -62,8 +61,8 @@ export const useObecForm = ({
               ? undefined
               : {
                   url: cImages[i]?.url ?? c?.url,
-                  width: cImages[i]?.width ?? c?.width,
-                  height: cImages[i]?.height ?? c?.height,
+                  width: cImages[i]?.width ?? (c as any)?.width,
+                  height: cImages[i]?.height ?? (c as any)?.height,
                   caption: c?.caption,
                 }
           ) as any satisfies (FigureData | undefined)[] as any,
@@ -72,8 +71,8 @@ export const useObecForm = ({
               ? undefined
               : {
                   url: bImages[i]?.url ?? b?.url,
-                  width: bImages[i]?.width ?? b?.width,
-                  height: bImages[i]?.height ?? b?.height,
+                  width: bImages[i]?.width ?? (b as any)?.width,
+                  height: bImages[i]?.height ?? (b as any)?.height,
                   caption: b?.caption,
                 }
           ) as any satisfies (FigureData | undefined)[] as any,
@@ -130,7 +129,7 @@ const upload = async (path: string, { blob, url }: FigureControlValue) => {
   };
 };
 
-const getImageSize = (blob: Blob) =>
+export const getImageSize = (blob: Blob) =>
   new Promise<[number, number] | null>((resolve) => {
     const img = document.createElement("img");
 
@@ -146,5 +145,3 @@ const getImageSize = (blob: Blob) =>
 
     img.src = URL.createObjectURL(blob);
   });
-
-const getPdfUrl = async () => {};

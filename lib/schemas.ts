@@ -11,8 +11,6 @@ export const figureSchema = v.object({
   caption: v.union([v.string(), v.undefinedType()]),
   blob: v.union([v.undefinedType(), v.blob()]),
   url: v.string(),
-  width: v.number(),
-  height: v.number(),
 });
 
 export const obecScheme = v.object({
@@ -52,3 +50,20 @@ export const obecScheme = v.object({
     ),
   }),
 });
+
+const getImageSize = (blob: Blob) =>
+  new Promise<[number, number] | null>((resolve) => {
+    const img = document.createElement("img");
+
+    img.onload = () => {
+      resolve([img.naturalWidth, img.naturalHeight]);
+      URL.revokeObjectURL(img.src);
+    };
+
+    img.onerror = () => {
+      resolve(null);
+      URL.revokeObjectURL(img.src);
+    };
+
+    img.src = URL.createObjectURL(blob);
+  });
