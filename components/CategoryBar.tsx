@@ -14,7 +14,7 @@ export const CategoryBar = ({
   return (
     <div
       className={twMerge(
-        "flex select-none w-[168px] h-[24px] before:border-t-white before:border-r-white",
+        "flex select-none h-[24px] before:border-t-white before:border-r-white",
         className
       )}
     >

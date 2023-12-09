@@ -5,7 +5,6 @@ import { Container } from "@mui/joy";
 import { ObecForm } from "@/components/admin/ObecForm";
 
 const getData = async (id: number) => {
-  console.log("start");
   const result = await db
     .selectFrom("cities")
     .where("id", "=", id)

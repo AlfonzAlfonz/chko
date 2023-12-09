@@ -1,25 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
+import { CategoryBar } from "@/components/CategoryBar";
 import { FigureImage } from "@/components/FigureImage";
-import { db } from "@/lib/db";
-import "./pdf.css";
 import { PdfFigureImage, PdfImage } from "@/components/PdfFigureImage";
-import QRCode from "qrcode";
-import a1 from "@/public/static/pdf/Vinarice_nadhled 3.png";
-import a2 from "@/public/static/pdf/Vinarice_nadhled 4.png";
-import chko_cr from "@/public/static/chko_cr.svg";
-import Image from "next/image";
+import { ProtectionBar } from "@/components/ProtectionBar";
+import { db } from "@/lib/db";
 import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
 import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
 import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
 import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
-import { CategoryBar } from "@/components/CategoryBar";
-import { ProtectionBar } from "@/components/ProtectionBar";
 import localFont from "next/font/local";
-import { twMerge } from "tailwind-merge";
+import QRCode from "qrcode";
+import "./pdf.css";
 
 export const dynamic = "error";
 export const dynamicParams = true;
-export const revalidate = 30;
+export const revalidate = 1;
 
 export const generateStaticParams = async () => {
   return await db
@@ -59,7 +54,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
                   Obec
                 </td>
                 <td className="py-2 border-y-[1px] border-black">
-                  Svatý jan pod skalou
+                  {obec.metadata.name}
                 </td>
               </tr>
               <tr>
@@ -227,7 +222,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
       </div>
       <div className="page">
         <Topbar>{obec.metadata.name}</Topbar>
-        <h1>Svatý jan pod skalou</h1>
+        <h1>{obec.metadata.name}</h1>
         <div className="section-col flex">
           <div className="flex-1 w-[50%]">
             <p className="label">Kategorie sídla</p>

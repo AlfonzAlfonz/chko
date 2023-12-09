@@ -1,6 +1,14 @@
 import * as L from "leaflet/dist/leaflet-src.esm";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  SetStateAction,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ChkoListContext, ObecListContext } from "../contexts";
 import { MapProps } from "./_Map";
 import { ensureSimplifiedChkoGeo } from "./data";
@@ -26,6 +34,10 @@ export const useLeaflet = (props: MapProps) => {
     defaultZoom: props.defaultZoom ?? 8,
   };
 
+  const [tileLayer, setTileLayer] = useTileLayerUrl((v) => {
+    setTileLayerUrl(props.mapRef.current.leaflet, v);
+  });
+
   useLayoutEffect(() => {
     if (!once.current) {
       const mapRef = props.mapRef!;
@@ -43,7 +55,7 @@ export const useLeaflet = (props: MapProps) => {
         });
         mapRef.current.leaflet = map;
 
-        setTileLayerUrl(map);
+        setTileLayerUrl(map, tileLayer);
 
         const zoomHandler = (zoom: number) => {
           if (zoom > 10) {
@@ -139,8 +151,8 @@ export const useLeaflet = (props: MapProps) => {
   return {
     mapRef: containerRef,
     containerRef: wrapperRef,
-    switchTileLayer: (v: "photo" | "topo") =>
-      props.mapRef.current && setTileLayerUrl(props.mapRef.current.leaflet, v),
+    tileLayer,
+    setTileLayer,
   };
 };
 
@@ -156,23 +168,30 @@ const isTileLayer = (layer: L.Layer): layer is L.TileLayer => {
 
 const localStorageKey = "chko.map.tileLayer";
 
-export const toggleTileUrl = () => {
-  const state = localStorage.getItem(localStorageKey) ?? "topo";
-  return state === "topo" ? "photo" : ("topo" as const);
+const useTileLayerUrl = (onChange?: (v: "photo" | "topo") => unknown) => {
+  const [state, setState] = useState(
+    (localStorage.getItem(localStorageKey) as "photo" | "topo") ?? "topo"
+  );
+
+  return [
+    state,
+    (v: SetStateAction<"photo" | "topo">) => {
+      setState((s) => {
+        let value = typeof v === "function" ? v(s) : v;
+
+        onChange?.(value);
+        localStorage.setItem(localStorageKey, value);
+
+        return value;
+      });
+    },
+  ] as const;
 };
 
-export const getTileLayer = () => {
-  return (localStorage.getItem(localStorageKey) as "photo" | "topo") ?? "topo";
-};
-
-const setTileLayerUrl = (map: L.Map, value?: "photo" | "topo") => {
-  if (value) {
-    localStorage.setItem(localStorageKey, value);
-  }
-
-  value ??= getTileLayer();
-
+const setTileLayerUrl = (map: L.Map, value: "photo" | "topo") => {
   const url = value === "photo" ? photoUrl : topoUrl;
+
+  map.getContainer().setAttribute("data-tileLayer", value);
 
   map.eachLayer((l) => {
     if (isTileLayer(l)) {

@@ -10,12 +10,12 @@ export const ProtectionBar = ({
   className,
   outline = "outline-black",
 }: {
-  protectionZone?: keyof typeof protectionZones;
+  protectionZone?: "A" | "B" | "C";
   className?: string;
   outline?: string;
 }) => {
   return (
-    <div className={twMerge("flex select-none w-[126px] h-[24px]", className)}>
+    <div className={twMerge("flex select-none h-[24px]", className)}>
       <Item
         label="A"
         active={"A" === protectionZone}
@@ -31,8 +31,8 @@ export const ProtectionBar = ({
         tooltip="Zpřísněné ochrany krajinného rázu"
         description="BBBBBBBBBBBB"
         fade={!!protectionZone}
-        bg="bg-black"
-        className={`${outline} text-white`}
+        bg="bg-[#AAAAAA]"
+        className={"outline-black text-black"}
       />
       <Item
         label="C"
@@ -45,12 +45,6 @@ export const ProtectionBar = ({
       />
     </div>
   );
-};
-
-const protectionZones: Record<ObecMetadata["protectionZone"], string> = {
-  A: "bg-black",
-  B: "bg-[#1A1A1A]",
-  C: "bg-white",
 };
 
 const Item = ({

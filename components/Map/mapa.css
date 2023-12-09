@@ -83,3 +83,13 @@
   text-shadow: none;
   margin: 1rem;
 }
+
+[data-tilelayer="photo"] .leaflet-control-scale-line {
+  border-color: white;
+  color: white;
+}
+
+.leaflet-container {
+  background: transparent;
+  outline: 0;
+}

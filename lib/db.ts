@@ -26,9 +26,9 @@ export type ObecMetadata = {
 
 export type ObecData = {
   /** Intro table */
-  foundedYear: number;
+  foundedYear?: number;
   /** Intro table */
-  censuses: [year: number, population: number, houses: number][];
+  censuses: [year?: number, population?: number, houses?: number][];
 
   /** Intro */
   cover: FigureData;

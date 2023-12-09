@@ -1,11 +1,10 @@
-import { FigureData, ObecTable } from "@/lib/db";
-import { figureSchema, obecScheme } from "@/lib/schemas";
+import { ObecTable } from "@/lib/db";
+import { obecScheme } from "@/lib/schemas";
 import { put } from "@vercel/blob";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import getSlug from "speakingurl";
 import * as v from "valibot";
-import { Output } from "valibot";
 import { DeepPartial, mapValibotResult, useForm } from "./useForm";
 
 export const useObecForm = ({
@@ -23,76 +22,39 @@ export const useObecForm = ({
     validate: (val) => mapValibotResult(v.safeParse(obecScheme, val)),
     onSubmit: async (v) => {
       setState("posting");
-      const {
-        data: {
-          cover: { blob, ...cover } = { url: "" },
-          characteristics = [],
-          buildings = [],
-          ...data
-        },
-        ...value
-      } = v as DeepPartial<ObecTable> & Output<typeof obecScheme>;
 
       if (!save) return;
 
       const prefix = "obec/" + initialValue?.id;
 
-      const [coverImg, cImages, bImages] = await Promise.all([
-        blob && upload(prefix + "/cover", cover.url, blob),
+      const [cover, characteristics, buildings] = await Promise.all([
+        upload(prefix + "/cover", v.data.cover),
         Promise.all(
-          (characteristics as Output<typeof figureSchema>[]).map(
-            ({ blob, ...c }, i) =>
-              blob && upload(`${prefix}/char/${i}`, c.url, blob)
-          ) ?? []
+          v.data.characteristics
+            .filter(Boolean)
+            .map((c, i) => upload(`${prefix}/char/${i}`, c)) ?? []
         ),
         Promise.all(
-          (buildings as Output<typeof figureSchema>[]).map(
-            ({ blob, ...b }, i) =>
-              blob && upload(`${prefix}/buildings/${i}`, b.url, blob)
-          ) ?? []
+          v.data.buildings
+            .filter(Boolean)
+            .map((b, i) => upload(`${prefix}/buildings/${i}`, b)) ?? []
         ),
       ]);
 
-      console.log("calling save");
-
       const payload = {
-        ...value,
-        id: value.id!,
-        slug: getSlug(value.metadata.name),
+        ...v,
+        id: v.id!,
+        slug: getSlug(v.metadata.name),
         published: false,
         data: {
-          ...data,
-          cover: {
-            ...cover,
-            ...(coverImg as any),
-          },
-          characteristics: characteristics.map((c, i) =>
-            !c
-              ? undefined
-              : {
-                  url: cImages[i]?.url ?? c?.url,
-                  width: cImages[i]?.width ?? c?.width,
-                  height: cImages[i]?.height ?? c?.height,
-                  caption: c?.caption,
-                }
-          ) as any satisfies (FigureData | undefined)[] as any,
-          buildings: buildings.map((b, i) =>
-            !b
-              ? undefined
-              : {
-                  url: bImages[i]?.url ?? b?.url,
-                  width: bImages[i]?.width ?? b?.width,
-                  height: bImages[i]?.height ?? b?.height,
-                  caption: b?.caption,
-                }
-          ) as any satisfies (FigureData | undefined)[] as any,
-        } as any,
-      };
-      console.log(payload);
+          ...v.data,
+          cover,
+          characteristics,
+          buildings,
+        },
+      } satisfies ObecTable;
 
       const insertedResult = await save(payload);
-
-      console.log(insertedResult);
 
       if (insertedResult) {
         fetch(`/api/prerender-pdf/${insertedResult.id}`, {
@@ -133,24 +95,42 @@ const emptyObec: DeepPartial<ObecTable> = {
   },
 };
 
-const upload = async (path: string, url: string | undefined, blob: Blob) => {
-  if (!blob) return;
+const upload = async <T extends { url?: string; blob?: Blob } | undefined>(
+  path: string,
+  _f: T
+): Promise<
+  | (Omit<T extends infer U | undefined ? U : never, "blob"> & {
+      url: string;
+      caption: string;
+      width: number;
+      height: number;
+    })
+  | Exclude<T, T extends infer U | undefined ? U : never>
+> => {
+  if (_f === undefined) return undefined!;
 
-  url && URL.revokeObjectURL(url);
+  if (!_f.blob) {
+    console.log(_f);
+    return _f as any;
+  } else {
+    const { blob, ...file } = _f;
+    file.url && URL.revokeObjectURL(file.url);
 
-  const size = await getImageSize(blob);
+    const size = await getImageSize(blob);
 
-  if (!size) throw new Error("Invalid file");
+    if (!size) throw new Error("Invalid file");
 
-  const result = await put(path + blob.name, blob, {
-    access: "public",
-    token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
-  });
-  return {
-    url: result.url,
-    width: size[0],
-    height: size[1],
-  };
+    const result = await put(path + blob.name, blob, {
+      access: "public",
+      token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
+    });
+    return {
+      ...file,
+      url: result.url,
+      width: size[0],
+      height: size[1],
+    } as any;
+  }
 };
 
 export const getImageSize = (blob: Blob) =>

@@ -9,7 +9,7 @@ import { Dispatch, MutableRefObject, SetStateAction, useState } from "react";
 import { CategoryBar } from "../CategoryBar";
 import { ObecSearch } from "../ObecSearch";
 import { ProtectionBar } from "../ProtectionBar";
-import { getTileLayer, toggleTileUrl, useLeaflet } from "./leaflet";
+import { useLeaflet } from "./leaflet";
 import "./mapa.css";
 
 export interface MapProps {
@@ -32,7 +32,7 @@ export type MapController = {
 };
 
 export const _Map = (props: MapProps) => {
-  const { mapRef, containerRef, switchTileLayer } = useLeaflet(props);
+  const { mapRef, containerRef, tileLayer, setTileLayer } = useLeaflet(props);
 
   const [category, setCategory] = useState<ObecMetadata["category"]>();
   const [protectionZone, setProtectionZone] =
@@ -41,7 +41,12 @@ export const _Map = (props: MapProps) => {
   props.mapRef.current.setProtectionZone = setProtectionZone;
 
   return (
-    <div ref={containerRef} className="h-full relative">
+    <div
+      ref={containerRef}
+      className={`h-full relative ${
+        tileLayer === "photo" ? "bg-[#1A331A]" : "bg-[#C4DEAB]"
+      }`}
+    >
       <div ref={mapRef} className="h-full" />
 
       <div className="absolute top-0 left-0 w-[320px] ml-10 mt-6 z-[410]">
@@ -70,24 +75,26 @@ export const _Map = (props: MapProps) => {
         } z-[410] flex items-end justify-between mx-10 mb-6 pointer-events-none`}
       >
         <div className="space-y-6">
-          <div className="cursor-pointer popisky-13 map-zones pointer-events-auto">
+          <div className="cursor-pointer popisky-13 map-zones pointer-events-auto w-[168px]">
             <div className="uppercase mb-2">Kategorie sídla</div>
             <CategoryBar category={category} />
           </div>
 
-          <div className="cursor-pointer popisky-13 map-zones pointer-events-auto">
+          <div className="cursor-pointer popisky-13 map-zones pointer-events-auto w-[168px]">
             <div className="uppercase mb-2">Pásmo ochrany</div>
             <ProtectionBar protectionZone={protectionZone} />
           </div>
 
           <div
             className="w-12 h-12 bg-black border-[3px] border-white border-solid rounded-sm shadow-lg pointer-events-auto"
-            onClick={() => switchTileLayer(toggleTileUrl())}
+            onClick={() =>
+              setTileLayer((v) => (v === "photo" ? "topo" : "photo"))
+            }
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={
-                getTileLayer() === "topo"
+                tileLayer === "topo"
                   ? "/static/map/photo.jpeg"
                   : "/static/map/topo.png"
               }
@@ -95,15 +102,15 @@ export const _Map = (props: MapProps) => {
             />
           </div>
         </div>
-        <div className="space-y-6 mb-12 ">
+        <div className="space-y-3 mb-12 ">
           <button
-            className="button w-12 h-12 pointer-events-auto text-[32px] leading-none flex items-center text-center shadow-md"
+            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md"
             onClick={() => props.mapRef.current.leaflet.zoomIn()}
           >
             <Plus />
           </button>
           <button
-            className="button w-12 h-12 pointer-events-auto text-[32px] leading-none flex items-center text-center shadow-md"
+            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md"
             onClick={() => props.mapRef.current.leaflet.zoomOut()}
           >
             <Minus />
