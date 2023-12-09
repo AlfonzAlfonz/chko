@@ -7,14 +7,11 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 const ObecDetail = async ({ params }: { params: { id: string } }) => {
   const saveData = async (obec: ObecTable) => {
     "use server";
-    const { id } =
-      (await db
-        .insertInto("cities")
-        .values(obec)
-        .returning("id")
-        .executeTakeFirst()) ?? {};
-
-    return id;
+    return await db
+      .insertInto("cities")
+      .values(obec)
+      .returningAll()
+      .executeTakeFirstOrThrow();
   };
 
   return (

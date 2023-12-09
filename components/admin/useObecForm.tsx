@@ -1,11 +1,11 @@
 import { FigureData, ObecTable } from "@/lib/db";
-import { obecScheme } from "@/lib/schemas";
+import { figureSchema, obecScheme } from "@/lib/schemas";
 import { put } from "@vercel/blob";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import getSlug from "speakingurl";
 import * as v from "valibot";
-import { FigureControlValue } from "./FigureControl/FigureControl";
+import { Output } from "valibot";
 import { DeepPartial, mapValibotResult, useForm } from "./useForm";
 
 export const useObecForm = ({
@@ -13,8 +13,9 @@ export const useObecForm = ({
   onSubmit: save,
 }: {
   initialValue?: ObecTable;
-  onSubmit?: (obec: ObecTable) => Promise<number | undefined>;
+  onSubmit?: (obec: ObecTable) => Promise<ObecTable>;
 }) => {
+  const { id } = useParams() ?? {};
   const router = useRouter();
   const [state, setState] = useState<"posting" | "ready">("ready");
   const form = useForm<typeof obecScheme, DeepPartial<ObecTable>>({
@@ -23,29 +24,38 @@ export const useObecForm = ({
     onSubmit: async (v) => {
       setState("posting");
       const {
-        data: { cover, characteristics, buildings, ...data },
+        data: {
+          cover: { blob, ...cover } = { url: "" },
+          characteristics = [],
+          buildings = [],
+          ...data
+        },
         ...value
-      } = v;
+      } = v as DeepPartial<ObecTable> & Output<typeof obecScheme>;
 
       if (!save) return;
 
       const prefix = "obec/" + initialValue?.id;
 
       const [coverImg, cImages, bImages] = await Promise.all([
-        cover?.blob && upload(prefix + "/cover", cover),
+        blob && upload(prefix + "/cover", cover.url, blob),
         Promise.all(
-          characteristics.map(
-            (c, i) => c?.blob && upload(`${prefix}/char/${i}`, c)
+          (characteristics as Output<typeof figureSchema>[]).map(
+            ({ blob, ...c }, i) =>
+              blob && upload(`${prefix}/char/${i}`, c.url, blob)
           ) ?? []
         ),
         Promise.all(
-          buildings.map(
-            (b, i) => b?.blob && upload(`${prefix}/buildings/${i}`, b)
+          (buildings as Output<typeof figureSchema>[]).map(
+            ({ blob, ...b }, i) =>
+              blob && upload(`${prefix}/buildings/${i}`, b.url, blob)
           ) ?? []
         ),
       ]);
 
-      const insertedId = await save({
+      console.log("calling save");
+
+      const payload = {
         ...value,
         id: value.id!,
         slug: getSlug(value.metadata.name),
@@ -61,8 +71,8 @@ export const useObecForm = ({
               ? undefined
               : {
                   url: cImages[i]?.url ?? c?.url,
-                  width: cImages[i]?.width ?? (c as any)?.width,
-                  height: cImages[i]?.height ?? (c as any)?.height,
+                  width: cImages[i]?.width ?? c?.width,
+                  height: cImages[i]?.height ?? c?.height,
                   caption: c?.caption,
                 }
           ) as any satisfies (FigureData | undefined)[] as any,
@@ -71,20 +81,34 @@ export const useObecForm = ({
               ? undefined
               : {
                   url: bImages[i]?.url ?? b?.url,
-                  width: bImages[i]?.width ?? (b as any)?.width,
-                  height: bImages[i]?.height ?? (b as any)?.height,
+                  width: bImages[i]?.width ?? b?.width,
+                  height: bImages[i]?.height ?? b?.height,
                   caption: b?.caption,
                 }
           ) as any satisfies (FigureData | undefined)[] as any,
         } as any,
-      });
+      };
+      console.log(payload);
 
-      setState("ready");
-      fetch(`/api/prerender-pdf/${insertedId ?? v.id}`, { method: "HEAD" });
-      alert("Uloženo");
+      const insertedResult = await save(payload);
 
-      if (insertedId) {
-        router.push(`/admin/obec/${insertedId}`);
+      console.log(insertedResult);
+
+      if (insertedResult) {
+        fetch(`/api/prerender-pdf/${insertedResult.id}`, {
+          method: "HEAD",
+        });
+
+        if (!id) {
+          router.push(`/admin/obec/${insertedResult.id}`);
+        } else {
+          form.setValue(insertedResult);
+        }
+        alert("Uloženo");
+        setState("ready");
+      } else {
+        setState("ready");
+        alert("Nebylo mozne ulozit obec");
       }
     },
   });
@@ -109,7 +133,7 @@ const emptyObec: DeepPartial<ObecTable> = {
   },
 };
 
-const upload = async (path: string, { blob, url }: FigureControlValue) => {
+const upload = async (path: string, url: string | undefined, blob: Blob) => {
   if (!blob) return;
 
   url && URL.revokeObjectURL(url);

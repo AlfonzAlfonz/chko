@@ -35,7 +35,7 @@ export const ObecForm = ({
   onSubmit: save,
 }: {
   value?: ObecTable;
-  onSubmit?: (obec: ObecTable) => Promise<number | undefined>;
+  onSubmit?: (obec: ObecTable) => Promise<ObecTable>;
 }) => {
   const { value, state, errors, fieldProps, onSubmit } = useObecForm({
     initialValue,
@@ -489,6 +489,7 @@ const NumberInput = (
 ) => (
   <Input
     {...props}
+    value={props.value ?? undefined}
     type="number"
     onChange={(e) =>
       props.onChange?.({ target: { value: e.target.valueAsNumber } })

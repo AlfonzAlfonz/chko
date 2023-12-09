@@ -5,11 +5,13 @@ import { Container } from "@mui/joy";
 import { ObecForm } from "@/components/admin/ObecForm";
 
 const getData = async (id: number) => {
-  return await db
+  console.log("start");
+  const result = await db
     .selectFrom("cities")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
+  return result;
 };
 
 const ObecDetail = async ({ params }: { params: { id: string } }) => {
@@ -17,13 +19,12 @@ const ObecDetail = async ({ params }: { params: { id: string } }) => {
 
   const saveData = async (obec: ObecTable) => {
     "use server";
-    await db
+    return await db
       .updateTable("cities")
       .where("id", "=", +params.id)
       .set(obec)
-      .returning("id")
+      .returningAll()
       .executeTakeFirstOrThrow();
-    return undefined;
   };
 
   return (
