@@ -90,7 +90,6 @@ export const useLeaflet = (props: MapProps) => {
         });
         geojson.addEventListener("click", (e) => {
           const data = e.propagatedFrom.feature?.properties;
-          console.log(data.KOD, chkoKodDic);
           if (data && data.KOD && chkoKodDic[data.KOD]) {
             map.flyTo(chkoKodDic[data.KOD]!.data.position, 11);
           }

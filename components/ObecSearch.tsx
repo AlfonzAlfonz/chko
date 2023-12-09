@@ -5,7 +5,7 @@ import Autocomplete, {
   createFilterOptions,
 } from "@mui/joy/Autocomplete";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { ConciseObec, ObecListContext } from "./contexts";
 
@@ -13,6 +13,7 @@ export const ObecSearch = ({
   onChange,
   className,
   slotProps: _slotProps,
+  onInputChange,
   defaultId,
   ...props
 }: Partial<AutocompleteProps<ConciseObec, false, false, false>> & {
@@ -85,8 +86,9 @@ export const ObecSearch = ({
 
         router.push(`/obec/${o.id}/${o.slug}`);
       }}
-      onInputChange={(_, v) => {
-        setInputValue(v);
+      onInputChange={(...args) => {
+        setInputValue(args[1]);
+        onInputChange?.(...args);
       }}
       onKeyUp={(e) => {
         if (e.key === "Enter") {

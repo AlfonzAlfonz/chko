@@ -1,9 +1,9 @@
 "use client";
-import createCache, { Options } from "@emotion/cache";
-import { useServerInsertedHTML } from "next/navigation";
+import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
-import { CssVarsProvider, Theme, extendTheme } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
+import { CssVarsProvider } from "@mui/joy/styles";
+import { useServerInsertedHTML } from "next/navigation";
 import { ReactNode, useState } from "react";
 
 interface Props {
@@ -54,26 +54,12 @@ export const ThemeRegistry = ({ children, theme }: Props) => {
     );
   });
 
-  console.log(webTheme);
-
   return (
     <CacheProvider value={cache}>
-      <CssVarsProvider theme={theme === "web" ? webTheme : undefined}>
+      <CssVarsProvider>
         <CssBaseline />
         {children}
       </CssVarsProvider>
     </CacheProvider>
   );
 };
-
-const webTheme = extendTheme({
-  components: {
-    JoyAutocomplete: {
-      styleOverrides: {
-        input: {
-          fontSize: undefined,
-        },
-      },
-    },
-  },
-});

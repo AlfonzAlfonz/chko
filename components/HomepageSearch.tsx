@@ -1,9 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { ObecSearch } from "./ObecSearch";
 import { ObecListContext } from "./contexts";
-import { useRouter } from "next/navigation";
 
 export const HomepageSearch = () => {
   const [input, setInput] = useState("");
@@ -12,31 +12,48 @@ export const HomepageSearch = () => {
   const obecList = useContext(ObecListContext);
 
   return (
-    <>
+    <div className="max-w-full">
       <ObecSearch
         onChange={() => setLoading(true)}
         onInputChange={(_, v) => setInput(v)}
-        className="bg-transparent shadow-none border-none"
+        className="bg-transparent shadow-none"
         slotProps={{
           root: {
-            className: "!rounded-none",
+            className:
+              "!rounded-none !border-b-[1px] lg:!border-b-[3px] !ps-[10px] !pe-[10px]",
             sx: {
               backgroundColor: "transparent",
               border: "none",
-              borderBottom: "3px solid black",
+              borderBottom: "solid black",
               boxShadow: "none",
+              "&.Mui-focused": {
+                "--Input-focusedHighlight": "none",
+              },
             },
           },
-          input: { className: "text-center outline-none" },
-          wrapper: { className: "text-[100px] text-[#AAA]" },
-          listbox: { className: "!text-[1rem]" },
+          input: {
+            className: "text-center text-black placeholder:!text-[#AAA]",
+          },
+          wrapper: { className: "text-[30px] lg:!text-[100px]" },
+          listbox: {
+            className:
+              "!text-[1rem] !rounded-none !shadow-none !border-none popisky-13",
+          },
+          option: {
+            className:
+              "!uppercase hover:!bg-transparent hover:text-black hover:underline",
+          },
+          noOptions: {
+            className:
+              "!uppercase hover:!bg-transparent hover:text-black hover:underline",
+          },
         }}
         placeholder="Svatý Jan pod Skalou"
         startDecorator={undefined}
         popupIcon={null}
       />
       <button
-        className="button mt-16 uppercase bg-chkogreen text-white"
+        className="button mt-8 lg:mt-16 uppercase bg-chkogreen text-white mx-auto"
         onClick={() => {
           if (!input) return;
 
@@ -53,6 +70,6 @@ export const HomepageSearch = () => {
           "Vyhledat obec"
         )}
       </button>
-    </>
+    </div>
   );
 };

@@ -65,7 +65,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       >
         Stáhnout pdf
       </a>
-      <div className="lg:h-[150px] lg:container  items-center m">
+      <div className="lg:h-[150px] lg:container items-center m">
         <h1 className="col-span-full lg:col-span-3 text-[30px] lg:text-[50px] shadow-lg lg:shadow-none px-4 py-5 lg:p-0">
           {obec.metadata.name}
         </h1>

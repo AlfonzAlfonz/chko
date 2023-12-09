@@ -45,13 +45,24 @@ const config: Config = {
           fontFamily: "Arial",
           fontSize: "40px",
         },
+        ".text-32": {
+          fontFamily: "Arial",
+          fontSize: "32px",
+        },
         ".text-18": {
           fontFamily: "Arial",
           fontSize: "18px",
         },
+        ".text-16": {
+          fontFamily: "Arial",
+          fontSize: "16px",
+        },
         ".popisky-13": {
           fontSize: "13px",
           textAlign: "left",
+          lineHeight: "17px",
+          letterSpacing: "2.86px",
+          textTransform: "uppercase",
         },
         ".mobil-popisky-11": {
           fontSize: "11px",
