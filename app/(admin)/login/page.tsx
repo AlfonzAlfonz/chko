@@ -2,7 +2,7 @@ import logo from "@/public/static/logo.svg";
 import { Card, CardContent } from "@mui/joy";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import { LoginForm } from "@/components/admin/LoginForm";
+import { LoginForm } from "@/components/admin/layout/LoginForm";
 import { authOptions } from "../../../pages/api/auth/[...nextauth]";
 
 const Login = async () => {

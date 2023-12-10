@@ -1,4 +1,4 @@
-import { ThemeRegistry } from "@/components/admin/ThemeRegistry";
+import { ThemeRegistry } from "@/components/admin/layout/ThemeRegistry";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../../globals.css";
@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../pages/api/auth/[...nextauth]";
 import Link from "next/link";
 import { Button } from "@mui/joy";
+import { db } from "@/lib/db";
 
 const inter = Inter({ subsets: ["latin"] });
 

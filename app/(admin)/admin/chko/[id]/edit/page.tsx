@@ -1,40 +1,40 @@
-import { ObecForm } from "@/components/admin/forms/ObecForm";
+import { ChkoForm } from "@/components/admin/forms/ChkoForm";
 import { AdminHeader } from "@/components/admin/layout/AdminHeader";
 import { AdminLayout } from "@/components/admin/layout/AdminLayout";
+import { ChkoTable } from "@/lib/chko";
 import { db } from "@/lib/db";
-import { ObecTable } from "@/lib/obec";
 import { Container } from "@mui/joy";
 
 const getData = async (id: number) => {
   const result = await db
-    .selectFrom("cities")
+    .selectFrom("chkos")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
   return result;
 };
 
-const ObecDetail = async ({ params }: { params: { id: string } }) => {
+const ChkoDetail = async ({ params }: { params: { id: string } }) => {
   const data = await getData(+params.id);
 
-  const saveData = async (obec: ObecTable) => {
+  const saveData = async (chko: ChkoTable) => {
     "use server";
     return await db
-      .updateTable("cities")
+      .updateTable("chkos")
       .where("id", "=", +params.id)
-      .set(obec)
+      .set(chko)
       .returningAll()
       .executeTakeFirstOrThrow();
   };
 
   return (
     <AdminLayout>
-      <AdminHeader>{data?.metadata.name}</AdminHeader>
+      <AdminHeader>{data?.name}</AdminHeader>
       <Container>
-        <ObecForm value={data} onSubmit={saveData} />
+        <ChkoForm value={data} onSubmit={saveData} />
       </Container>
     </AdminLayout>
   );
 };
 
-export default ObecDetail;
+export default ChkoDetail;

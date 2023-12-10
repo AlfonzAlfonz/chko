@@ -1,4 +1,4 @@
-import { ThemeRegistry } from "@/components/admin/ThemeRegistry";
+import { ThemeRegistry } from "@/components/admin/layout/ThemeRegistry";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../../globals.css";

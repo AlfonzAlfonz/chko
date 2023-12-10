@@ -1,11 +1,11 @@
-import { FigureData } from "@/lib/db";
+import { FigureData } from "@/lib/figure";
 import Edit from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/joy";
 import { Dispatch, SetStateAction, useState } from "react";
-import { DeepPartial, Errors } from "../useForm";
+import { DeepPartial, Errors } from "../forms/useForm";
 import { EditFigureModal } from "./EditFigureModal";
 import { FileInput } from "./FileInput";
-import { ErrorMessage } from "../ErrorMessage";
+import { ErrorMessage } from "../forms/ErrorMessage";
 
 export type FigureControlValue = DeepPartial<FigureData> & { blob?: Blob };
 
@@ -68,7 +68,7 @@ export const AddFigureControl = ({ setValue }: Pick<Props, "setValue">) => {
       <FileInput
         onChange={(blob) =>
           setValue((s) => ({
-            ...s,
+            ...(s ?? emptyFigure),
             url: URL.createObjectURL(blob),
             blob,
           }))
@@ -76,4 +76,8 @@ export const AddFigureControl = ({ setValue }: Pick<Props, "setValue">) => {
       />
     </div>
   );
+};
+
+const emptyFigure = {
+  caption: "",
 };

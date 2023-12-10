@@ -1,11 +1,10 @@
-import { ObecTable } from "@/lib/db";
-import { obecScheme } from "@/lib/schemas";
 import { put } from "@vercel/blob";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import getSlug from "speakingurl";
 import * as v from "valibot";
 import { DeepPartial, mapValibotResult, useForm } from "./useForm";
+import { ObecTable, obecScheme } from "@/lib/obec";
 
 export const useObecForm = ({
   initialValue,

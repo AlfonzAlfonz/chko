@@ -18,6 +18,7 @@ import chkoimg from "@/public/static/cesky_kras_logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import "./obec.css";
+import { notFound } from "next/navigation";
 
 export const dynamic = "error";
 export const dynamicParams = true;
@@ -37,17 +38,34 @@ export const generateStaticParams = async () => {
 };
 
 const getData = async (id: number) => {
-  return await db
+  const obec = await db
     .selectFrom("cities")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
+
+  if (!obec) return undefined;
+
+  const chko = await db
+    .selectFrom("chkos")
+    .where("id", "=", obec.chko)
+    .selectAll()
+    .executeTakeFirst();
+
+  if (!chko) return undefined;
+
+  return {
+    ...obec,
+    chko,
+  };
 };
 
 const Detail = async ({ params }: { params: { id: string } }) => {
   const obec = await getData(+params.id);
 
-  if (!obec) return null;
+  if (!obec) notFound();
+
+  const chko = obec.chko;
 
   return (
     <div className="relative -mt-[85px] lg:-mt-[150px] z-[1000] bg-white">
@@ -116,7 +134,10 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           <h2 className="leading-none">{chko.name}</h2>
         </AccordionButton>
         <AccordionContent className="container-inner mb-8">
-          {chko.lists.map((l, i) => (
+          {[
+            { title: chko.data.list1Title, values: chko.data.list1 },
+            { title: chko.data.list2Title, values: chko.data.list2 },
+          ].map((l, i) => (
             <div key={i} className="col-span-4 text-18">
               <h3 className="container-content uppercase p-5 border-b-[1px] border-black tracking-[4px]">
                 {l.title}
@@ -130,42 +151,10 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               </ol>
             </div>
           ))}
-          <WithCaption
-            className="col-span-2"
-            caption="SKALNATÁ ÚDOLÍ A ZALESNĚNÉ VRCHY BEZ STAVEB"
-          >
-            <Image
-              src={imgb1}
-              alt="SKALNATÁ ÚDOLÍ A ZALESNĚNÉ VRCHY BEZ STAVEB"
-            />
-          </WithCaption>
-          <WithCaption
-            className="col-span-2"
-            caption="VÁPENCOVÉ LOMY – SPOLEČNÉ PŮSOBENÍ ČLOVĚKA A PŘÍRODY"
-          >
-            <Image
-              src={imgb2}
-              alt="VÁPENCOVÉ LOMY – SPOLEČNÉ PŮSOBENÍ ČLOVĚKA A PŘÍRODY"
-            />
-          </WithCaption>
-          <WithCaption
-            className="col-span-2"
-            caption="HISTORICKÉ DOMINANTY – KOSTELY, KLÁŠTER, HRAD"
-          >
-            <Image
-              src={imgb3}
-              alt="HISTORICKÉ DOMINANTY – KOSTELY, KLÁŠTER, HRAD"
-            />
-          </WithCaption>
-          <WithCaption
-            className="col-span-2"
-            caption="SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVINY OKOLO"
-          >
-            <Image
-              src={imgb4}
-              alt="SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVINY OKOLO"
-            />
-          </WithCaption>
+
+          {chko.data.figures.map((f) => (
+            <FigureImage key={f.url} figure={f} className="col-span-2" />
+          ))}
         </AccordionContent>
       </Accordion>
 
@@ -269,27 +258,3 @@ www.nature.cz/web/chko-cesky-kras`}
 };
 
 export default Detail;
-
-const chko = {
-  name: "CHKO Český kras",
-  lists: [
-    {
-      title: "CO JE TYPICKÉ?",
-      values: [
-        "Okolo vesnic volná zemědělská krajina pastvin, luk, polí, sadů, polních cest, lesů",
-        "Sevřené menší vesnice posazené mezi kopci se zděnými podélnými statky a střechami z pálených tašek",
-        "Bez roztroušených staveb po okolí (mlýny, hájovny apod. výjimečně)",
-        "Dominanty kostelů, hradu",
-      ],
-    },
-    {
-      title: "NAVAZUJEME NA TRADICE",
-      values: [
-        "Nezastavět horizonty",
-        "Stavět (vymezovat zastavitelná území) jen v přímé návaznosti na obce",
-        "Nezakrýt historické dominanty",
-        "Opravy starých domů nebo novostavby držící tvar a vzhled statků, které jsou ve vesnicích okolo",
-      ],
-    },
-  ],
-};

@@ -8,12 +8,12 @@ import {
   ModalDialog,
   Typography,
 } from "@mui/joy";
-import { mapValibotResult, useForm } from "../useForm";
+import { mapValibotResult, useForm } from "../forms/useForm";
 import { FigureControlValue } from "./FigureControl";
 import { FileInput } from "./FileInput";
-import { ErrorMessage } from "../ErrorMessage";
+import { ErrorMessage } from "../forms/ErrorMessage";
 import * as v from "valibot";
-import { figureSchema } from "@/lib/schemas";
+import { figureSchema } from "@/lib/figure";
 
 export const EditFigureModal = ({
   open,

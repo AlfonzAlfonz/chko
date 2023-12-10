@@ -1,10 +1,11 @@
 "use client";
 
-import { DeepPartial, FieldProps } from "@/components/admin/useForm";
-import { FigureData, ObecData, ObecTable } from "@/lib/db";
+import { NumberInput } from "@/components/admin/forms/NumberInput";
+import { StringList } from "@/components/admin/forms/StringList";
+import { DeepPartial, FieldProps } from "@/components/admin/forms/useForm";
+import { FigureData } from "@/lib/figure";
+import { ObecData, ObecTable } from "@/lib/obec";
 import Delete from "@mui/icons-material/Delete";
-import ArrowUpward from "@mui/icons-material/ArrowUpward";
-import ArrowDownward from "@mui/icons-material/ArrowDownward";
 import {
   Button,
   Card,
@@ -21,14 +22,15 @@ import {
   Textarea,
   Typography,
 } from "@mui/joy";
-import { ComponentProps } from "react";
-import { ErrorMessage } from "./ErrorMessage";
 import {
   AddFigureControl,
   FigureControl,
   FigureControlValue,
-} from "./FigureControl/FigureControl";
+} from "../FigureControl/FigureControl";
+import { ErrorMessage } from "./ErrorMessage";
 import { useObecForm } from "./useObecForm";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export const ObecForm = ({
   value: initialValue,
@@ -37,10 +39,16 @@ export const ObecForm = ({
   value?: ObecTable;
   onSubmit?: (obec: ObecTable) => Promise<ObecTable>;
 }) => {
+  const searchParams = useSearchParams()!;
   const { value, state, errors, fieldProps, onSubmit } = useObecForm({
     initialValue,
     onSubmit: save,
   });
+
+  useEffect(() => {
+    fieldProps(["chko"]).setValue(searchParams.get("chko")!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <Stack
@@ -309,78 +317,12 @@ export const ObecForm = ({
           Podmínky ochrany a doplňující doporučení
         </Typography>
 
-        <div className="flex flex-col">
-          <FormLabel>Podmínky</FormLabel>
-          <div className="flex flex-col gap-3">
-            {value.data?.terms?.map((t, i) => (
-              <Textarea
-                key={i}
-                {...fieldProps<string>(["data", "terms", i])}
-                startDecorator={<div className="px-2">{i + 1}.</div>}
-                endDecorator={
-                  <div className="flex gap-4">
-                    <div className="flex flex-col">
-                      <IconButton
-                        color="neutral"
-                        disabled={i === 0}
-                        onClick={() =>
-                          fieldProps<ObecData["terms"]>([
-                            "data",
-                            "terms",
-                          ]).setValue((s) => reorder(s, i, i - 1))
-                        }
-                      >
-                        <ArrowUpward />
-                      </IconButton>
-                      <IconButton
-                        color="neutral"
-                        disabled={i === value.data?.terms?.length}
-                        onClick={() =>
-                          fieldProps<ObecData["terms"]>([
-                            "data",
-                            "terms",
-                          ]).setValue((s) => reorder(s, i, i + 1))
-                        }
-                      >
-                        <ArrowDownward />
-                      </IconButton>
-                    </div>
-                    <IconButton
-                      color="danger"
-                      onClick={() =>
-                        fieldProps<ObecData["terms"]>([
-                          "data",
-                          "terms",
-                        ]).setValue((s) => s.filter((_, ii) => i !== ii))
-                      }
-                    >
-                      <Delete />
-                    </IconButton>
-                  </div>
-                }
-                slotProps={{
-                  root: { className: "!flex-row" },
-                  endDecorator: { className: "!my-0" },
-                }}
-              />
-            ))}
-          </div>
-
-          {(value.data?.terms?.length ?? 0) <= 8 && (
-            <Button
-              onClick={() =>
-                fieldProps<ObecData["terms"]>(["data", "terms"]).setValue(
-                  (s) => [...s, ""]
-                )
-              }
-              size="sm"
-              color="neutral"
-              className="self-center !mt-6"
-            >
-              Přidat podmínku
-            </Button>
-          )}
-        </div>
+        <StringList
+          {...fieldProps(["data", "terms"])}
+          label="Podmínky"
+          add="Přidat podmínku"
+          maxLength={8}
+        />
       </Card>
 
       <Card>
@@ -480,27 +422,4 @@ export const ObecForm = ({
       </Card>
     </Stack>
   );
-};
-
-const NumberInput = (
-  props: Omit<ComponentProps<typeof Input>, "onChange"> & {
-    onChange?: (x: { target: { value: number } }) => unknown;
-  }
-) => (
-  <Input
-    {...props}
-    value={props.value ?? undefined}
-    type="number"
-    onChange={(e) =>
-      props.onChange?.({ target: { value: e.target.valueAsNumber } })
-    }
-  />
-);
-
-const reorder = <T,>(list: T[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed!);
-
-  return result;
 };

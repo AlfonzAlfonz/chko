@@ -4,18 +4,22 @@ import { db } from "@/lib/db";
 import { Button, Card, Container, Table } from "@mui/joy";
 import Link from "next/link";
 
-const getData = async () => {
-  return await db.selectFrom("cities").select(["id", "metadata"]).execute();
+const getData = async (chko: number) => {
+  return await db
+    .selectFrom("cities")
+    .select(["id", "metadata"])
+    .where("chko", "=", chko)
+    .execute();
 };
 
-const CityList = async () => {
-  const cities = await getData();
+const ObecList = async ({ params: { id } }: { params: { id: string } }) => {
+  const cities = await getData(+id);
 
   return (
     <AdminLayout>
       <AdminHeader>
         <div>Obce</div>
-        <Link href="/admin/obec/vytvorit">
+        <Link href={`/admin/obec/vytvorit?chko=${id}`}>
           <Button size="lg">Přidat obec</Button>
         </Link>
       </AdminHeader>
@@ -55,4 +59,4 @@ const CityList = async () => {
   );
 };
 
-export default CityList;
+export default ObecList;
