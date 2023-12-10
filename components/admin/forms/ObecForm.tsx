@@ -46,7 +46,8 @@ export const ObecForm = ({
   });
 
   useEffect(() => {
-    fieldProps(["chko"]).setValue(searchParams.get("chko")!);
+    const chko = searchParams.get("chko");
+    chko && fieldProps(["chko"]).setValue(chko);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
