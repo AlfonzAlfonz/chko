@@ -1,4 +1,4 @@
-import { FigureData } from "@/lib/db";
+import { FigureData } from "@/lib/figure";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { ComponentProps } from "react";

@@ -1,6 +1,7 @@
 "use client";
 
-import { ChkoTable, ObecMetadata } from "@/lib/db";
+import { ChkoTable } from "@/lib/chko";
+import { ObecMetadata } from "@/lib/obec";
 import { ComponentProps, createContext } from "react";
 
 export type ConciseObec = {

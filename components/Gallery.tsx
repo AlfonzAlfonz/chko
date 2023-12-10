@@ -1,10 +1,10 @@
 "use client";
 
-import { FigureData } from "@/lib/db";
+import { FigureData } from "@/lib/figure";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 import { FigureImage } from "./FigureImage";
 import { LightBox, SliderOverlay } from "./LightBox/LightBox";
-import { twMerge } from "tailwind-merge";
-import { useState } from "react";
 
 interface Props {
   figures: FigureData[];

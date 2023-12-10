@@ -1,8 +1,8 @@
-import { FigureData } from "@/lib/db";
 import Image from "next/image";
 import { WithCaption } from "./WithCaption";
 import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
+import { FigureData } from "@/lib/figure";
 
 export const FigureImage = ({
   figure,

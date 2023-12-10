@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { RefObject, createContext, useContext, useEffect } from "react";
 import { MapController } from "./_Map";
-import { ObecMetadata } from "@/lib/db";
+import { ObecMetadata } from "@/lib/obec";
 
 export const Map = dynamic(() => import("./_Map").then((mod) => mod._Map), {
   ssr: false,

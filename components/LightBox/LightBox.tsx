@@ -1,6 +1,6 @@
 "use client";
 
-import { FigureData } from "@/lib/db";
+import { FigureData } from "@/lib/figure";
 import { Modal } from "@mui/base";
 import Image from "next/image";
 import React, { Dispatch, SetStateAction, useState } from "react";

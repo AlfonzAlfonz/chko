@@ -21,8 +21,11 @@ export const ChkoModal = ({
       onClose={onClose}
       slots={{ backdrop: Backdrop }}
     >
-      <div className="bg-white px-9 py-8 relative nsu-modal min-w-[300px]">
-        <div className="absolute top-[30px] right-[30px]" onClick={onClose}>
+      <div className="bg-white px-9 py-8 relative nsu-modal min-w-[300px] chko-prose mx-4 lg:mx-auto lg:max-w-[70vw] max-h-[80vh] overflow-scroll">
+        <div
+          className="absolute top-[30px] right-[30px] cursor-pointer"
+          onClick={onClose}
+        >
           <Close />
         </div>
         {children}

@@ -2,7 +2,6 @@
 
 import { Minus } from "@/components/icons/Minus";
 import { Plus } from "@/components/icons/Plus";
-import { ObecMetadata } from "@/lib/db";
 import "leaflet/dist/leaflet.css";
 import Link from "next/link";
 import { Dispatch, MutableRefObject, SetStateAction, useState } from "react";
@@ -11,6 +10,7 @@ import { ObecSearch } from "../ObecSearch";
 import { ProtectionBar } from "../ProtectionBar";
 import { useLeaflet } from "./leaflet";
 import "./mapa.css";
+import { ObecMetadata } from "@/lib/obec";
 
 export interface MapProps {
   defaultCenter?: [number, number];
