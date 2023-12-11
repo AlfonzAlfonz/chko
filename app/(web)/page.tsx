@@ -1,4 +1,5 @@
 import { HomepageSearch } from "@/components/HomepageSearch";
+import { Chevron } from "@/components/icons/Chevron";
 import group35 from "@/public/static/Group 35.svg";
 import krajraz1 from "@/public/static/Vinarice_nadhled 3.png";
 import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
@@ -13,7 +14,10 @@ import "./home.css";
 const Home = async () => {
   return (
     <div className="homepage">
-      <div className="flex items-start container h-[100vh] first px-0 lg:px-10">
+      <div
+        className="flex flex-col justify-between container h-[100vh] first px-0 lg:px-10"
+        id="uvod"
+      >
         <h1
           className={`
             col-span-full lg:h-[208px]
@@ -32,9 +36,22 @@ const Home = async () => {
             />
           </div>
         </h1>
+        <div className="container">
+          <div className="col-start-3 col-span-2 text-center text-white flex flex-col gap-12 items-center text-18">
+            Webová stránka obsahuje informace o krajinném rázu obcí v Chráněných
+            krajinných oblastech České republiky. Stačí vyhledat tu, která Vás
+            zajímá.
+            <a
+              href="#vyhledavani"
+              className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md bg-chkogreen rotate-180"
+            >
+              <Chevron color="white" />
+            </a>
+          </div>
+        </div>
       </div>
 
-      <div className="relative container h-[100vh] bg-chkobg">
+      <div className="relative container h-[100vh] bg-chkobg" id="vyhledavani">
         <Link
           href="/mapa"
           className="button uppercase flex absolute top-0 right-0 mr-8 mt-8 items-center gap-2"
@@ -51,7 +68,7 @@ const Home = async () => {
         <h2 className="mt-[67px] lg:mt-[120px] podnadpis-40 lg:nadpis-80">
           Proč a jak krajinný ráz?
         </h2>
-        <p className="mt-6 text-16 lg:text-32">
+        <p className="mt-6 text-16 lg:text-24">
           Patří k dobrému životu, že můžeme pobývat v prostředí, které se nám
           líbí a blahodárně na nás působí. Silou zákona proto bráníme takovým
           stavebním a jiným zásahům, které necitlivě proměňují, nebo dokonce
@@ -62,25 +79,32 @@ const Home = async () => {
       </div>
 
       <div className="container mt-2 lg:mt-32 max-w-[1900px] mx-auto">
+        <p className="col-span-full text-center popisky-13">
+          RŮZNÉ CHARAKTERY KRAJIN A TOMU ODPOVÍDAJÍCÍ URBANISTICKÉ STRUKTURY:
+        </p>
         <div className="col-span-full lg:col-span-3">
           {/* TODO: captions */}
-          <Image src={krajraz1} alt="TODO:" />
+          <Image
+            src={krajraz1}
+            alt="1) KOMPAKTNÍ VESNICE S NÁVSÍ V NÍŽINNÝCH OBLASTECH"
+          />
           <p className="px-4 mt-2 popisky-13">
-            RŮZNÉ CHARAKTERY KRAJIN A TOMU ODPOVÍDAJÍCÍ URBANISTICKÉ STRUKTURY:
-            <br />
-            1&#41; KOMPAKTNÍ VESNICE S NÁVSÍ V NÍŽINNÝCH OBLASTECH
+            1) KOMPAKTNÍ VESNICE S NÁVSÍ V NÍŽINNÝCH OBLASTECH
           </p>
         </div>
         <div className="col-span-full lg:col-span-3">
-          <Image src={krajraz2} alt="TODO:" />
+          <Image
+            src={krajraz2}
+            alt="2) ROZVODNĚNÁ ZÁSTAVBA CHALUP TYPICKÁ PRO HORSKÉ OBLASTI"
+          />
           <p className="px-4 mt-2 popisky-13">
-            2&#41; ROZVODNĚNÁ ZÁSTAVBA CHALUP TYPICKÁ PRO HORSKÉ OBLASTI
+            2) ROZVODNĚNÁ ZÁSTAVBA CHALUP TYPICKÁ PRO HORSKÉ OBLASTI
           </p>
         </div>
       </div>
 
       <div className="max-w-[1220px] m-auto text-center px-4">
-        <p className="my-8 lg:my-64 text-16 lg:text-32">
+        <p className="my-8 lg:my-64 text-16 lg:text-24">
           Posuzujeme-li nějaký stavební záměr z hlediska ochrany krajinného
           rázu, nejde to dělat všude stejně a podle stejných kritérií. Je
           zásadní, kde přesně se má stavět. Co se může schovat někde v údolí či
@@ -104,7 +128,7 @@ const Home = async () => {
           <h2 className="lg:mt-[120px] podnadpis-40 lg:nadpis-80">
             Chráněná krajinná oblast
           </h2>
-          <p className="text-16 lg:text-32 my-8 lg:my-16">
+          <p className="text-16 lg:text-24 my-8 lg:my-16">
             Asi jen jednu sedminu území státu tvoří tzv. Chráněné krajinné
             oblasti (CHKO). To jsou území, která se navzdory překotné
             modernizaci a industrializaci podařilo zachovat lépe než jiná a
@@ -115,7 +139,7 @@ const Home = async () => {
         </div>
         <Image src={group35} alt="" className="mx-auto" />
         <div className="max-w-[1220px] m-auto text-center px-4 pt-8">
-          <p className="text-16 lg:text-32 py-8 lg:py-32">
+          <p className="text-16 lg:text-24 py-8 lg:py-32">
             Na ochranu krajinného rázu se při schvalování stavební činnosti
             v CHKO dbá výrazněji než jinde. Ačkoli toto usměrňování výstavby
             představuje pro jednotlivé stavebníky určitá omezení, v širších
@@ -133,7 +157,14 @@ const Home = async () => {
         />
       </div>
 
-      <footer className="h-[305px] bg-black"></footer>
+      <footer className="h-[305px] bg-black flex justify-center items-center">
+        <a
+          href="#uvod"
+          className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md border bg-black border-white border-solid"
+        >
+          <Chevron color="white" />
+        </a>
+      </footer>
     </div>
   );
 };

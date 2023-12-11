@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 
-export const Chevron = (p: ComponentProps<"svg">) => {
+export const Chevron = ({ color = "black", ...p }: ComponentProps<"svg">) => {
   return (
     <svg
       {...p}
@@ -15,7 +15,7 @@ export const Chevron = (p: ComponentProps<"svg">) => {
         y1="12.7071"
         x2="11.2929"
         y2="0.707105"
-        stroke="black"
+        stroke={color}
         stroke-width="2"
       />
       <line
@@ -23,7 +23,7 @@ export const Chevron = (p: ComponentProps<"svg">) => {
         y1="0.707107"
         x2="0.707105"
         y2="12.7071"
-        stroke="black"
+        stroke={color}
         stroke-width="2"
       />
     </svg>

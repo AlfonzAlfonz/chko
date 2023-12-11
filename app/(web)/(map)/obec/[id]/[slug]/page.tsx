@@ -77,7 +77,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         <Close />
       </Link>
       <a
-        className="button hidden lg:block fixed bottom-4 right-14 bg-[#2ECC71] text-white popisky-13 uppercase z-50"
+        className="button hidden lg:block fixed bottom-4 right-14 bg-chkogreen text-white popisky-13 uppercase z-50"
         target="_blank"
         href={`/api/pdf/${obec.id}`}
       >
@@ -232,7 +232,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
 
       <div className="flex justify-center mb-12">
         <a
-          className="button lg:hidden bg-[#2ECC71] text-white popisky-13 uppercase z-50"
+          className="button lg:hidden bg-chkogreen text-white popisky-13 uppercase z-50"
           target="_blank"
           href="/static/svaty-jan-pod-skalou.pdf"
         >

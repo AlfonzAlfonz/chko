@@ -185,9 +185,8 @@ const Item = ({
     <>
       <ChkoTooltip
         title={
-          <span className="popisky-13">
-            <span className="uppercase tracking-[4px]">Pásmo {label}</span>{" "}
-            <br />
+          <span className="text-[13px]">
+            <span className="popisky-13">Pásmo {label}</span> <br />
             {tooltip}
           </span>
         }

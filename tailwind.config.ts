@@ -16,7 +16,7 @@ const config: Config = {
         "3xl": "1920px",
       },
       colors: {
-        chkogreen: "#27AE60",
+        chkogreen: "#2ECC71",
         chkored: "#E74C3C",
         chkoorange: "#F39C12",
         chkosearch: "#AAAAAA",
@@ -45,9 +45,10 @@ const config: Config = {
           fontFamily: "Arial",
           fontSize: "40px",
         },
-        ".text-32": {
+        ".text-24": {
           fontFamily: "Arial",
-          fontSize: "32px",
+          fontSize: "24px",
+          lineHeight: "normal",
         },
         ".text-18": {
           fontFamily: "Arial",
@@ -59,7 +60,6 @@ const config: Config = {
         },
         ".popisky-13": {
           fontSize: "13px",
-          textAlign: "left",
           lineHeight: "17px",
           letterSpacing: "2.86px",
           textTransform: "uppercase",

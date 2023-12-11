@@ -78,6 +78,14 @@ export const ObecSearch = ({
         listbox: {
           className: twMerge("rounded-none", slotProps?.listbox?.className),
         },
+        option: {
+          className:
+            "!uppercase hover:!bg-transparent hover:text-black hover:underline tracking-[2.2px]",
+        },
+        noOptions: {
+          className:
+            "!uppercase hover:!bg-transparent hover:text-black hover:underline tracking-[2.2px]",
+        },
       }}
       onChange={(...args) => {
         onChange?.(...args);
@@ -105,4 +113,4 @@ export const ObecSearch = ({
   );
 };
 
-const filterOptions = createFilterOptions<ConciseObec>({});
+export const filterOptions = createFilterOptions<ConciseObec>({});

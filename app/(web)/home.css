@@ -16,7 +16,7 @@
       z-index: -1;
       background: url("/static/XPR27533_zRAW.jpg");
       background-size: cover;
-      filter: brightness(60%);
+      background-position: bottom;
     }
   }
 

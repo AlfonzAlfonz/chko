@@ -35,8 +35,9 @@
   }
 }
 
-body {
+body,html {
   font-family: Arial;
+  scroll-behavior: smooth;
 }
 
 .MuiTooltip-arrow::before {

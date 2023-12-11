@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
-import { ObecSearch } from "./ObecSearch";
+import { ObecSearch, filterOptions } from "./ObecSearch";
 import { ObecListContext } from "./contexts";
 
 export const HomepageSearch = () => {
@@ -39,16 +39,9 @@ export const HomepageSearch = () => {
             className:
               "!text-[1rem] !rounded-none !shadow-none !border-none popisky-13",
           },
-          option: {
-            className:
-              "!uppercase hover:!bg-transparent hover:text-black hover:underline",
-          },
-          noOptions: {
-            className:
-              "!uppercase hover:!bg-transparent hover:text-black hover:underline",
-          },
         }}
         placeholder="Svatý Jan pod Skalou"
+        clearOnBlur={false}
         startDecorator={undefined}
         popupIcon={null}
       />
@@ -57,11 +50,12 @@ export const HomepageSearch = () => {
         onClick={() => {
           if (!input) return;
 
-          const o = obecList.find((x) => x.metadata.name.includes(input));
-          if (o) {
-            router.push(`/obec/${o.id}/${o.slug}`);
-            setLoading(true);
-          }
+          const filtered = filterOptions(obecList, {
+            inputValue: input,
+            getOptionLabel: (o) => o.metadata.name,
+          });
+          const o = filtered[0];
+          if (o) router.push(`/obec/${o.id}/${o.slug}`);
         }}
       >
         {loading ? (
