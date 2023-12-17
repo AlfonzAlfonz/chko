@@ -147,8 +147,8 @@ const Home = async () => {
         </div>
 
         <div className="bg-chkobg text-center">
-          <div className="max-w-[1220px] m-auto text-center px-4 pt-8">
-            <h2 className="lg:mt-[120px] podnadpis-40 lg:nadpis-80">
+          <div className="max-w-[1220px] m-auto text-center px-4 pt-16 lg:pt-32">
+            <h2 className="podnadpis-40 lg:nadpis-80">
               Chráněná krajinná oblast
             </h2>
             <p className="text-16 lg:text-32 my-8 lg:my-16">
@@ -161,8 +161,8 @@ const Home = async () => {
             </p>
           </div>
           <Image src={group35} alt="" className="mx-auto" />
-          <div className="max-w-[1220px] m-auto text-center px-4 pt-8">
-            <p className="text-16 lg:text-24 py-8 lg:py-32">
+          <div className="max-w-[1220px] m-auto text-center px-4 py-16 lg:py-32">
+            <p className="text-16 lg:text-24">
               Na ochranu krajinného rázu se při schvalování stavební činnosti
               v CHKO dbá výrazněji než jinde. Ačkoli toto usměrňování výstavby
               představuje pro jednotlivé stavebníky určitá omezení, v širších
