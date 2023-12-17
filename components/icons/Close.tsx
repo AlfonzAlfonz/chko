@@ -10,12 +10,12 @@ export const Close = () => {
       <path
         d="M9.04102 9.04199L26.0116 26.0126"
         stroke="black"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <path
         d="M26.0117 9.04199L9.04115 26.0126"
         stroke="black"
-        stroke-width="2"
+        strokeWidth="2"
       />
     </svg>
   );

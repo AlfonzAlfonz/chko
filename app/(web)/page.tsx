@@ -8,14 +8,13 @@ import logoTitle from "@/public/static/logo_title.svg";
 import pexelsJaro from "@/public/static/pexels-jaro.png";
 import pexelsThimm from "@/public/static/pexels-volker-thimm-9957840.png";
 import Image from "next/image";
-import Link from "next/link";
 import "./home.css";
 
 const Home = async () => {
   return (
     <div className="homepage">
       <div
-        className="flex flex-col justify-between container h-[100vh] first px-0 lg:px-10"
+        className="flex flex-col justify-between container min-h-[100vh] first px-0 lg:px-10"
         id="uvod"
       >
         <h1
@@ -38,9 +37,9 @@ const Home = async () => {
         </h1>
         <div className="container">
           <div className="col-start-3 col-span-2 text-center text-white flex flex-col gap-12 items-center text-18">
-            Webová stránka obsahuje informace o krajinném rázu obcí v Chráněných
-            krajinných oblastech České republiky. Stačí vyhledat tu, která Vás
-            zajímá.
+            Tato webová stránka obsahuje informace o krajinném rázu obcí v
+            chráněných krajinných oblastech Český kras a Křivoklátsko. Stačí
+            vyhledat tu, která Vás zajímá.
             <a
               href="#vyhledavani"
               className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md bg-chkogreen rotate-180"
@@ -51,21 +50,27 @@ const Home = async () => {
         </div>
       </div>
 
-      <div className="relative container h-[100vh] bg-chkobg" id="vyhledavani">
-        <Link
-          href="/mapa"
-          className="button uppercase flex absolute top-0 right-0 mr-8 mt-8 items-center gap-2"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
-          Mapa <img src="/static/cz.svg" />
-        </Link>
+      <div
+        className="relative container min-h-[100vh] bg-chkobg py-16"
+        id="vyhledavani"
+      >
+        <div className="col-span-full"></div>
         <div className="col-span-full flex items-center justify-center flex-col w-full px-4">
           <HomepageSearch />
         </div>
+        <div className="col-span-full flex items-center justify-end flex-col w-full px-4">
+          <p className="mb-6">Proč ochrana krajinného rázu?</p>
+          <a
+            href="#why"
+            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center bg-transparent rotate-180 border border-black shadow-none"
+          >
+            <Chevron color="black" />
+          </a>
+        </div>
       </div>
 
-      <div className="max-w-[1220px] m-auto text-center px-4">
-        <h2 className="mt-[67px] lg:mt-[120px] podnadpis-40 lg:nadpis-80">
+      <div className="max-w-[1220px] m-auto text-center px-4" id="why">
+        <h2 className="pt-[67px] lg:pt-[120px] podnadpis-40 lg:nadpis-80">
           Proč a jak krajinný ráz?
         </h2>
         <p className="mt-6 text-16 lg:text-24">

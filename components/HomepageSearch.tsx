@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { ObecSearch, filterOptions } from "./ObecSearch";
 import { ObecListContext } from "./contexts";
+import Link from "next/link";
 
 export const HomepageSearch = () => {
   const [input, setInput] = useState("");
@@ -33,6 +34,7 @@ export const HomepageSearch = () => {
           },
           input: {
             className: "text-center text-black placeholder:!text-[#AAA]",
+            name: "search",
           },
           wrapper: { className: "text-[30px] lg:!text-[100px]" },
           listbox: {
@@ -64,6 +66,17 @@ export const HomepageSearch = () => {
           "Vyhledat obec"
         )}
       </button>
+      <div className="text-center">
+        <p className="my-5">nebo</p>
+        <Link
+          href="/mapa"
+          className="button uppercase bg-white text-black mx-auto inline-flex whitespace-nowrap flex-nowrap gap-1 items-center"
+        >
+          <span>HLEDAT NA MAPĚ</span>
+          {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
+          <img src="/static/cz.svg" />
+        </Link>
+      </div>
     </div>
   );
 };

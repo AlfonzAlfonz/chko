@@ -7,8 +7,8 @@ export const Plus = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M12 0V24" stroke="black" stroke-width="2" />
-      <path d="M24 12L-7.15256e-07 12" stroke="black" stroke-width="2" />
+      <path d="M12 0V24" stroke="black" strokeWidth="2" />
+      <path d="M24 12L-7.15256e-07 12" stroke="black" strokeWidth="2" />
     </svg>
   );
 };

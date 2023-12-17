@@ -16,7 +16,7 @@ export const Chevron = ({ color = "black", ...p }: ComponentProps<"svg">) => {
         x2="11.2929"
         y2="0.707105"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="12.7071"
@@ -24,7 +24,7 @@ export const Chevron = ({ color = "black", ...p }: ComponentProps<"svg">) => {
         x2="0.707105"
         y2="12.7071"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
     </svg>
   );
