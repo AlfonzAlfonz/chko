@@ -19,9 +19,7 @@ export const ObecSearch = ({
 }: Partial<AutocompleteProps<ConciseObec, false, false, false>> & {
   defaultId?: number;
 }) => {
-  const obecList = useContext(ObecListContext).sort((a, b) =>
-    a.metadata.name.localeCompare(b.metadata.name)
-  );
+  const obecList = useContext(ObecListContext);
   const router = useRouter();
 
   const [inputValue, setInputValue] = useState("");

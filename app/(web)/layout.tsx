@@ -10,7 +10,10 @@ const getData = async () => {
   return await db
     .selectFrom("cities")
     .select(["id", "metadata", "slug"])
-    .execute();
+    .execute()
+    .then((d) =>
+      d.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
+    );
 };
 
 const Layout = async ({ children }: { children: ReactNode }) => {

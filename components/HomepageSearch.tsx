@@ -48,7 +48,7 @@ export const HomepageSearch = () => {
         popupIcon={null}
       />
       <button
-        className="button mt-8 lg:mt-16 uppercase bg-chkogreen text-white mx-auto"
+        className="button button-green mt-8 lg:mt-16 uppercase mx-auto"
         onClick={() => {
           if (!input) return;
 
@@ -70,7 +70,7 @@ export const HomepageSearch = () => {
         <p className="my-5">nebo</p>
         <Link
           href="/mapa"
-          className="button uppercase bg-white text-black mx-auto inline-flex whitespace-nowrap flex-nowrap gap-1 items-center"
+          className="button uppercase mx-auto inline-flex whitespace-nowrap flex-nowrap gap-1 items-center"
         >
           <span>HLEDAT NA MAPĚ</span>
           {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}

@@ -5,7 +5,7 @@ import krajraz1 from "@/public/static/Vinarice_nadhled 3.png";
 import krajraz2 from "@/public/static/Vinarice_nadhled 4.png";
 import logoLand from "@/public/static/logo_land.svg";
 import logoTitle from "@/public/static/logo_title.svg";
-import pexelsJaro from "@/public/static/pexels-jaro.png";
+import hostimTresina from "@/public/static/Hostim_Tresina-DSCF9873_panorama_JPrach.jpg";
 import whyEndImg from "@/public/static/IMGP8789_zRAWu.jpg";
 import Image from "next/image";
 import "./home.css";
@@ -43,7 +43,7 @@ const Home = async () => {
             vyhledat tu, která Vás zajímá.
             <a
               href="#vyhledavani"
-              className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md bg-chkogreen rotate-180"
+              className="button button-green w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"
             >
               <Chevron color="white" />
             </a>
@@ -60,10 +60,10 @@ const Home = async () => {
           <HomepageSearch />
         </div>
         <div className="col-span-full flex items-center justify-end flex-col w-full px-4">
-          <p className="mb-6">Proč ochrana krajinného rázu?</p>
+          <p className="mt-4 mb-6">Proč ochrana krajinného rázu?</p>
           <a
             href="#why"
-            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center bg-transparent rotate-180 border border-black shadow-none"
+            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center bg-transparent hover:bg-transparent rotate-180 border border-black shadow-none"
           >
             <Chevron color="black" />
           </a>
@@ -151,7 +151,7 @@ const Home = async () => {
             <h2 className="lg:mt-[120px] podnadpis-40 lg:nadpis-80">
               Chráněná krajinná oblast
             </h2>
-            <p className="text-16 lg:text-24 my-8 lg:my-16">
+            <p className="text-16 lg:text-32 my-8 lg:my-16">
               Asi jen jednu sedminu území státu tvoří tzv. Chráněné krajinné
               oblasti (CHKO). To jsou území, která se navzdory překotné
               modernizaci a industrializaci podařilo zachovat lépe než jiná a
@@ -172,18 +172,18 @@ const Home = async () => {
           </div>
         </div>
 
-        <div className="h-[700px] lg:h-[1500px] w-full relative overflow-hidden">
+        <div className="h-[1000px] lg:h-[1800px] w-full relative overflow-hidden">
           <Image
-            src={pexelsJaro}
+            src={hostimTresina}
             alt=""
-            className="absolute top-0 bottom-0 min-w-full w-[1980px] h-auto max-w-none left-[50%] translate-x-[-50%]"
+            className="absolute bottom-0 min-w-full h-auto max-w-none right-[20%] translate-x-[20%]"
           />
         </div>
 
         <footer className="h-[305px] bg-black flex justify-center items-center">
           <a
             href="#uvod"
-            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md border bg-black border-white border-solid"
+            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md border bg-transparent hover:bg-transparent border-white border-solid"
           >
             <Chevron color="white" />
           </a>
