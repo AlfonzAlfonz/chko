@@ -142,7 +142,7 @@ const Home = async () => {
           <Image
             src={whyEndImg}
             alt=""
-            className="absolute top-[50%] min-w-full w-[1980px] h-auto max-w-none left-[50%] translate-x-[-50%] translate-y-[-50%]"
+            className="absolute top-[50%] min-w-full w-[600px] lg:w-[1980px] h-auto max-w-none left-[50%] translate-x-[-50%] translate-y-[-50%]"
           />
         </div>
 
@@ -172,11 +172,11 @@ const Home = async () => {
           </div>
         </div>
 
-        <div className="h-[1000px] lg:h-[1800px] w-full relative overflow-hidden">
+        <div className="h-[100vh] w-full relative overflow-hidden">
           <Image
             src={hostimTresina}
             alt=""
-            className="absolute bottom-0 min-w-full h-auto max-w-none right-[20%] translate-x-[20%]"
+            className="absolute top-[50%] min-w-full w-[800px] lg:w-[1980px] h-auto max-w-none left-[50%] translate-x-[-50%] translate-y-[-50%]"
           />
         </div>
 
