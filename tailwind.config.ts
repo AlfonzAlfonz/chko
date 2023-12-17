@@ -45,6 +45,11 @@ const config: Config = {
           fontFamily: "Arial",
           fontSize: "40px",
         },
+        ".text-32": {
+          fontFamily: "Arial",
+          fontSize: "32px",
+          lineHeight: "normal",
+        },
         ".text-24": {
           fontFamily: "Arial",
           fontSize: "24px",
