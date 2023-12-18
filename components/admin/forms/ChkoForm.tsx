@@ -36,8 +36,6 @@ export const ChkoForm = ({
     onSubmit: save,
   });
 
-  console.log({ value, errors });
-
   return (
     <Stack
       className="mt-8"

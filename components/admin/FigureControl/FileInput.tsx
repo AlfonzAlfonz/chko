@@ -1,12 +1,13 @@
 import { Button, FormControl, styled } from "@mui/joy";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { FigureControlValue } from "./FigureControl";
 
 export const FileInput = ({
-  url,
+  value,
   error,
   onChange,
 }: {
-  url?: string;
+  value?: FigureControlValue;
   onChange: (b: Blob) => unknown;
   error?: unknown;
 }) => {
@@ -24,9 +25,9 @@ export const FileInput = ({
         minHeight: "200px",
       }}
     >
-      {url ? (
+      {value?.url ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt="file" className="max-h-[30vh]" />
+        <img src={value.url} alt="file" className="max-h-[30vh]" />
       ) : (
         <div className="flex flex-col items-center justify-center w-[250px]">
           <CloudUploadIcon sx={{ width: "32px", height: "32px", mb: 2 }} />

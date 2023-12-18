@@ -23,7 +23,7 @@ export const FigureControl = ({ error, value, setValue, onDelete }: Props) => {
     <div className="relative flex-shrink-0">
       <FileInput
         error={!!error}
-        url={value?.url}
+        value={value}
         onChange={(blob) =>
           setValue((s) => ({
             ...s,

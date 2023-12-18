@@ -46,8 +46,6 @@ export const ObecForm = ({
     onSubmit: save,
   });
 
-  console.log({ value, errors });
-
   useEffect(() => {
     const chko = searchParams.get("chko");
     chko && fieldProps(["chko"]).setValue(chko);
@@ -246,7 +244,7 @@ export const ObecForm = ({
           <div className="flex justify-between">
             <ErrorMessage>{errors?.data?.intro}</ErrorMessage>
             <FormHelperText>
-              {fieldProps<string>(["data", "intro"]).value.length} / 1380
+              {fieldProps<string>(["data", "intro"]).value?.length ?? 0} / 1380
             </FormHelperText>
           </div>
         </FormControl>

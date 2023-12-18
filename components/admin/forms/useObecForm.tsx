@@ -40,8 +40,6 @@ export const useObecForm = ({
         ),
       ]);
 
-      console.log(v);
-
       const payload = {
         ...v,
         id: v.id!,
@@ -66,7 +64,9 @@ export const useObecForm = ({
         } else {
           form.setValue(insertedResult);
         }
-        alert("Uloženo");
+        alert(
+          "Uloženo. Změny se projeví do několika minut (tvorba pdf souboru může trvat až hodinu)."
+        );
         setState("ready");
       } else {
         setState("ready");
