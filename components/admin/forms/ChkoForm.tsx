@@ -104,7 +104,7 @@ export const ChkoForm = ({
       </Card>
 
       <Card>
-        <Typography level="h3">Dlazdice</Typography>
+        <Typography level="h3">Fotografie</Typography>
 
         <ErrorMessage>{errors?.data?.figures}</ErrorMessage>
         <div className="flex gap-4 w-full overflow-scroll">
@@ -126,13 +126,17 @@ export const ChkoForm = ({
                     )}
                   />
                 ))}
-                <AddFigureControl
-                  setValue={(s) => {
-                    const fig =
-                      typeof s === "function" ? s({ width: 0, height: 0 }) : s;
-                    setValue([...value, fig]);
-                  }}
-                />
+                {value.length < 4 && (
+                  <AddFigureControl
+                    setValue={(s) => {
+                      const fig =
+                        typeof s === "function"
+                          ? s({ width: 0, height: 0 })
+                          : s;
+                      setValue([...value, fig]);
+                    }}
+                  />
+                )}
               </>
             )
           )}
