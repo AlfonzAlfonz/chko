@@ -72,11 +72,24 @@ export const ObecSearch = ({
       noOptionsText="K dispozici nejsou žádné obce"
       slotProps={{
         ...slotProps,
+        root: {
+          sx: {
+            "&.Mui-focused": {
+              "--Input-focusedHighlight": "none",
+            },
+          },
+        },
         input: {
-          className: twMerge("outline-none", slotProps?.input?.className),
+          className: twMerge(
+            "outline-none popisky-13",
+            slotProps?.input?.className
+          ),
         },
         listbox: {
-          className: twMerge("rounded-none", slotProps?.listbox?.className),
+          className: twMerge(
+            "rounded-none popisky-13",
+            slotProps?.listbox?.className
+          ),
         },
         option: {
           className:
