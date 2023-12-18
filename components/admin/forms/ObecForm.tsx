@@ -9,6 +9,7 @@ import Delete from "@mui/icons-material/Delete";
 import {
   Button,
   Card,
+  Checkbox,
   CircularProgress,
   FormControl,
   FormHelperText,
@@ -44,6 +45,8 @@ export const ObecForm = ({
     initialValue,
     onSubmit: save,
   });
+
+  console.log({ value, errors });
 
   useEffect(() => {
     const chko = searchParams.get("chko");
@@ -238,7 +241,12 @@ export const ObecForm = ({
         <FormControl error={!!errors?.data?.intro}>
           <FormLabel>Popis vesnice</FormLabel>
           <Textarea {...fieldProps<string>(["data", "intro"])} />
-          <ErrorMessage>{errors?.data?.intro}</ErrorMessage>
+          <div className="flex justify-between">
+            <ErrorMessage>{errors?.data?.intro}</ErrorMessage>
+            <FormHelperText>
+              {fieldProps<string>(["data", "intro"]).value.length} / 1380
+            </FormHelperText>
+          </div>
         </FormControl>
       </Card>
 
@@ -324,6 +332,39 @@ export const ObecForm = ({
           add="Přidat podmínku"
           maxLength={8}
         />
+
+        <FormControl error={!!errors?.data?.termsText}>
+          <FormLabel>Doplňující podmínky</FormLabel>
+          <Textarea {...fieldProps<string>(["data", "termsText"])} />
+          <div className="flex justify-between">
+            <ErrorMessage>{errors?.data?.termsText}</ErrorMessage>
+          </div>
+        </FormControl>
+
+        <div className="flex gap-4 w-full">
+          <FormControl sx={{ flexGrow: 1 }}>
+            <FormLabel>Doplňující tlačítko - text</FormLabel>
+            <Input
+              {...fieldProps<string>(["data", "termsButton", 0])}
+              slotProps={{
+                root: { className: "!flex-row" },
+                endDecorator: { className: "!my-0" },
+              }}
+            />
+            <ErrorMessage>{errors?.data?.links?.[0]}</ErrorMessage>
+          </FormControl>
+          <FormControl sx={{ flexGrow: 1 }}>
+            <FormLabel>Doplňující tlačítko - odkaz</FormLabel>
+            <Input
+              {...fieldProps<string>(["data", "termsButton", 1])}
+              slotProps={{
+                root: { className: "!flex-row" },
+                endDecorator: { className: "!my-0" },
+              }}
+            />
+            <ErrorMessage>{errors?.data?.links?.[1]}</ErrorMessage>
+          </FormControl>
+        </div>
       </Card>
 
       <Card>
@@ -332,7 +373,7 @@ export const ObecForm = ({
           <tbody>
             <tr>
               <th>Text</th>
-              <th>Link</th>
+              <th>Odkaz</th>
               <th className="w-[48px]"></th>
             </tr>
             {value.data?.links?.map(([text, href] = [], i) => (
@@ -392,7 +433,7 @@ export const ObecForm = ({
       </Card>
 
       <Card className="mb-16 flex flex-col items-center">
-        {/* <div className="flex">
+        <div className="flex">
           <Checkbox
             label={
               <>
@@ -404,7 +445,7 @@ export const ObecForm = ({
           />
         </div>
         <i>(Pokud je pole zaškrtnuté bude obec viditelná na stránce)</i>
-        <ErrorMessage>{errors?.metadata?.name}</ErrorMessage> */}
+        <ErrorMessage>{errors?.published}</ErrorMessage>
 
         <Button
           size="lg"

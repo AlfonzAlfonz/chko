@@ -40,11 +40,12 @@ export const useObecForm = ({
         ),
       ]);
 
+      console.log(v);
+
       const payload = {
         ...v,
         id: v.id!,
         slug: getSlug(v.metadata.name),
-        published: false,
         data: {
           ...v.data,
           cover,
@@ -90,6 +91,7 @@ const emptyObec: DeepPartial<ObecTable> = {
     characteristics: [],
     buildings: [],
     terms: [],
+    termsButton: [],
     links: [],
   },
 };

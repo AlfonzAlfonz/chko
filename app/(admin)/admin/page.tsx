@@ -1,11 +1,14 @@
 import { AdminHeader } from "@/components/admin/layout/AdminHeader";
 import { AdminLayout } from "@/components/admin/layout/AdminLayout";
 import { db } from "@/lib/db";
-import { Button, Card, Container, Table } from "@mui/joy";
+import { Button, Card, Container, Switch, Table } from "@mui/joy";
 import Link from "next/link";
 
 const getData = async () => {
-  return await db.selectFrom("cities").select(["id", "metadata"]).execute();
+  return await db
+    .selectFrom("chkos")
+    .select(["id", "name", "data", "published"])
+    .execute();
 };
 
 const CityList = async () => {
@@ -14,9 +17,9 @@ const CityList = async () => {
   return (
     <AdminLayout>
       <AdminHeader>
-        <div>Obce</div>
-        <Link href="/admin/obec/vytvorit">
-          <Button size="lg">Přidat obec</Button>
+        <div>Seznam CHKO</div>
+        <Link href={`/admin/chko/vytvorit`}>
+          <Button size="lg">Přidat CHKO</Button>
         </Link>
       </AdminHeader>
       <Container>
@@ -26,8 +29,7 @@ const CityList = async () => {
               <tr>
                 <th>ID</th>
                 <th>Obec</th>
-                <th>Okres</th>
-                <th>CHKO</th>
+                <th>Publikováno</th>
                 <th></th>
               </tr>
             </thead>
@@ -35,13 +37,14 @@ const CityList = async () => {
               {cities.map((c) => (
                 <tr key={c.id}>
                   <td>{c.id}</td>
-                  <td>{c.metadata.name}</td>
-                  <td>{c.metadata.okres}</td>
-                  <td>CHKO Český kras</td>
+                  <td>{c.name}</td>
+                  <td>
+                    <Switch checked={c.published} variant="outlined" readOnly />
+                  </td>
                   <td style={{ textAlign: "right" }}>
-                    <Link href={`/admin/obec/${c.id}`}>
+                    <Link href={`/admin/chko/${c.id}/list`}>
                       <Button component="div" size="sm">
-                        Upravit
+                        Seznam obcí
                       </Button>
                     </Link>
                   </td>

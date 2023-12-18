@@ -116,6 +116,7 @@ export const useForm = <
 
     const fieldProps = {
       value: value as T,
+      checked: !!value,
       setValue,
       onChange: (e: {
         target: { value: T; type?: string; checked?: boolean };

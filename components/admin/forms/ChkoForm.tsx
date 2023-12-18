@@ -9,6 +9,7 @@ import { FigureData } from "@/lib/figure";
 import {
   Button,
   Card,
+  Checkbox,
   CircularProgress,
   FormControl,
   FormHelperText,
@@ -35,6 +36,8 @@ export const ChkoForm = ({
     onSubmit: save,
   });
 
+  console.log({ value, errors });
+
   return (
     <Stack
       className="mt-8"
@@ -50,7 +53,7 @@ export const ChkoForm = ({
 
         <div className="flex gap-4 w-full">
           <FormControl className="flex-1" error={!!errors?.name}>
-            <FormLabel>Název obce</FormLabel>
+            <FormLabel>Název CHKO</FormLabel>
             <Input {...fieldProps<string>(["name"])} />
             <ErrorMessage>{errors?.name}</ErrorMessage>
           </FormControl>
@@ -85,32 +88,16 @@ export const ChkoForm = ({
       <Card>
         <Typography level="h3">Obsah</Typography>
 
-        <div className="flex gap-4 w-full">
-          <FormControl className="flex-1" error={!!errors?.name}>
-            <FormLabel>Nadpis 1</FormLabel>
-            <Input {...fieldProps<string>(["data", "list1Title"])} />
-            <ErrorMessage>{errors?.name}</ErrorMessage>
-          </FormControl>
-        </div>
-
         <StringList
           {...fieldProps(["data", "list1"])}
-          label="List 1"
+          label="CO JE TYPICKÉ?"
           add="Pridat"
           maxLength={4}
         />
 
-        <div className="flex gap-4 w-full">
-          <FormControl className="flex-1" error={!!errors?.name}>
-            <FormLabel>Nadpis 2</FormLabel>
-            <Input {...fieldProps<string>(["data", "list2Title"])} />
-            <ErrorMessage>{errors?.name}</ErrorMessage>
-          </FormControl>
-        </div>
-
         <StringList
           {...fieldProps(["data", "list2"])}
-          label="List 1"
+          label="NAVAZUJEME NA TRADICE"
           add="Pridat"
           maxLength={4}
         />
@@ -153,11 +140,11 @@ export const ChkoForm = ({
       </Card>
 
       <Card className="mb-16 flex flex-col items-center">
-        {/* <div className="flex">
+        <div className="flex">
           <Checkbox
             label={
               <>
-                Publikovat obec
+                Publikovat CHKO
                 <br />
               </>
             }
@@ -165,7 +152,7 @@ export const ChkoForm = ({
           />
         </div>
         <i>(Pokud je pole zaškrtnuté bude obec viditelná na stránce)</i>
-        <ErrorMessage>{errors?.metadata?.name}</ErrorMessage> */}
+        <ErrorMessage>{errors?.published}</ErrorMessage>
 
         <Button
           size="lg"

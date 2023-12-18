@@ -2,18 +2,17 @@
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/joy/CssBaseline";
-import { CssVarsProvider } from "@mui/joy/styles";
+import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
 import { useServerInsertedHTML } from "next/navigation";
 import { ReactNode, useState } from "react";
 
 interface Props {
   children: ReactNode;
-  theme?: "web";
 }
 
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
-export const ThemeRegistry = ({ children, theme }: Props) => {
+export const ThemeRegistry = ({ children }: Props) => {
   const [{ cache, flush }] = useState(() => {
     const cache = createCache({ key: "joy" });
     cache.compat = true;
@@ -56,10 +55,31 @@ export const ThemeRegistry = ({ children, theme }: Props) => {
 
   return (
     <CacheProvider value={cache}>
-      <CssVarsProvider>
+      <CssVarsProvider theme={theme}>
         <CssBaseline />
         {children}
       </CssVarsProvider>
     </CacheProvider>
   );
 };
+
+const theme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          900: "#12536C",
+          800: "#187E85",
+          700: "#1E9D8A",
+          600: "#26B581",
+          500: "#2ECC71",
+          400: "#48D569",
+          300: "#62DE68",
+          200: "#8BE57D",
+          100: "#B3EC99",
+          50: "#D4F2B5",
+        },
+      },
+    },
+  },
+});

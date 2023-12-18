@@ -16,5 +16,9 @@ const Template = async ({ children }: { children: ReactNode }) => {
 export default Template;
 
 const getData = async () => {
-  return await db.selectFrom("chkos").select(["id", "name", "data"]).execute();
+  return await db
+    .selectFrom("chkos")
+    .select(["id", "name", "data", "published"])
+    .where("published", "=", true)
+    .execute();
 };

@@ -43,7 +43,7 @@ export const useChkoForm = ({
 
       if (insertedResult) {
         if (!id) {
-          router.push(`/admin/chko/${insertedResult.id}`);
+          router.push(`/admin/chko/${insertedResult.id}/list`);
         } else {
           form.setValue(insertedResult);
         }
@@ -62,9 +62,9 @@ export const useChkoForm = ({
 const emptyChko: DeepPartial<ChkoTable> = {
   name: "",
   data: {
-    list1Title: "",
+    position: [],
     list1: [],
-    list2Title: "",
     list2: [],
   },
+  published: false,
 };

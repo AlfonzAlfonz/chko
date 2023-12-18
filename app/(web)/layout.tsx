@@ -10,6 +10,7 @@ const getData = async () => {
   return await db
     .selectFrom("cities")
     .select(["id", "metadata", "slug"])
+    .where("published", "=", true)
     .execute()
     .then((d) =>
       d.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))

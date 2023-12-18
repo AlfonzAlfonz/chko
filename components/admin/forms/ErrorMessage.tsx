@@ -20,4 +20,5 @@ export const ErrorMessage = ({
 
 const renderError = (e: unknown) => {
   if (!e || typeof e === "object") return "";
+  return String(e);
 };

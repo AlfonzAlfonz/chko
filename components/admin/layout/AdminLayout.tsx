@@ -1,23 +1,22 @@
+import { db } from "@/lib/db";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import logo from "@/public/static/logo.svg";
-import Home from "@mui/icons-material/Home";
+import Terrain from "@mui/icons-material/Terrain";
+import ListIcon from "@mui/icons-material/List";
 import {
   Card,
   Divider,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemContent,
   ListItemDecorator,
 } from "@mui/joy";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { LoginMenu } from "./LoginMenu";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { db } from "@/lib/db";
-import Edit from "@mui/icons-material/Edit";
 
 export const AdminLayout = async ({ children }: { children: ReactNode }) => {
   const session = await getServerSession(authOptions);
@@ -35,29 +34,31 @@ export const AdminLayout = async ({ children }: { children: ReactNode }) => {
           borderBottom: "none",
         }}
       >
-        <Image src={logo} alt="logo" className="invert mb-2" />
+        <Image
+          src={logo}
+          alt="logo"
+          className="invert mb-4 h-[130px] mx-auto mt-3"
+        />
         <List>
+          <ListItem>
+            <Link href={`/admin`} className="self-stretch w-full">
+              <ListItemButton>
+                <ListItemDecorator>
+                  <ListIcon />
+                </ListItemDecorator>
+                <ListItemContent>Seznam CHKO</ListItemContent>
+              </ListItemButton>
+            </Link>
+          </ListItem>
           {chkos.map((c) => (
-            <ListItem
-              key={c.id}
-              endAction={
-                <Link
-                  href={`/admin/chko/${c.id}/edit`}
-                  className="self-stretch w-full"
-                >
-                  <IconButton component="div" size="sm">
-                    <Edit />
-                  </IconButton>
-                </Link>
-              }
-            >
+            <ListItem key={c.id}>
               <Link
                 href={`/admin/chko/${c.id}/list`}
                 className="self-stretch w-full"
               >
                 <ListItemButton>
                   <ListItemDecorator>
-                    <Home />
+                    <Terrain />
                   </ListItemDecorator>
                   <ListItemContent>{c.name}</ListItemContent>
                 </ListItemButton>

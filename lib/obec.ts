@@ -42,6 +42,9 @@ export type ObecData = {
   /** Podmínky ochrany a doplňující doporučení */
   terms: string[];
 
+  termsText?: string;
+  termsButton?: [label?: string, link?: string];
+
   links: [label: string, link: string][];
 };
 
@@ -66,7 +69,7 @@ export const obecScheme = v.object({
       v.tuple([optional(number()), optional(number()), optional(number())])
     ),
     cover: optional(figureSchema),
-    intro: v.string([requiredSchema]),
+    intro: v.string([requiredSchema, v.maxLength(1380)]),
     characteristics: v.coerce(v.array(figureSchema, [v.maxLength(8)]), (x) =>
       Array.isArray(x) ? x.filter(Boolean) : []
     ),
@@ -74,6 +77,8 @@ export const obecScheme = v.object({
       Array.isArray(x) ? x.filter(Boolean) : []
     ),
     terms: v.array(v.string([requiredSchema])),
+    termsText: v.string(),
+    termsButton: optional(v.array(optional(v.string()))),
     links: v.array(
       v.tuple([
         v.string([requiredSchema]),
