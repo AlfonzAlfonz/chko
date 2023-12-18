@@ -11,6 +11,8 @@ import { ProtectionBar } from "../ProtectionBar";
 import { useLeaflet } from "./leaflet";
 import "./mapa.css";
 import { ObecMetadata } from "@/lib/obec";
+import { Layers } from "@/components/icons/Layers";
+import { Close } from "@/components/icons/Close";
 
 export interface MapProps {
   defaultCenter?: [number, number];
@@ -37,6 +39,7 @@ export const _Map = (props: MapProps) => {
   const [category, setCategory] = useState<ObecMetadata["category"]>();
   const [protectionZone, setProtectionZone] =
     useState<ObecMetadata["protectionZone"]>();
+  const [showInfoMobile, setShowInfoMobile] = useState(false);
   props.mapRef.current.setCategory = setCategory;
   props.mapRef.current.setProtectionZone = setProtectionZone;
 
@@ -72,9 +75,61 @@ export const _Map = (props: MapProps) => {
       </div>
 
       <div
-        className={`absolute left-0 right-0 map-zones-wrapper ${
+        className={`absolute left-0 right-0 md:hidden z-[410] m-4 ${
           !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
-        } z-[410] flex items-end justify-between mx-10 mb-6 pointer-events-none`}
+        }`}
+      >
+        <button
+          className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md"
+          onClick={() => setShowInfoMobile(true)}
+        >
+          <Layers />
+        </button>
+      </div>
+      {showInfoMobile && (
+        <div
+          className={`md:hidden absolute left-0 right-0 bottom-0 flex gap-2 bg-chkobg z-[1001] justify-between flex-col p-8`}
+        >
+          <button
+            className="absolute top-4 right-4 w-12 h-12 pointer-events-auto p-0 flex items-center justify-center"
+            onClick={() => setShowInfoMobile(false)}
+          >
+            <Close />
+          </button>
+          <div className="flex gap-4">
+            <div
+              className="cursor-pointer w-12 h-12 bg-black border-[3px] border-white border-solid rounded-sm shadow-lg pointer-events-auto"
+              onClick={() => (setTileLayer("photo"), setShowInfoMobile(false))}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/static/map/photo.jpeg" alt="podklad" />
+            </div>
+            <div
+              className="cursor-pointer w-12 h-12 bg-black border-[3px] border-white border-solid rounded-sm shadow-lg pointer-events-auto"
+              onClick={() => (setTileLayer("topo"), setShowInfoMobile(false))}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/static/map/topo.png" alt="podklad" />
+            </div>
+          </div>
+
+          <div className="pointer-events-auto mt-2">
+            <div className="uppercase mb-2 popisky-13">Kategorie sídla</div>
+            <CategoryBar category={category} />
+            {/* <div className="mt-4">TODO: tu by mal byt popisok</div> */}
+          </div>
+
+          <div className="pointer-events-auto mt-2">
+            <div className="uppercase mb-2 popisky-13">Pásmo ochrany</div>
+            <ProtectionBar protectionZone={protectionZone} />
+            {/* <div className="mt-4">TODO: tu by mal byt popisok</div> */}
+          </div>
+        </div>
+      )}
+      <div
+        className={`absolute left-0 right-0 hidden md:flex ${
+          !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
+        } z-[410] items-end justify-between mx-10 mb-6 pointer-events-none`}
       >
         <div className="space-y-6">
           <div className="cursor-pointer popisky-13 map-zones pointer-events-auto w-[168px]">
