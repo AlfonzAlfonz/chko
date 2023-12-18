@@ -79,10 +79,11 @@ export const ObecForm = ({
           <FormControl className="flex-1" error={!!errors?.metadata?.category}>
             <FormLabel>Kategorie sídla</FormLabel>
             <Select
-              {...fieldProps(["metadata", "category"])}
+              {...fieldProps<string[]>(["metadata", "category"])}
               onChange={(_, v) =>
                 fieldProps(["metadata", "category"]).setValue(v)
               }
+              multiple
             >
               <Option value="I">I</Option>
               <Option value="II">II</Option>
@@ -95,10 +96,11 @@ export const ObecForm = ({
           <FormControl className="flex-1" error={!!errors?.metadata?.category}>
             <FormLabel>Pásmo ochrany</FormLabel>
             <Select
-              {...fieldProps(["metadata", "protectionZone"])}
+              {...fieldProps<string[]>(["metadata", "protectionZone"])}
               onChange={(_, v) =>
                 fieldProps(["metadata", "protectionZone"]).setValue(v)
               }
+              multiple
             >
               <Option value="A">A</Option>
               <Option value="B">B</Option>

@@ -8,7 +8,7 @@ export const CategoryBar = ({
   category,
   className,
 }: {
-  category?: "I" | "II" | "III" | "IV";
+  category?: ("I" | "II" | "III" | "IV")[];
   className?: string;
 }) => {
   return (
@@ -20,7 +20,7 @@ export const CategoryBar = ({
     >
       <Item
         label="I"
-        active={category === "I"}
+        active={!!category?.includes("I")}
         fade={!!category}
         tooltip="Sídlo má mimořádně silný vliv na vznik výrazného rázu krajiny, přírodní rámec (morfologie terénu a vegetační kryt) zde dotváří estetické hodnoty a harmonii krajiny."
         description={
@@ -101,7 +101,7 @@ export const CategoryBar = ({
       />
       <Item
         label="II"
-        active={category === "II"}
+        active={!!category?.includes("II")}
         fade={!!category}
         tooltip="Sídlo vyznačují se výraznou krajinotvornou hodnotou, vystupuje jako významný spolutvůrčí krajinný prvek s příznivým projevem v kontextu širšího krajinného rámce."
         description={
@@ -181,7 +181,7 @@ export const CategoryBar = ({
       />
       <Item
         label="III"
-        active={category === "III"}
+        active={!!category?.includes("III")}
         fade={!!category}
         tooltip="Sídlo nevynikající významnými urbanistickými ani architektonickými či památkovými hodnotami, jeho projev v obrazu krajiny (vnější působení) je však do značné míry harmonický."
         description={
@@ -251,7 +251,7 @@ export const CategoryBar = ({
       />
       <Item
         label="IV"
-        active={category === "IV"}
+        active={!!category?.includes("IV")}
         fade={!!category}
         tooltip="Sídlo nevynikající významnými urbanistickými ani architektonickými či památkovými hodnotami ani harmonickým projevem v obrazu krajiny."
         description={

@@ -18,8 +18,8 @@ export type ObecMetadata = {
   kraj: string;
   position: [number, number];
 
-  category: "I" | "II" | "III" | "IV";
-  protectionZone: "A" | "B" | "C";
+  category: ("I" | "II" | "III" | "IV")[];
+  protectionZone: ("A" | "B" | "C")[];
 };
 
 export type ObecData = {
@@ -55,13 +55,17 @@ export const obecScheme = v.object({
     okres: v.string([requiredSchema]),
     kraj: v.string([requiredSchema]),
     position: v.tuple([number(), number()]),
-    category: v.union([
-      v.literal("I"),
-      v.literal("II"),
-      v.literal("III"),
-      v.literal("IV"),
-    ]),
-    protectionZone: v.union([v.literal("A"), v.literal("B"), v.literal("C")]),
+    category: v.array(
+      v.union([
+        v.literal("I"),
+        v.literal("II"),
+        v.literal("III"),
+        v.literal("IV"),
+      ])
+    ),
+    protectionZone: v.array(
+      v.union([v.literal("A"), v.literal("B"), v.literal("C")])
+    ),
   }),
   data: v.object({
     foundedYear: optional(number()),

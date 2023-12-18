@@ -135,8 +135,8 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </AccordionButton>
         <AccordionContent className="container-inner mb-8">
           {[
-            { title: chko.data.list1Title, values: chko.data.list1 },
-            { title: chko.data.list2Title, values: chko.data.list2 },
+            { title: "CO JE TYPICKÉ?", values: chko.data.list1 },
+            { title: "NAVAZUJEME NA TRADICE", values: chko.data.list2 },
           ].map((l, i) => (
             <div key={i} className="col-span-4 text-18">
               <h3 className="container-content uppercase p-5 border-b-[1px] border-black tracking-[4px]">

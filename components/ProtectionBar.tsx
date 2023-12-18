@@ -9,7 +9,7 @@ export const ProtectionBar = ({
   className,
   outline = "outline-black",
 }: {
-  protectionZone?: "A" | "B" | "C";
+  protectionZone?: ("A" | "B" | "C")[];
   className?: string;
   outline?: string;
 }) => {
@@ -17,7 +17,7 @@ export const ProtectionBar = ({
     <div className={twMerge("flex select-none h-[24px]", className)}>
       <Item
         label="A"
-        active={"A" === protectionZone}
+        active={!!protectionZone?.includes("A")}
         tooltip="Přísné ochrany krajinného rázu"
         description={
           <>
@@ -64,7 +64,7 @@ export const ProtectionBar = ({
       />
       <Item
         label="B"
-        active={"B" === protectionZone}
+        active={!!protectionZone?.includes("B")}
         tooltip="Zpřísněné ochrany krajinného rázu"
         description={
           <>
@@ -115,7 +115,7 @@ export const ProtectionBar = ({
       />
       <Item
         label="C"
-        active={"C" === protectionZone}
+        active={!!protectionZone?.includes("C")}
         tooltip="Běžná ochrana krajinného rázu"
         description={
           <>
