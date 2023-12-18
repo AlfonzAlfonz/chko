@@ -158,28 +158,32 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </AccordionContent>
       </Accordion>
 
-      <Accordion className="container">
-        <AccordionButton className="container-inner text-left">
-          <h2 className="leading-none">Převažující charakter výstavby</h2>
-        </AccordionButton>
-        <AccordionContent className="container-inner mb-8">
-          <Gallery
-            figures={obec.data.characteristics}
-            className="col-span-full"
-          />
-        </AccordionContent>
-      </Accordion>
+      {obec.data.characteristics.length > 0 && (
+        <Accordion className="container">
+          <AccordionButton className="container-inner text-left">
+            <h2 className="leading-none">Převažující charakter výstavby</h2>
+          </AccordionButton>
+          <AccordionContent className="container-inner mb-8">
+            <Gallery
+              figures={obec.data.characteristics}
+              className="col-span-full"
+            />
+          </AccordionContent>
+        </Accordion>
+      )}
 
-      <Accordion className="container">
-        <AccordionButton className="container-inner text-left">
-          <h2 className="leading-none">
-            Přítomnost památkově chráněných objektů
-          </h2>
-        </AccordionButton>
-        <AccordionContent className="container-inner mb-8">
-          <Gallery figures={obec.data.buildings} className="col-span-full" />
-        </AccordionContent>
-      </Accordion>
+      {obec.data.buildings.length > 0 && (
+        <Accordion className="container">
+          <AccordionButton className="container-inner text-left">
+            <h2 className="leading-none">
+              Přítomnost památkově chráněných objektů
+            </h2>
+          </AccordionButton>
+          <AccordionContent className="container-inner mb-8">
+            <Gallery figures={obec.data.buildings} className="col-span-full" />
+          </AccordionContent>
+        </Accordion>
+      )}
 
       <Accordion className="container">
         <div className="container-inner flex flex-col bg-[rgba(46,204,113,0.25)] border-b-[1px] border-black">

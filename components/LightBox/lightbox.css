@@ -20,7 +20,6 @@
   .slider-overlay {
     & line {
       @apply shadow-lg;
-      stroke: white !important;
     }
   }
 }

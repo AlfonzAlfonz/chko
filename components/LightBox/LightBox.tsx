@@ -82,20 +82,24 @@ export const SliderOverlay = ({
 }) => {
   return (
     <div className="absolute w-full h-full flex justify-between items-center p-2 inset-0 slider-overlay">
-      <Chevron
-        style={{
-          transform: "rotate(-90deg) scale(1.4)",
-          cursor: "pointer",
-        }}
-        onClick={() => setIndex((s) => (s === 0 ? length - 1 : s - 1))}
-      />
-      <Chevron
-        style={{
-          transform: "rotate(90deg) scale(1.4)",
-          cursor: "pointer",
-        }}
-        onClick={() => setIndex((s) => (s + 1) % length)}
-      />
+      <div className="button w-12 h-12 p-0 flex items-center justify-center">
+        <Chevron
+          style={{
+            transform: "rotate(-90deg)",
+            cursor: "pointer",
+          }}
+          onClick={() => setIndex((s) => (s === 0 ? length - 1 : s - 1))}
+        />
+      </div>
+      <div className="button w-12 h-12 p-0 flex items-center justify-center">
+        <Chevron
+          style={{
+            transform: "rotate(90deg)",
+            cursor: "pointer",
+          }}
+          onClick={() => setIndex((s) => (s + 1) % length)}
+        />
+      </div>
     </div>
   );
 };

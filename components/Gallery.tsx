@@ -23,7 +23,9 @@ export const Gallery = ({ figures, className }: Props) => {
           className={twMerge("cursor-pointer relative", className)}
           // onClick={() => setOpen(true)}
         >
-          <SliderOverlay length={figures.length} setIndex={setIndex} />
+          {figures.length > 1 && (
+            <SliderOverlay length={figures.length} setIndex={setIndex} />
+          )}
         </FigureImage>
 
         <LightBox
