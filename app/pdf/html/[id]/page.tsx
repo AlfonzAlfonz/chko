@@ -160,34 +160,17 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
           <div className="flex-1">
             <h2 className="py-3">Co je typické</h2>
             <ul className="ordered-list leading-tight text-[14px]">
-              <li>
-                Sevřené menší vesnice posazené mezi kopci se zděnými podélnými
-                statky a střechami z pálených tašek
-              </li>
-              <li>
-                Okolo vesnic volná zemědělská krajina pastvin, luk, polí, sadů,
-                polních cest, lesů
-              </li>
-              <li>
-                Bez roztroušených staveb po okolí (mlýny, hájovny apod.
-                výjimečně)
-              </li>
-              <li>Dominanty kostelů, hradu</li>
+              {chko.data.list1.map((l, i) => (
+                <li key={i}>{l}</li>
+              ))}
             </ul>
           </div>
           <div className="flex-1">
             <h2 className="py-3">Navazujme na tradice</h2>
             <ul className="ordered-list leading-tight text-[14px]">
-              <li>Nezastavět horizonty</li>
-              <li>
-                Stavět (vymezovat zastavitelná území) jen v přímé návaznosti na
-                obce
-              </li>
-              <li>Nezakrýt historické dominanty</li>
-              <li>
-                Opravy starých domů nebo novostavby držící tvar a vzhled statků,
-                které jsou ve vesnicích okolo
-              </li>
+              {chko.data.list2.map((l, i) => (
+                <li key={i}>{l}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -195,35 +178,14 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
           className="grid grid-cols-2 gap-x-5 gap-y-4 tracking-[2.2px] mt-[20px]"
           style={{ breakInside: "avoid" }}
         >
-          <div className="">
-            <PdfImage
-              img={imgb1}
-              imgClassName="aspect-[10/8] object-cover mb-2"
-              caption="SKALNATÁ ÚDOLÍ A ZALESNĚNÉ VRCHY BEZ STAVEB"
-            />
-          </div>
-          <div className="">
-            <PdfImage
-              img={imgb2}
-              imgClassName="aspect-[10/8] object-cover mb-2"
-              caption="VÁPENCOVÉ LOMY – SPOLEČNÉ PŮSOBENÍ ČLOVĚKA A PŘÍRODY"
-            />
-          </div>
-          <div className="">
-            <PdfImage
-              img={imgb3}
-              imgClassName="aspect-[10/8] object-cover mb-2"
-              caption="HISTORICKÉ DOMINANTY – KOSTELY, KLÁŠTER, HRAD"
-            />
-          </div>
-          <div className="">
-            <PdfImage
-              img={imgb4}
-              imgClassName="aspect-[10/8] object-cover mb-2"
-              caption="HISTORICKÉ DOMINANTY – KOSTELY, KLÁŠTER, HRAD
-SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVINY OKOLO"
-            />
-          </div>
+          {chko.data.figures.map((f) => (
+            <div className="" key={f.url}>
+              <PdfFigureImage
+                figure={f}
+                imgClassName="aspect-[10/8] object-cover mb-2"
+              />
+            </div>
+          ))}
         </div>
       </div>
       <div className="page">

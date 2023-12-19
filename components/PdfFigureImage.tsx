@@ -27,7 +27,7 @@ export const PdfFigureImage = ({
         className={twMerge("w-full object-contain", imgClassName)}
       />
       {figure.caption && (
-        <figcaption className="popisky-pdf-8 mt-[12px] leading-tight">
+        <figcaption className="text-[11px] leading-tight">
           {figure.caption}
         </figcaption>
       )}
