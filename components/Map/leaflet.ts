@@ -58,15 +58,10 @@ export const useLeaflet = (props: MapProps) => {
         setTileLayerUrl(map, tileLayer);
 
         const zoomHandler = (zoom: number) => {
-          if (zoom > 10) {
-            wrapperRef.current.classList.add("show-details");
-          } else {
-            wrapperRef.current.classList.remove("show-details");
-          }
-
-          if (zoom < 13) {
-            // router.push("/mapa");
-          }
+          wrapperRef.current.setAttribute(
+            "data-mapmode",
+            zoom > 10 ? "detail" : "fill"
+          );
         };
         map.addEventListener("zoom", () => {
           const zoom = mapRef.current!.leaflet.getZoom();
@@ -111,7 +106,7 @@ export const useLeaflet = (props: MapProps) => {
         for (const obec of obecList) {
           const m = L.marker(obec.metadata.position, {
             icon: L.divIcon({
-              className: `map-marker map-obec-marker map-marker-${obec.metadata.category}`,
+              className: `map-marker map-obec-marker map-marker-${obec.metadata.category[0]}`,
               html: obec.metadata.name,
             }),
           }).addTo(mapRef.current.leaflet);

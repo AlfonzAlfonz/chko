@@ -21,6 +21,7 @@ import {
   Stack,
   Table,
   Textarea,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import {
@@ -32,6 +33,7 @@ import { ErrorMessage } from "./ErrorMessage";
 import { useObecForm } from "./useObecForm";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { InfoButton } from "../InfoButton";
 
 export const ObecForm = ({
   value: initialValue,
@@ -75,7 +77,10 @@ export const ObecForm = ({
 
         <div className="flex gap-4 w-full">
           <FormControl className="flex-1" error={!!errors?.metadata?.category}>
-            <FormLabel>Kategorie sídla</FormLabel>
+            <div className="flex justify-between">
+              <FormLabel>Kategorie sídla</FormLabel>
+              <InfoButton title="Převažující kategorii uveďte na prvním místě" />
+            </div>
             <Select
               {...fieldProps<string[]>(["metadata", "category"])}
               onChange={(_, v) =>
@@ -92,7 +97,10 @@ export const ObecForm = ({
           </FormControl>
 
           <FormControl className="flex-1" error={!!errors?.metadata?.category}>
-            <FormLabel>Pásmo ochrany</FormLabel>
+            <div className="flex justify-between">
+              <FormLabel>Pásmo ochrany</FormLabel>
+              <InfoButton title="Převažující pásmo uveďte na prvním místě" />
+            </div>
             <Select
               {...fieldProps<string[]>(["metadata", "protectionZone"])}
               onChange={(_, v) =>
@@ -240,7 +248,7 @@ export const ObecForm = ({
 
         <FormControl error={!!errors?.data?.intro}>
           <FormLabel>Popis vesnice</FormLabel>
-          <Textarea {...fieldProps<string>(["data", "intro"])} />
+          <Textarea {...fieldProps<string>(["data", "intro"])} minRows={6} />
           <div className="flex justify-between">
             <ErrorMessage>{errors?.data?.intro}</ErrorMessage>
             <FormHelperText>
@@ -334,7 +342,7 @@ export const ObecForm = ({
         />
 
         <FormControl error={!!errors?.data?.termsText}>
-          <FormLabel>Doplňující podmínky</FormLabel>
+          <FormLabel>Doplňující doporučení</FormLabel>
           <Textarea {...fieldProps<string>(["data", "termsText"])} />
           <div className="flex justify-between">
             <ErrorMessage>{errors?.data?.termsText}</ErrorMessage>

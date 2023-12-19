@@ -33,7 +33,8 @@ export const HomepageSearch = () => {
             },
           },
           input: {
-            className: "text-center text-black placeholder:!text-[#AAA]",
+            className:
+              "text-center text-black placeholder:!text-[#AAA] tracking-none",
             name: "search",
           },
           wrapper: { className: "text-[30px] lg:!text-[100px]" },

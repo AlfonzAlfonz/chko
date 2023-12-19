@@ -23,6 +23,7 @@ import {
   FigureControl,
 } from "../FigureControl/FigureControl";
 import { ErrorMessage } from "./ErrorMessage";
+import { InfoButton } from "../InfoButton";
 
 export const ChkoForm = ({
   value: initialValue,
@@ -89,20 +90,23 @@ export const ChkoForm = ({
         <StringList
           {...fieldProps(["data", "list1"])}
           label="CO JE TYPICKÉ?"
-          add="Pridat"
+          add="Přidat položku"
           maxLength={4}
         />
 
         <StringList
           {...fieldProps(["data", "list2"])}
           label="NAVAZUJEME NA TRADICE"
-          add="Pridat"
+          add="Přidat položku"
           maxLength={4}
         />
       </Card>
 
       <Card>
-        <Typography level="h3">Fotografie</Typography>
+        <Typography level="h3" className="!flex justify-between">
+          <span>Fotografie</span>
+          <InfoButton title="Fotografie nahrávejte v poměru 1:1" />
+        </Typography>
 
         <ErrorMessage>{errors?.data?.figures}</ErrorMessage>
         <div className="flex gap-4 w-full overflow-scroll">
@@ -124,7 +128,7 @@ export const ChkoForm = ({
                     )}
                   />
                 ))}
-                {value.length < 4 && (
+                {(value?.length ?? 0) < 4 && (
                   <AddFigureControl
                     setValue={(s) => {
                       const fig =

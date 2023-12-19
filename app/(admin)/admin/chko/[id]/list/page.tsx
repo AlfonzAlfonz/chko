@@ -35,7 +35,9 @@ const ObecList = async ({ params: { id } }: { params: { id: string } }) => {
             <Button size="lg">Přidat obec</Button>
           </Link>
           <Link href={`/admin/chko/${id}/edit`}>
-            <Button size="lg">Upravit chko</Button>
+            <Button size="lg" variant="outlined">
+              Upravit CHKO
+            </Button>
           </Link>
         </div>
       </AdminHeader>

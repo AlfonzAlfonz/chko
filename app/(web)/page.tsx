@@ -96,7 +96,7 @@ const Home = async () => {
             ohrožují charakter místní krajiny. Jde zejména o typické tvary a
             proporce, barvy, charakteristické pohledy či kulturní formy.
             Takovému ohledu při vytváření nových hodnot říkáme ochrana
-            krajinného rázu.
+            krajinného&nbsp;rázu.
           </p>
         </div>
 

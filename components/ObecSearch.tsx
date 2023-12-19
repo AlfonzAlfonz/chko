@@ -82,7 +82,10 @@ export const ObecSearch = ({
           },
         },
         input: {
-          className: twMerge(slotProps?.input?.className, "outline-none"),
+          className: twMerge(
+            "outline-none !tracking-[2.2px]",
+            slotProps?.input?.className
+          ),
         },
         listbox: {
           className: twMerge(

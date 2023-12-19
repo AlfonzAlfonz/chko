@@ -153,7 +153,12 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           ))}
 
           {chko.data.figures.map((f) => (
-            <FigureImage key={f.url} figure={f} className="col-span-2" />
+            <FigureImage
+              key={f.url}
+              figure={f}
+              className="col-span-2 aspect-square"
+              imgClassName="h-full object-cover"
+            />
           ))}
         </AccordionContent>
       </Accordion>
@@ -185,42 +190,43 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </Accordion>
       )}
 
-      <Accordion className="container">
-        <div className="container-inner flex flex-col bg-[rgba(46,204,113,0.25)] border-b-[1px] border-black">
-          <AccordionButton className="text-left">
-            <h2 className="leading-none">
-              Podmínky ochrany a doplňující doporučení
-            </h2>
-          </AccordionButton>
-          <AccordionContent className="pb-7 mb-8">
-            <ol className="ordered-list col-span-full">
-              {obec.data.terms.map((v, ii) => (
-                <li key={ii} className="p-5 border-b-[1px] border-black">
-                  {v}
-                </li>
-              ))}
-            </ol>
-            <p className="container-content col-span-full">
-              Je dobré si předem zjistit, zda zamýšlený stavební záměr je v
-              souladu s územním plánem (viz webové stránky obce). Zároveň
-              doporučujeme ještě před započetím projekčních prací konzultovat
-              svůj záměr na správě CHKO – je vhodné mít s sebou alespoň zákres
-              půdorysu do situace, tj. umístění stavby v katastrální mapě, a
-              hmotovou skicu, tj. siluetu stavby ve vybrané fotografii z
-              charakteristického pohledu ukazujícího její působení v krajině.
-            </p>
+      {(obec.data.terms.length || obec.data.termsText) && (
+        <Accordion className="container">
+          <div className="container-inner flex flex-col bg-[rgba(46,204,113,0.25)] border-b-[1px] border-black">
+            <AccordionButton className="text-left">
+              <h2 className="leading-none">
+                Podmínky ochrany a doplňující doporučení
+              </h2>
+            </AccordionButton>
+            <AccordionContent className="pb-7 mb-8">
+              <ol className="ordered-list col-span-full">
+                {obec.data.terms.map((v, ii) => (
+                  <li key={ii} className="p-5 border-b-[1px] border-black">
+                    {v}
+                  </li>
+                ))}
+              </ol>
+              {obec.data.termsText && (
+                <p className="container-content col-span-full mt-5">
+                  {obec.data.termsText}
+                </p>
+              )}
 
-            <div className="container-content col-span-full flex mt-9 px-4">
-              <a
-                className="button flex-auto lg:flex-initial"
-                href="https://example.com"
-              >
-                DALŠÍ INFORMACE KE STAVEBNÍ ČINNOSTI
-              </a>
-            </div>
-          </AccordionContent>
-        </div>
-      </Accordion>
+              {obec.data.termsButton?.[0] && obec.data.termsButton[1] && (
+                <div className="container-content col-span-full flex mt-9 px-4">
+                  <a
+                    className="button flex-auto lg:flex-initial"
+                    href={obec.data.termsButton[1]}
+                    target="_blank"
+                  >
+                    {obec.data.termsButton[0]}
+                  </a>
+                </div>
+              )}
+            </AccordionContent>
+          </div>
+        </Accordion>
+      )}
 
       <div className="container">
         <div className="container-inner">

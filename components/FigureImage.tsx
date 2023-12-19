@@ -29,7 +29,9 @@ export const FigureImage = ({
   return (
     <div {...divProps}>
       {figure.caption && !noCaption ? (
-        <WithCaption caption={figure.caption}>{image}</WithCaption>
+        <WithCaption caption={figure.caption} className="h-full">
+          {image}
+        </WithCaption>
       ) : (
         image
       )}

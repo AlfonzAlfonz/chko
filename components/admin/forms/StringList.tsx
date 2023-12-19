@@ -68,7 +68,7 @@ export const StringList = ({
         <Button
           onClick={() => setValue((s) => [...s, ""])}
           size="sm"
-          color="neutral"
+          variant="outlined"
           className="self-center !mt-6"
         >
           {add}
