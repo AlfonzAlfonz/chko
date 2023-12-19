@@ -49,12 +49,9 @@ export const _Map = (props: MapProps) => {
       ref={containerRef}
       className={`h-full relative min-h-[300px] ${
         tileLayer === "photo" ? "bg-[#1A331A]" : "bg-[#C4DEAB]"
-      }`}
+      } ${props.activeObec ? "active-obec" : ""}`}
     >
-      <div
-        ref={mapRef}
-        className={`h-full ${props.activeObec ? "active-obec" : ""}`}
-      />
+      <div ref={mapRef} className={`h-full`} />
 
       <div className="absolute top-0 left-0 w-full flex items-center justify-between gap-1 px-4 py-4 md:px-8 z-[410]">
         <div className="w-[calc(100%-64px)] md:w-[320px]">
