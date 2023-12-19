@@ -5,6 +5,7 @@
   .first {
     @apply py-7;
     position: relative;
+    overflow: hidden;
 
     &::before {
       content: "";
@@ -17,6 +18,14 @@
       background: url("/static/XPR27533_zRAW.jpg");
       background-size: cover;
       background-position: bottom;
+      transform: scale(1.25);
+    }
+
+
+    @media screen(lg) {
+      &::before {
+        transform: none;
+      }
     }
   }
 

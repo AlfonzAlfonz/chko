@@ -24,10 +24,14 @@ const Home = async () => {
             flex flex-col lg:flex-row gap-9 w-full items-center justify-center  
             text-white`}
         >
-          <span className="flex lg:hidden text-[70px] text-center">
+          <span className="flex lg:hidden text-[37px] text-center">
             Jak stavět{"\n"} v&nbsp;krajině
           </span>
-          <Image src={logoLand} alt="logo" className="h-full" />
+          <Image
+            src={logoLand}
+            alt="logo"
+            className="h-full w-[120px] lg:w-[317px]"
+          />
           <div className="h-full items-center pt-8 hidden lg:flex flex-grow">
             <Image
               src={logoTitle}
@@ -36,18 +40,16 @@ const Home = async () => {
             />
           </div>
         </h1>
-        <div className="container">
-          <div className="col-start-3 col-span-2 text-center text-white flex flex-col gap-12 items-center text-18">
-            Tato webová stránka obsahuje informace o krajinném rázu obcí v
-            chráněných krajinných oblastech Český kras a Křivoklátsko. Stačí
-            vyhledat tu, která Vás zajímá.
-            <a
-              href="#vyhledavani"
-              className="button button-green w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"
-            >
-              <Chevron color="white" />
-            </a>
-          </div>
+        <div className="max-w-[650px] mx-auto px-8 text-center text-white flex flex-col gap-12 items-center text-18">
+          Tato webová stránka obsahuje informace o krajinném rázu obcí v
+          chráněných krajinných oblastech Český kras a Křivoklátsko. Stačí
+          vyhledat tu, která Vás zajímá.
+          <a
+            href="#vyhledavani"
+            className="button button-green w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"
+          >
+            <Chevron color="white" />
+          </a>
         </div>
       </div>
 
@@ -138,7 +140,7 @@ const Home = async () => {
           </p>
         </div>
 
-        <div className="h-[566px] lg:h-[1370px] w-full relative overflow-hidden">
+        <div className="h-[566px] lg:h-[1350px] w-full relative overflow-hidden">
           <Image
             src={whyEndImg}
             alt=""
