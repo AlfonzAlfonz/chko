@@ -199,7 +199,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
               className="w-full h-[28px] my-2"
             />
             <p className="text-[11px] my-2">
-              {categoryItems[obec.metadata.category[0]!].tooltip}
+              {categoryItems[obec.metadata.category[0]!]?.tooltip}
             </p>
           </div>
           <div className="flex-1 w-[50%]">
@@ -210,7 +210,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
               className="w-full h-[28px] my-2"
             />
             <p className="text-[11px] my-2">
-              {protectionZoneItems[obec.metadata.protectionZone[0]!].tooltip}
+              {protectionZoneItems[obec.metadata.protectionZone[0]!]?.tooltip}
             </p>
           </div>
         </div>
