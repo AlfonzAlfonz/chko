@@ -72,6 +72,12 @@ const config: Config = {
           letterSpacing: "2.86px",
           textTransform: "uppercase",
         },
+        ".popisky-pdf-8": {
+          fontSize: "12px",
+          lineHeight: "13.5px",
+          letterSpacing: "2.2px",
+          textTransform: "uppercase",
+        },
         ".mobil-popisky-11": {
           fontSize: "11px",
         },

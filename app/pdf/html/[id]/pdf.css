@@ -29,11 +29,11 @@
     }
 
     h2 {
-      font-size: 22px;
+      font-size: 27px;
     }
 
     .label {
-      @apply uppercase text-[#808080] tracking-[2.2px];
+      @apply text-[#808080];
     }
 
     .section-col {

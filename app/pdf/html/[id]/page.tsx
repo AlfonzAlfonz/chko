@@ -92,7 +92,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
             střecha).
           </div>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-[18px] mt-[18px]">
           <img
             src="/static/pdf/Vinarice_nadhled 3.png"
             className="w-full"
@@ -103,7 +103,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
             className="w-full"
             alt=""
           />
-          <p className="text-[12px] leading-tight -mt-3">
+          <p className="popisky-pdf-8 leading-tight">
             RŮZNÉ CHARAKTERY KRAJIN A TOMU ODPOVÍDAJÍCÍ URBANISTICKÉ STRUKTURY:
             <br />
             1) KOMPAKTNÍ VESNICE S NÁVSÍ V NÍŽINNÝCH OBLASTECH
@@ -144,7 +144,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
           </div>
           <figure>
             <img src="/static/chko_cr.svg" alt="" className="w-full -ml-4" />
-            <figcaption className="mt-16 text-[12px] leading-tight">
+            <figcaption className="mt-16 popisky-pdf-8 leading-tight">
               CHRÁNĚNNÉ KRAJINÉ OBLASTI V ČESKÉ REPUBLICE
             </figcaption>
           </figure>
@@ -188,7 +188,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
             </ul>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-x-5 gap-y-4 tracking-[2.2px] mt-2">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-4 tracking-[2.2px] mt-[20px]">
           <div className="">
             <PdfImage
               img={imgb1}
@@ -222,10 +222,10 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
       </div>
       <div className="page">
         <Topbar>{obec.metadata.name}</Topbar>
-        <h1>{obec.metadata.name}</h1>
+        <h1 className="page-title">{obec.metadata.name}</h1>
         <div className="section-col flex">
           <div className="flex-1 w-[50%]">
-            <p className="label">Kategorie sídla</p>
+            <p className="label popisky-pdf-8">Kategorie sídla</p>
             <CategoryBar
               category={obec.metadata.category}
               className="w-full h-[28px] my-2"
@@ -237,7 +237,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
             </p>
           </div>
           <div className="flex-1 w-[50%]">
-            <p className="label">Pásmo ochrany</p>
+            <p className="label popisky-pdf-8">Pásma ochrany</p>
             <ProtectionBar
               protectionZone={obec.metadata.protectionZone}
               outline="outline-black"
@@ -306,22 +306,30 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
       </div>
       <div className="page">
         <Topbar>{obec.metadata.name}</Topbar>
-        <h1 className="page-title">Převažující charakter výstavby</h1>
-        {obec.data.characteristics.map((f, i) => (
-          <PdfFigureImage key={i} figure={f} />
-        ))}
+        <h1 className="page-title border-none">
+          Převažující charakter výstavby
+        </h1>
+        <div className="flex flex-col gap-[24px]">
+          {obec.data.characteristics.map((f, i) => (
+            <PdfFigureImage key={i} figure={f} />
+          ))}
+        </div>
       </div>
       <div className="page">
         <Topbar>{obec.metadata.name}</Topbar>
-        <h1 className="page-title">Přítomnost památkově chráněných objektů</h1>
-        {obec.data.buildings.map((f, i) => (
-          <PdfFigureImage key={i} figure={f} />
-        ))}
+        <h1 className="page-title border-none">
+          Přítomnost památkově chráněných objektů
+        </h1>
+        <div className="flex flex-col gap-[24px]">
+          {obec.data.buildings.map((f, i) => (
+            <PdfFigureImage key={i} figure={f} />
+          ))}
+        </div>
       </div>
       <div className="page exact">
         <Topbar>{obec.metadata.name}</Topbar>
-        <div className="bg-[#b9eed0] -mx-8 -mt-[17px] px-7 h-[calc(100%-17px)]">
-          <h1 className="page-title">
+        <div className="bg-[#b9eed0] -mx-8 -mt-[17px] px-[37px] h-[calc(100%-17px)]">
+          <h1 className="page-title border-none">
             Podmínky ochrany a doplňující doporučení
           </h1>
           <ul className="ordered-list white section-col col-span-full flex flex-col flex-wrap h-[45%]">
@@ -331,16 +339,20 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
               </li>
             ))}
           </ul>
-          <h2>Doporučení</h2>
-          <p className="container-content col-span-full">
-            Je dobré si předem zjistit, zda zamýšlený stavební záměr je v
-            souladu s územním plánem (viz webové stránky obce). Zároveň
-            doporučujeme ještě před započetím projekčních prací konzultovat svůj
-            záměr na správě CHKO – je vhodné mít s sebou alespoň zákres půdorysu
-            do situace, tj. umístění stavby v katastrální mapě, a hmotovou
-            skicu, tj. siluetu stavby ve vybrané fotografii z charakteristického
-            pohledu ukazujícího její působení v krajině.
-          </p>
+          <div className="border-t-[1px] border-black pt-[18px]">
+            <div className="w-[50%]">
+              <h2 className="text-[27px]">Doporučení</h2>
+              <p className="mt-[18px]">
+                Je dobré si předem zjistit, zda zamýšlený stavební záměr je v
+                souladu s územním plánem (viz webové stránky obce). Zároveň
+                doporučujeme ještě před započetím projekčních prací konzultovat
+                svůj záměr na správě CHKO – je vhodné mít s sebou alespoň zákres
+                půdorysu do situace, tj. umístění stavby v katastrální mapě, a
+                hmotovou skicu, tj. siluetu stavby ve vybrané fotografii z
+                charakteristického pohledu ukazujícího její působení v krajině.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <div
