@@ -84,6 +84,14 @@
   margin: 1rem;
 }
 
+.active-obec .leaflet-control-scale-line {
+  margin-bottom: 85px;
+  
+  @screen lg {
+    margin-bottom: 150px;
+  }
+}
+
 [data-tilelayer="photo"] .leaflet-control-scale-line {
   border-color: white;
   color: white;

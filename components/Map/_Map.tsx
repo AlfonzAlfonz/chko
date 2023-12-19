@@ -13,6 +13,7 @@ import "./mapa.css";
 import { ObecMetadata } from "@/lib/obec";
 import { Layers } from "@/components/icons/Layers";
 import { Close } from "@/components/icons/Close";
+import { Chevron } from "@/components/icons/Chevron";
 
 export interface MapProps {
   defaultCenter?: [number, number];
@@ -50,7 +51,10 @@ export const _Map = (props: MapProps) => {
         tileLayer === "photo" ? "bg-[#1A331A]" : "bg-[#C4DEAB]"
       }`}
     >
-      <div ref={mapRef} className="h-full" />
+      <div
+        ref={mapRef}
+        className={`h-full ${props.activeObec ? "active-obec" : ""}`}
+      />
 
       <div className="absolute top-0 left-0 w-full flex items-center justify-between gap-1 px-4 py-4 md:px-8 z-[410]">
         <div className="flex-grow md:flex-grow-0 md:w-[320px]">
@@ -75,8 +79,8 @@ export const _Map = (props: MapProps) => {
       </div>
 
       <div
-        className={`absolute left-0 right-0 md:hidden z-[410] m-4 ${
-          !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
+        className={`absolute left-0 md:hidden z-[410] m-4 ${
+          props.activeObec ? "bottom-[85px] lg:bottom-[150px]" : "bottom-0"
         }`}
       >
         <button
@@ -86,6 +90,16 @@ export const _Map = (props: MapProps) => {
           <Layers />
         </button>
       </div>
+      {props.activeObec && (
+        <div className="absolute bottom-[85px] md:hidden z-[410] lg:bottom-[150px] my-4 left-[50%] translate-x-[-50%]">
+          <a
+            href="#obec"
+            className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"
+          >
+            <Chevron color="black" />
+          </a>
+        </div>
+      )}
       {showInfoMobile && (
         <div
           className={`md:hidden absolute left-0 right-0 bottom-0 flex gap-2 bg-chkobg z-[1001] justify-between flex-col p-8`}
@@ -128,10 +142,10 @@ export const _Map = (props: MapProps) => {
       )}
       <div
         className={`absolute left-0 right-0 hidden md:flex ${
-          !props.activeObec ? "bottom-0" : "bottom-[85px] lg:bottom-[150px]"
+          props.activeObec ? "bottom-[85px] lg:bottom-[150px]" : "bottom-0"
         } z-[410] items-end justify-between mx-10 mb-6 pointer-events-none`}
       >
-        <div className="space-y-6">
+        <div className="space-y-6 w-[200px]">
           <div className="cursor-pointer popisky-13 map-zones pointer-events-auto w-[168px]">
             <div
               className={`uppercase mb-2 ${
@@ -171,7 +185,17 @@ export const _Map = (props: MapProps) => {
             />
           </div>
         </div>
-        <div className="space-y-3 mb-12 ">
+        {props.activeObec && (
+          <div>
+            <a
+              href="#obec"
+              className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"
+            >
+              <Chevron color="black" />
+            </a>
+          </div>
+        )}
+        <div className="space-y-3 mb-12  w-[200px] flex flex-col items-end">
           <button
             className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md"
             onClick={() => props.mapRef.current.leaflet.zoomIn()}
