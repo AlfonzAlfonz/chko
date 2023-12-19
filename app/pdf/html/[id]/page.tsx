@@ -415,7 +415,7 @@ const Contact = ({ children, chko }: { children: ReactNode; chko: number }) => {
         <img
           src={"/static/krivoklatsko_logo.png"}
           alt="CHKO Český kras logo"
-          className="absolute right-0 bottom-0 max-w-[300px]"
+          className="absolute right-0 bottom-0 max-h-[300px]"
         />
       )}
       <h2>Kontakt</h2>
