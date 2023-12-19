@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { CategoryBar } from "@/components/CategoryBar";
+import { CategoryBar, categoryItems } from "@/components/CategoryBar";
 import { FigureImage } from "@/components/FigureImage";
 import { PdfFigureImage, PdfImage } from "@/components/PdfFigureImage";
-import { ProtectionBar } from "@/components/ProtectionBar";
+import { ProtectionBar, protectionZoneItems } from "@/components/ProtectionBar";
 import { db } from "@/lib/db";
 import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
 import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
@@ -11,6 +11,7 @@ import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
 import localFont from "next/font/local";
 import QRCode from "qrcode";
 import "./pdf.css";
+import { ReactNode } from "react";
 
 export const dynamic = "error";
 export const dynamicParams = true;
@@ -29,9 +30,9 @@ export const generateStaticParams = async () => {
 };
 
 const Pdf = async ({ params }: { params: { id: string } }) => {
-  const obec = await getData(+params.id);
+  const { obec, chko } = await getData(+params.id);
 
-  if (!obec) return null;
+  if (!obec || !chko) return null;
 
   const qrcodes = await Promise.all(
     obec.data.links.map((l) =>
@@ -61,7 +62,9 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
                 <td className="py-2 text-[#808080] border-y-[1px] border-black">
                   CHKO
                 </td>
-                <td className="py-2 border-y-[1px] border-black">Český kras</td>
+                <td className="py-2 border-y-[1px] border-black">
+                  {chko.name}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -152,7 +155,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
       </div>
       <div className="page">
         <Topbar>{obec.metadata.name}</Topbar>
-        <h1 className="page-title">CHKO Český kras</h1>
+        <h1 className="page-title">CHKO {chko.name}</h1>
         <div className="flex gap-5">
           <div className="flex-1">
             <h2 className="py-3">Co je typické</h2>
@@ -188,7 +191,10 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
             </ul>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-x-5 gap-y-4 tracking-[2.2px] mt-[20px]">
+        <div
+          className="grid grid-cols-2 gap-x-5 gap-y-4 tracking-[2.2px] mt-[20px]"
+          style={{ breakInside: "avoid" }}
+        >
           <div className="">
             <PdfImage
               img={imgb1}
@@ -231,9 +237,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
               className="w-full h-[28px] my-2"
             />
             <p className="text-[11px] my-2">
-              Sídlo má mimořádně silný vliv na vznik výrazného rázu krajiny,
-              přírodní rámec (morfologie terénu a vegetační kryt) zde dotváří
-              estetické hodnoty a harmonii krajiny.
+              {categoryItems[obec.metadata.category[0]!].tooltip}
             </p>
           </div>
           <div className="flex-1 w-[50%]">
@@ -243,7 +247,9 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
               outline="outline-black"
               className="w-full h-[28px] my-2"
             />
-            <p className="text-[11px] my-2">Přísné ochrany krajinného rázu.</p>
+            <p className="text-[11px] my-2">
+              {protectionZoneItems[obec.metadata.protectionZone[0]!].tooltip}
+            </p>
           </div>
         </div>
 
@@ -342,15 +348,7 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
           <div className="border-t-[1px] border-black pt-[18px]">
             <div className="w-[50%]">
               <h2 className="text-[27px]">Doporučení</h2>
-              <p className="mt-[18px]">
-                Je dobré si předem zjistit, zda zamýšlený stavební záměr je v
-                souladu s územním plánem (viz webové stránky obce). Zároveň
-                doporučujeme ještě před započetím projekčních prací konzultovat
-                svůj záměr na správě CHKO – je vhodné mít s sebou alespoň zákres
-                půdorysu do situace, tj. umístění stavby v katastrální mapě, a
-                hmotovou skicu, tj. siluetu stavby ve vybrané fotografii z
-                charakteristického pohledu ukazujícího její působení v krajině.
-              </p>
+              <p className="mt-[18px] leading-tight">{obec.data.termsText}</p>
             </div>
           </div>
         </div>
@@ -382,14 +380,14 @@ SEMKNUTÉ VESNICE PODÉLNÝCH ZDĚNÝCH STATKŮ, LOUKY, ALEJE, SADY, POLE PASTVI
         </div>
         {qrcodes.length <= 4 && (
           <div className="flex-auto flex items-end">
-            <Contact />
+            <Contact chko={chko.id}>{chko.data.contact}</Contact>
           </div>
         )}
       </div>
       {qrcodes.length > 4 && (
         <div className="page flex flex-col justify-between">
           <Topbar>{obec.metadata.name}</Topbar>
-          <Contact />
+          <Contact chko={chko.id}>{chko.data.contact}</Contact>
         </div>
       )}
     </div>
@@ -404,11 +402,21 @@ const myFont = localFont({
 });
 
 const getData = async (id: number) => {
-  return await db
+  const obec = await db
     .selectFrom("cities")
     .where("id", "=", id)
     .selectAll()
+    .executeTakeFirstOrThrow();
+
+  if (!obec) return {};
+
+  const chko = await db
+    .selectFrom("chkos")
+    .where("id", "=", obec.chko)
+    .selectAll()
     .executeTakeFirst();
+
+  return { obec, chko };
 };
 
 const Topbar = ({ children }: { children: string }) => {
@@ -431,30 +439,25 @@ const Topbar = ({ children }: { children: string }) => {
   );
 };
 
-const Contact = () => {
+const Contact = ({ children, chko }: { children: ReactNode; chko: number }) => {
   return (
     <div className="relative w-full text-[12px]">
-      <img
-        src={"/static/pdf/cesky_kras_logo.png"}
-        alt="CHKO Český kras logo"
-        className="absolute right-0 bottom-0"
-      />
+      {chko === 1 && (
+        <img
+          src={"/static/pdf/cesky_kras_logo.png"}
+          alt="CHKO Český kras logo"
+          className="absolute right-0 bottom-0"
+        />
+      )}
+      {chko === 3 && (
+        <img
+          src={"/static/pdf/krivoklatsko_logo.png"}
+          alt="CHKO Český kras logo"
+          className="absolute right-0 bottom-0"
+        />
+      )}
       <h2>Kontakt</h2>
-      <p>
-        Správa CHKO Český kras
-        <br />
-        č. p. 85, 267 18 Karlštejn
-        <br />
-        Úřední hodiny všech pracovišť
-        <br />
-        pondělí, středa: 8–17 hod
-        <br />
-        951 42 4552, 951 42 4554
-        <br />
-        stredni.cechy@nature.cz
-        <br />
-        www.nature.cz/web/chko-cesky-kras
-      </p>
+      <p className="whitespace-pre-wrap">{children}</p>
     </div>
   );
 };

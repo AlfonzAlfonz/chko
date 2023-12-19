@@ -14,6 +14,8 @@ export type ChkoTable = {
     list2: string[];
 
     figures: FigureData[];
+
+    contact?: string;
   };
   published: boolean;
 };
@@ -29,6 +31,8 @@ export const chkoScheme = v.object({
     figures: v.coerce(v.array(figureSchema, [v.maxLength(4)]), (x) =>
       Array.isArray(x) ? x.filter(Boolean) : []
     ),
+
+    contact: v.string(),
   }),
   published: v.boolean(),
 });

@@ -57,17 +57,18 @@ export const _Map = (props: MapProps) => {
       />
 
       <div className="absolute top-0 left-0 w-full flex items-center justify-between gap-1 px-4 py-4 md:px-8 z-[410]">
-        <div className="flex-grow md:flex-grow-0 md:w-[320px]">
+        <div className="w-[calc(100%-64px)] md:w-[320px]">
           <ObecSearch className="!popisky-13" defaultId={props.activeObec} />
         </div>
-        <div className="">
-          <Link href="/" className="button md:px-10 py-2">
+        <div>
+          <Link href="/" className="button md:px-10 py-[7px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
               fill="none"
+              className="h-5 w-5"
             >
               <path
                 d="M23.8333 11.5863L12.4086 0.169459C12.1824 -0.0564862 11.8143 -0.0564862 11.5914 0.169459L0.166683 11.5863C-0.191288 11.9452 0.0653694 12.5466 0.57531 12.5466H3.04396V23.4318C3.04396 23.7442 3.30062 23.9967 3.61807 23.9967H9.0079V17.1253C9.0079 16.813 9.26456 16.5604 9.582 16.5604H14.4214C14.7388 16.5604 14.9955 16.813 14.9955 17.1253V24H20.3819C20.6994 24 20.956 23.7475 20.956 23.4351V12.5499H23.4247C23.9346 12.5499 24.1913 11.9452 23.8333 11.5863Z"
@@ -91,7 +92,7 @@ export const _Map = (props: MapProps) => {
         </button>
       </div>
       {props.activeObec && (
-        <div className="absolute bottom-[85px] md:hidden z-[410] lg:bottom-[150px] my-4 left-[50%] translate-x-[-50%]">
+        <div className="absolute bottom-[85px] md:hidden z-[5010] lg:bottom-[150px] my-4 left-[50%] translate-x-[-50%]">
           <a
             href="#obec"
             className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"

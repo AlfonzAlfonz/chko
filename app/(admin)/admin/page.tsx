@@ -18,9 +18,9 @@ const CityList = async () => {
     <AdminLayout>
       <AdminHeader>
         <div>Seznam CHKO</div>
-        <Link href={`/admin/chko/vytvorit`}>
+        {/* <Link href={`/admin/chko/vytvorit`}>
           <Button size="lg">Přidat CHKO</Button>
-        </Link>
+        </Link> */}
       </AdminHeader>
       <Container>
         <Card className="mt-8">

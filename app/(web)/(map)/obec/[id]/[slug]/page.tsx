@@ -7,18 +7,14 @@ import { FigureImage } from "@/components/FigureImage";
 import { Footer } from "@/components/Footer";
 import { Gallery } from "@/components/Gallery";
 import { MapControllerComponent } from "@/components/Map/Map";
-import { WithCaption } from "@/components/WithCaption";
 import { Close } from "@/components/icons/Close";
 import { db } from "@/lib/db";
-import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
-import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
-import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
-import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
-import chkoimg from "@/public/static/cesky_kras_logo.png";
+import ceskyKrasLogo from "@/public/static/cesky_kras_logo.png";
+import krivoLogo from "@/public/static/krivoklatsko_logo.png";
 import Image from "next/image";
 import Link from "next/link";
-import "./obec.css";
 import { notFound } from "next/navigation";
+import "./obec.css";
 
 export const dynamic = "error";
 export const dynamicParams = true;
@@ -123,13 +119,24 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       </div>
 
       <Accordion className="container mt-8">
-        <div className="col-span-1 relative">
-          <Image
-            src={chkoimg}
-            alt="Logo CHKO Český Kras"
-            className="absolute"
-          />
-        </div>
+        {chko.id === 1 && (
+          <div className="col-span-1 relative">
+            <Image
+              src={ceskyKrasLogo}
+              alt={`Logo CHKO ${chko.name}`}
+              className="absolute"
+            />
+          </div>
+        )}
+        {chko.id === 3 && (
+          <div className="col-span-1 relative mx-4">
+            <Image
+              src={krivoLogo}
+              alt={`Logo CHKO ${chko.name}`}
+              className="absolute"
+            />
+          </div>
+        )}
         <AccordionButton className="container-inner text-left">
           <h2 className="leading-none">{chko.name}</h2>
         </AccordionButton>
@@ -244,24 +251,14 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         <a
           className="button button-green lg:hidden popisky-13 uppercase z-50"
           target="_blank"
-          href="/static/svaty-jan-pod-skalou.pdf"
+          href={`/api/pdf/${obec.id}`}
         >
           Stáhnout pdf
         </a>
       </div>
 
       <Footer>
-        <p className="whitespace-pre-line py-12">
-          {`Správa CHKO Český kras
-č. p. 85, 267 18 Karlštejn
-
-Úřední hodiny všech pracovišť
-pondělí, středa: 8–17 hod
-
-951 42 4552, 951 42 4554
-stredni.cechy@nature.cz
-www.nature.cz/web/chko-cesky-kras`}
-        </p>
+        <p className="whitespace-pre-line py-12">{chko.data.contact}</p>
       </Footer>
     </div>
   );

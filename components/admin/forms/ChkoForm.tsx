@@ -16,6 +16,7 @@ import {
   FormLabel,
   Input,
   Stack,
+  Textarea,
   Typography,
 } from "@mui/joy";
 import {
@@ -142,6 +143,23 @@ export const ChkoForm = ({
               </>
             )
           )}
+        </div>
+      </Card>
+
+      <Card>
+        <Typography level="h3" className="!flex justify-between">
+          Kontakt
+        </Typography>
+
+        <div className="flex gap-4 w-full">
+          <FormControl className="flex-1" error={!!errors?.data?.contact}>
+            <FormLabel>Kontaktní údaje správy CHKO</FormLabel>
+            <Textarea
+              {...fieldProps<string>(["data", "contact"])}
+              minRows={6}
+            />
+            <ErrorMessage>{errors?.data?.contact}</ErrorMessage>
+          </FormControl>
         </div>
       </Card>
 

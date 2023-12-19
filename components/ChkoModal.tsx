@@ -1,9 +1,7 @@
 "use client";
-import { Modal } from "@mui/base/Modal";
-import Image from "next/image";
-import { ReactNode, forwardRef } from "react";
-import close from "../../public/close.svg";
 import { Close } from "@/components/icons/Close";
+import { Modal } from "@mui/base/Modal";
+import { ReactNode, forwardRef } from "react";
 
 export const ChkoModal = ({
   open,
@@ -16,7 +14,7 @@ export const ChkoModal = ({
 }) => {
   return (
     <Modal
-      className="fixed inset-0 flex z-[500] items-center justify-center"
+      className="fixed inset-0 flex z-[50000] items-center justify-center"
       open={open}
       onClose={onClose}
       slots={{ backdrop: Backdrop }}
