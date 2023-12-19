@@ -333,7 +333,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
               <div>{l[0]}</div>
               <a
                 href={l[1]}
-                className="uppercase text-[#808080] tracking-normal underline"
+                className="uppercase text-[#808080] tracking-normal underline block overflow-hidden text-ellipsis"
               >
                 {l[1].replace("https://", "")}
               </a>
@@ -413,9 +413,9 @@ const Contact = ({ children, chko }: { children: ReactNode; chko: number }) => {
       )}
       {chko === 3 && (
         <img
-          src={"/static/pdf/krivoklatsko_logo.png"}
+          src={"/static/krivoklatsko_logo.png"}
           alt="CHKO Český kras logo"
-          className="absolute right-0 bottom-0"
+          className="absolute right-0 bottom-0 max-w-[300px]"
         />
       )}
       <h2>Kontakt</h2>
