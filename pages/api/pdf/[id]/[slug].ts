@@ -4,13 +4,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = +[req.query.id].flat()[0]!;
+  const slug = +[req.query.id].flat()[0]!;
 
   if (!id) {
     res.status(400).end("Invalid id");
     return;
   }
 
-  const key = `/obec/pdf/${id}.pdf`;
+  const key = `/obec/pdf/${id}/${slug}.pdf`;
 
   const entries = await getPdfEntries(key);
   const cached = entries[0];

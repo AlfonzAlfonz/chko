@@ -75,7 +75,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       <a
         className="button button-green hidden lg:block fixed bottom-4 right-14 popisky-13 uppercase z-50"
         target="_blank"
-        href={`/api/pdf/${obec.id}`}
+        href={`/api/pdf/${obec.id}/${obec.slug}`}
       >
         Stáhnout pdf
       </a>
@@ -251,7 +251,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         <a
           className="button button-green lg:hidden popisky-13 uppercase z-50"
           target="_blank"
-          href={`/api/pdf/${obec.id}`}
+          href={`/api/pdf/${obec.id}/${obec.slug}`}
         >
           Stáhnout pdf
         </a>
