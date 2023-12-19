@@ -73,17 +73,16 @@ export const ObecSearch = ({
       slotProps={{
         ...slotProps,
         root: {
+          className: slotProps?.root?.className,
           sx: {
+            ...slotProps?.root?.sx,
             "&.Mui-focused": {
               "--Input-focusedHighlight": "none",
             },
           },
         },
         input: {
-          className: twMerge(
-            "outline-none popisky-13",
-            slotProps?.input?.className
-          ),
+          className: twMerge(slotProps?.input?.className, "outline-none"),
         },
         listbox: {
           className: twMerge(
