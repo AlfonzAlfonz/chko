@@ -30,6 +30,7 @@ export const getChkoPdfEntry = async (id: number) => {
 export const putPdfEntry = async (key: string, pdf: Buffer) =>
   await put(key, pdf, {
     access: "public",
+    addRandomSuffix: false,
     token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
   });
 

@@ -28,7 +28,7 @@ export const StringList = ({
           <Textarea
             key={i}
             value={v}
-            onChange={(e) => setValue((s) => s.with(i, e.target.value))}
+            onChange={(e) => setValue((s) => arrayWith(s, i, e.target.value))}
             startDecorator={<div className="px-2">{i + 1}.</div>}
             endDecorator={
               <div className="flex gap-4">
@@ -83,5 +83,13 @@ const reorder = <T,>(list: T[], startIndex: number, endIndex: number) => {
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed!);
 
+  return result;
+};
+
+const arrayWith = <T,>(arr: T[], i: number, value: T) => {
+  const result =
+    "with" in arr
+      ? arr.with(i, value)
+      : (arr as T[]).map((x, ii) => (ii === i ? value : x));
   return result;
 };

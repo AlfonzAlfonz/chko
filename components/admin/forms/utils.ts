@@ -28,6 +28,7 @@ export const upload = async <
 
     const result = await put(path + blob.name, blob, {
       access: "public",
+      addRandomSuffix: false,
       token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,
     });
     return {
