@@ -21,19 +21,18 @@ import {
   Stack,
   Table,
   Textarea,
-  Tooltip,
   Typography,
 } from "@mui/joy";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import {
   AddFigureControl,
   FigureControl,
   FigureControlValue,
 } from "../FigureControl/FigureControl";
+import { InfoButton } from "../InfoButton";
 import { ErrorMessage } from "./ErrorMessage";
 import { useObecForm } from "./useObecForm";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { InfoButton } from "../InfoButton";
 
 export const ObecForm = ({
   value: initialValue,

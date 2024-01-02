@@ -1,6 +1,7 @@
 import { FigureData, figureSchema } from "@/lib/figure";
 import { number, optional, requiredSchema } from "@/lib/schemas";
 import * as v from "valibot";
+import { ListBlobResultBlob } from "./pdfCache";
 
 export type ChkoTable = {
   id: number;

@@ -10,6 +10,8 @@ export type ObecTable = {
   published: boolean;
 
   chko: number;
+
+  pdf: { url: string; uploadedAt: number } | null;
 };
 
 export type ObecMetadata = {

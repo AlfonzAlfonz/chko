@@ -1,5 +1,4 @@
-import { delPdfEntries, getPdfEntries, putPdfEntry } from "@/lib/pdfCache";
-import { renderPdf } from "@/lib/renderPdf";
+import { getPdfEntries } from "@/lib/pdfCache";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
@@ -23,24 +22,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const key = `/obec/pdf/${id}.pdf`;
+  const entries = await getPdfEntries(id);
 
-  const entries = await getPdfEntries(key);
-
-  const pdf = await renderPdf(id);
-
-  if (!pdf) {
-    res.status(400).end("Error rendering pdf");
-    return;
-  }
-
-  await putPdfEntry(key, pdf);
-
-  await delPdfEntries(key, entries);
-
-  if (req.method === "GET") {
-    res.end(pdf);
-  }
+  res.redirect(
+    `/api/invoke-puppeteer/${id}?${entries.map(
+      (e) => `staleEntry=${encodeURIComponent(e.url)}`
+    )}`
+  );
 };
 
 export default handler;

@@ -50,6 +50,7 @@ export const useObecForm = ({
           characteristics,
           buildings,
         },
+        pdf: null,
       } satisfies ObecTable;
 
       const insertedResult = await save(payload);
