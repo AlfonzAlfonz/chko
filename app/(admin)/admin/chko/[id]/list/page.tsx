@@ -6,7 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 const getData = async (chko: number) => {
-  if (!chko) return undefined;
+  if (!chko) return { obecs: [] };
 
   const [obecs, data] = await Promise.all([
     db
