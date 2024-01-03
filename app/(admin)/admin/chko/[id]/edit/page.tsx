@@ -4,8 +4,11 @@ import { AdminLayout } from "@/components/admin/layout/AdminLayout";
 import { ChkoTable } from "@/lib/chko";
 import { db } from "@/lib/db";
 import { Container } from "@mui/joy";
+import { notFound } from "next/navigation";
 
 const getData = async (id: number) => {
+  if (!id) return undefined;
+
   const result = await db
     .selectFrom("chkos")
     .where("id", "=", id)
@@ -16,6 +19,8 @@ const getData = async (id: number) => {
 
 const ChkoDetail = async ({ params }: { params: { id: string } }) => {
   const data = await getData(+params.id);
+
+  if (!data) notFound();
 
   const saveData = async (chko: ChkoTable) => {
     "use server";
@@ -29,7 +34,7 @@ const ChkoDetail = async ({ params }: { params: { id: string } }) => {
 
   return (
     <AdminLayout>
-      <AdminHeader>{data?.name}</AdminHeader>
+      <AdminHeader>{data.name}</AdminHeader>
       <Container>
         <ChkoForm value={data} onSubmit={saveData} />
       </Container>

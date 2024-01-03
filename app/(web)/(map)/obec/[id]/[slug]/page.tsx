@@ -34,6 +34,8 @@ export const generateStaticParams = async () => {
 };
 
 const getData = async (id: number) => {
+  if (!id) return undefined;
+
   const obec = await db
     .selectFrom("cities")
     .where("id", "=", id)

@@ -14,11 +14,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (entry) {
     res.redirect(entry.url).end();
     if (isStale(entry.uploadedAt)) {
-      res.redirect(
+      await fetch(
         `/api/invoke-puppeteer/${id}?staleEntry=${encodeURIComponent(
           entry.url
-        )}`
-      );
+        )}`,
+        { redirect: "manual" }
+      ).catch(() => null);
     }
   } else {
     res.redirect(`/api/invoke-puppeteer/${id}`);

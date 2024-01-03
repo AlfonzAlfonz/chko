@@ -3,8 +3,11 @@ import { AdminLayout } from "@/components/admin/layout/AdminLayout";
 import { db } from "@/lib/db";
 import { Button, Card, Container, Switch, Table } from "@mui/joy";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 const getData = async (chko: number) => {
+  if (!chko) return undefined;
+
   const [obecs, data] = await Promise.all([
     db
       .selectFrom("cities")
@@ -15,7 +18,7 @@ const getData = async (chko: number) => {
       .selectFrom("chkos")
       .select(["id", "name", "published", "data"])
       .where("id", "=", chko)
-      .executeTakeFirstOrThrow(),
+      .executeTakeFirst(),
   ]);
   return {
     obecs,
@@ -25,6 +28,8 @@ const getData = async (chko: number) => {
 
 const ObecList = async ({ params: { id } }: { params: { id: string } }) => {
   const { obecs, chko } = await getData(+id);
+
+  if (!chko) notFound();
 
   return (
     <AdminLayout>
