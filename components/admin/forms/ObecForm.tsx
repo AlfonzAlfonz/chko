@@ -62,6 +62,12 @@ export const ObecForm = ({
           ? { userSelect: "none", pointerEvents: "none", opacity: 0.5 }
           : {}
       }
+      onDrop={(e) => {
+        e.preventDefault();
+      }}
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
     >
       <Card>
         <Typography level="h3">Obecné informace</Typography>

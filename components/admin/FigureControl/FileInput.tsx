@@ -24,6 +24,18 @@ export const FileInput = ({
         width: "100%",
         minHeight: "200px",
       }}
+      onDrop={(e) => {
+        e.preventDefault();
+        const file = toArray(e.dataTransfer.items)
+          .find((i) => i.kind === "file")
+          ?.getAsFile();
+        if (file) {
+          onChange(file);
+        }
+      }}
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
     >
       {value?.url ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -54,3 +66,9 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
+
+const toArray = <T,>(iter: { [i: number]: T; length: number }): T[] => {
+  const result: T[] = [];
+  for (let i = 0; i < iter.length; i++) result.push(iter[i]!);
+  return result;
+};
