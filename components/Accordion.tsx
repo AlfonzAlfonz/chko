@@ -36,14 +36,14 @@ export const AccordionButton = (props: ComponentProps<typeof Button>) => {
       {...props}
       onClick={() => setState((s) => ({ ...s, open: !s.open }))}
       className={twMerge(
-        "border-t-[1px] border-black p-6 podnadpis-40",
+        "border-t-[1px] border-black p-6 text-[24px] md:podnadpis-40",
         props.className,
-        "block relative"
+        "flex justify-between relative items-center"
       )}
     >
       {props.children}
       <div
-        className={`absolute right-0 top-0 m-6 h-10 w-10 flex items-center justify-center transition-transform`}
+        className={`m-0 h-10 w-10 flex flex-shrink-0 items-center justify-center transition-transform`}
         style={{ transform: !state.open ? "rotate(180deg)" : "rotate(0)" }}
       >
         <Chevron />

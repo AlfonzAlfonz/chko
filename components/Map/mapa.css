@@ -101,3 +101,7 @@
   background: transparent;
   outline: 0;
 }
+
+.leaflet-bottom {
+  z-index: 900 !important;
+}

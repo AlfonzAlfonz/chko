@@ -68,12 +68,22 @@ const Detail = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="relative -mt-[85px] lg:-mt-[150px] z-[1000] bg-white">
       <MapControllerComponent {...obec.metadata} />
-      <Link
-        href="/mapa"
-        className="text-5xl absolute top-4 right-4 lg:right-16 cursor-pointer font-bold shadow-lg rounded-full h-12 w-12 flex items-center justify-center"
-      >
-        <Close />
-      </Link>
+      {/* TODO: maybe add md:static */}
+      <div className="sticky top-0 right-0 lg:right-16 pointer-events-none z-[9001]">
+        <Link
+          href="/mapa"
+          className={`
+            absolute right-4 top-4 lg:right-16
+            flex items-center justify-center
+            text-5xl cursor-pointer font-bold
+            shadow-lg rounded-full
+            h-12 w-12 z-[50000]
+            pointer-events-auto
+        `}
+        >
+          <Close />
+        </Link>
+      </div>
       <a
         className="button button-green hidden lg:block fixed bottom-4 right-14 popisky-13 uppercase z-50"
         target="_blank"
@@ -81,11 +91,21 @@ const Detail = async ({ params }: { params: { id: string } }) => {
       >
         Stáhnout pdf
       </a>
-      <div className="lg:h-[150px] lg:container items-center m" id="obec">
-        <h1 className="col-span-full lg:col-span-3 text-[30px] lg:text-[50px] shadow-lg lg:shadow-none px-4 py-5 lg:p-0">
+      <div
+        className="sticky top-0 md:static bg-white lg:h-[150px] lg:container items-center z-[9000]"
+        id="obec"
+      >
+        <h1
+          className={`
+            col-span-full lg:col-span-3
+            text-[30px] lg:text-[50px]
+            shadow-lg lg:shadow-none
+            px-4 py-5 lg:p-0
+          `}
+        >
           {obec.metadata.name}
         </h1>
-        <table className="info-table col-span-full lg:col-span-2 mx-4 my-5 lg:m-0 popisky-13">
+        <table className="hidden md:block info-table col-span-full lg:col-span-2 mx-4 my-5 lg:m-0 popisky-13">
           <tbody>
             <tr>
               <td>Okres</td>
@@ -110,16 +130,41 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           </tbody>
         </table>
       </div>
-
+      <table className="block md:hidden info-table col-span-full lg:col-span-2 mx-4 my-5 lg:m-0 popisky-13">
+        <tbody>
+          <tr>
+            <td>Okres</td>
+            <td>{obec.metadata.okres}</td>
+          </tr>
+          <tr>
+            <td>Kraj</td>
+            <td>{obec.metadata.kraj}</td>
+          </tr>
+          <tr>
+            <td>První písemná zmínka</td>
+            <td>{obec.data.foundedYear}</td>
+          </tr>
+          {obec.data.censuses.map(([year, people, houses]) => (
+            <tr key={year}>
+              <td>POČET OBYVATEL/DOMŮ V R. {year}</td>
+              <td>
+                {people}/{houses}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <div className="container">
         <div className="col-start-2 col-end-6">
-          <FigureImage figure={obec.data.cover} />
+          <FigureImage
+            figure={obec.data.cover}
+            captionClassName="max-sm:!static max-sm:!mx-0 max-sm:!mt-[10px]"
+          />
         </div>
         <p className="container-content whitespace-pre-line col-start-2 col-end-6">
           {obec.data.intro}
         </p>
       </div>
-
       <Accordion className="container mt-8">
         {chko.id === 1 && (
           <div className="col-span-1 relative">
@@ -165,13 +210,13 @@ const Detail = async ({ params }: { params: { id: string } }) => {
             <FigureImage
               key={f.url}
               figure={f}
-              className="col-span-2 aspect-square"
-              imgClassName="h-full object-cover"
+              className="col-span-full md:!col-span-2"
+              imgClassName="aspect-square object-cover"
+              captionClassName="max-sm:!static max-sm:!mx-0 max-sm:!mt-[10px]"
             />
           ))}
         </AccordionContent>
       </Accordion>
-
       {obec.data.characteristics.length > 0 && (
         <Accordion className="container">
           <AccordionButton className="container-inner text-left">
@@ -185,7 +230,6 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           </AccordionContent>
         </Accordion>
       )}
-
       {obec.data.buildings.length > 0 && (
         <Accordion className="container">
           <AccordionButton className="container-inner text-left">
@@ -198,7 +242,6 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           </AccordionContent>
         </Accordion>
       )}
-
       {(obec.data.terms.length || obec.data.termsText) && (
         <Accordion className="container">
           <div className="container-inner flex flex-col bg-[rgba(46,204,113,0.25)] border-b-[1px] border-black">
@@ -208,35 +251,36 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               </h2>
             </AccordionButton>
             <AccordionContent className="pb-7 mb-8">
-              <ol className="ordered-list col-span-full">
-                {obec.data.terms.map((v, ii) => (
-                  <li key={ii} className="p-5 border-b-[1px] border-black">
-                    {v}
-                  </li>
-                ))}
-              </ol>
-              {obec.data.termsText && (
-                <p className="container-content col-span-full mt-5">
-                  {obec.data.termsText}
-                </p>
-              )}
+              <div className="max-w-[910px] border-t-[1px] border-black">
+                <ol className="ordered-list col-span-full white">
+                  {obec.data.terms.map((v, ii) => (
+                    <li key={ii} className="p-5 border-b-[1px] border-black">
+                      {v}
+                    </li>
+                  ))}
+                </ol>
+                {obec.data.termsText && (
+                  <p className="px-3 md:px-6 col-span-full mt-5">
+                    {obec.data.termsText}
+                  </p>
+                )}
 
-              {obec.data.termsButton?.[0] && obec.data.termsButton[1] && (
-                <div className="container-content col-span-full flex mt-9 px-4">
-                  <a
-                    className="button flex-auto lg:flex-initial"
-                    href={obec.data.termsButton[1]}
-                    target="_blank"
-                  >
-                    {obec.data.termsButton[0]}
-                  </a>
-                </div>
-              )}
+                {obec.data.termsButton?.[0] && obec.data.termsButton[1] && (
+                  <div className="container-content col-span-full flex mt-9 px-4">
+                    <a
+                      className="button flex-auto lg:flex-initial"
+                      href={obec.data.termsButton[1]}
+                      target="_blank"
+                    >
+                      {obec.data.termsButton[0]}
+                    </a>
+                  </div>
+                )}
+              </div>
             </AccordionContent>
           </div>
         </Accordion>
       )}
-
       <div className="container">
         <div className="container-inner">
           <div className="container-content flex flex-col lg:flex-row col-span-full items-center gap-5 py-9">
@@ -248,7 +292,6 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-
       <div className="flex justify-center mb-12">
         <a
           className="button button-green lg:hidden popisky-13 uppercase z-50"
@@ -258,7 +301,6 @@ const Detail = async ({ params }: { params: { id: string } }) => {
           Stáhnout pdf
         </a>
       </div>
-
       <Footer>
         <p className="whitespace-pre-line py-12">{chko.data.contact}</p>
       </Footer>

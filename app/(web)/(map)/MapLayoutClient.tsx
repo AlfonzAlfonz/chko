@@ -13,7 +13,7 @@ export const MapLayoutClient = ({ children }: { children: ReactNode }) => {
   const map = pathname === "/mapa";
 
   return (
-    <div className="h-screen">
+    <div className="h-sscreen">
       <div className={"h-full"}>
         <Map activeObec={id ? +[id].flat()[0]! : undefined} mapRef={mapRef} />
       </div>

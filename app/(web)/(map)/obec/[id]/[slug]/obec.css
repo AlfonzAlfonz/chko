@@ -20,6 +20,10 @@
   .ordered-list {
     counter-reset: items;
 
+    &.white li::before {
+      background: white;
+    }
+    
     & li {
       @apply flex;
 

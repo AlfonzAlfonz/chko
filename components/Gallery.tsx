@@ -21,6 +21,7 @@ export const Gallery = ({ figures, className }: Props) => {
         <FigureImage
           figure={figures[index]}
           className={twMerge("cursor-pointer relative", className)}
+          captionClassName="max-sm:!static max-sm:!mx-0 max-sm:!mt-[10px]"
           // onClick={() => setOpen(true)}
         >
           {figures.length > 1 && (

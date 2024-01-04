@@ -15,7 +15,7 @@ const Home = async () => {
   return (
     <div className="homepage">
       <div
-        className="flex flex-col justify-between container min-h-[100vh] first px-0 lg:px-10"
+        className="flex flex-col justify-between container first px-0 lg:px-10"
         id="uvod"
       >
         <h1
@@ -41,9 +41,9 @@ const Home = async () => {
           </div>
         </h1>
         <div className="max-w-[650px] mx-auto px-8 text-center text-white flex flex-col gap-12 items-center text-18">
-          Tato webová stránka obsahuje informace o krajinném rázu obcí v
-          chráněných krajinných oblastech Český kras a Křivoklátsko. Stačí
-          vyhledat tu, která Vás zajímá.
+          Tato webová stránka obsahuje informace o krajinném rázu obcí
+          v&nbsp;chráněných krajinných oblastech Český kras a Křivoklátsko.
+          Stačí vyhledat tu, která Vás zajímá.
           <a
             href="#vyhledavani"
             className="button button-green w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"
@@ -87,7 +87,7 @@ const Home = async () => {
           id="why"
         >
           <h2 className="podnadpis-40 lg:nadpis-80">
-            Proč a jak krajinný ráz?
+            Proč a jak krajinný&nbsp;ráz?
           </h2>
           <p className="text-16 lg:text-32 pt-8 lg:pt-20">
             Patří k dobrému životu, že můžeme pobývat v prostředí, které se nám

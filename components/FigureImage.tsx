@@ -8,11 +8,13 @@ export const FigureImage = ({
   figure,
   noCaption,
   imgClassName,
+  captionClassName,
   ...divProps
 }: {
   figure?: FigureData;
   noCaption?: boolean;
   imgClassName?: string;
+  captionClassName?: string;
 } & ComponentProps<"div">) => {
   if (!figure) return null;
   const image = (
@@ -29,7 +31,11 @@ export const FigureImage = ({
   return (
     <div {...divProps}>
       {figure.caption && !noCaption ? (
-        <WithCaption caption={figure.caption} className="h-full">
+        <WithCaption
+          caption={figure.caption}
+          className={"h-full"}
+          captionClassName={captionClassName}
+        >
           {image}
         </WithCaption>
       ) : (

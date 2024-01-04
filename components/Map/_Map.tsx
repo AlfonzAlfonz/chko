@@ -89,7 +89,7 @@ export const _Map = (props: MapProps) => {
         </button>
       </div>
       {props.activeObec && (
-        <div className="absolute bottom-[85px] md:hidden z-[5010] lg:bottom-[150px] my-4 left-[50%] translate-x-[-50%]">
+        <div className="absolute bottom-[85px] md:hidden z-[910] lg:bottom-[150px] my-4 left-[50%] translate-x-[-50%]">
           <a
             href="#obec"
             className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"

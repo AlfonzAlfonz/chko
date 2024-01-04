@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer utilities {
+  .h-sscreen {
+    height: 100vh;
+    height: 100svh;
+  }
 }
 
 @layer components {
