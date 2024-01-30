@@ -181,13 +181,22 @@ const Home = async () => {
           />
         </div>
 
-        <footer className="h-[305px] bg-black flex justify-center items-center">
+        <footer className="h-[305px] bg-black flex justify-center items-center relative">
           <a
             href="#uvod"
             className="button w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md border bg-transparent hover:bg-transparent border-white border-solid"
           >
             <Chevron color="white" />
           </a>
+          <div className="absolute inset-6 pointer-events-none flex items-end justify-end">
+            <a
+              className="text-white pointer-events-auto"
+              href="/vyzkumnazprava"
+              target="_blank"
+            >
+              Výzkumná zpráva
+            </a>
+          </div>
         </footer>
       </div>
     </div>
