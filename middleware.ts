@@ -4,9 +4,13 @@ import { NextResponse } from "next/server";
 import { NextURL } from "next/dist/server/web/next-url";
 
 const middleware: NextMiddleware = async (req) => {
-  console.log(req.nextUrl.pathname);
+  if (req.nextUrl.pathname === "/výzkumnazprava") {
+    return NextResponse.redirect(
+      cloneUrl(req.nextUrl, (u) => (u.pathname = "/vyzkumnazprava"))
+    );
+  }
   if (req.nextUrl.pathname === "/vyzkumnazprava") {
-    return NextResponse.rewrite(
+    return NextResponse.redirect(
       cloneUrl(
         req.nextUrl,
         (u) => (u.pathname = "/TL03000439 - Souhrnna vyzkumna zprava.pdf")
@@ -44,7 +48,7 @@ const middleware: NextMiddleware = async (req) => {
 export default middleware;
 
 export const config = {
-  matcher: ["/obec/:id*", "/vyzkumnazprava"],
+  matcher: ["/obec/:id*", "/vyzkumnazprava", "/výzkumnazprava"],
 };
 
 const cloneUrl = (url: NextURL, map: (url: NextURL) => void) => {
