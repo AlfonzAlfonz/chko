@@ -41,9 +41,9 @@ const Home = async () => {
           </div>
         </h1>
         <div className="max-w-[650px] mx-auto px-8 text-center text-white flex flex-col gap-12 items-center text-18">
-          Tato webová stránka obsahuje informace o krajinném rázu obcí
-          v&nbsp;chráněných krajinných oblastech Český kras a Křivoklátsko.
-          Stačí vyhledat tu, která Vás zajímá.
+          Tato webová stránka obsahuje informace o krajinném rázu obcí v
+          chráněných krajinných oblastech (zatím spuštěno pro Český kras a
+          Křivoklátsko). Stačí vyhledat tu, která Vás zajímá.
           <a
             href="#vyhledavani"
             className="button button-green w-12 h-12 pointer-events-auto p-0 flex items-center justify-center shadow-md rotate-180"

@@ -171,7 +171,7 @@ export const ObecForm = ({
         </div>
 
         <FormControl error={!!errors?.data?.foundedYear}>
-          <FormLabel>Obec založena</FormLabel>
+          <FormLabel>První písemná zmínka</FormLabel>
           <NumberInput {...fieldProps<number>(["data", "foundedYear"])} />
           <ErrorMessage>{errors?.data?.foundedYear}</ErrorMessage>
         </FormControl>

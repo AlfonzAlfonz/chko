@@ -8,6 +8,7 @@ const getData = async () => {
   return await db
     .selectFrom("chkos")
     .select(["id", "name", "data", "published"])
+    .orderBy("chkos.name desc")
     .execute();
 };
 
@@ -27,7 +28,6 @@ const CityList = async () => {
           <Table borderAxis="xBetween" sx={{ whiteSpace: "nowrap" }}>
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Obec</th>
                 <th>Publikováno</th>
                 <th></th>
@@ -36,7 +36,6 @@ const CityList = async () => {
             <tbody>
               {cities.map((c) => (
                 <tr key={c.id}>
-                  <td>{c.id}</td>
                   <td>{c.name}</td>
                   <td>
                     <Switch checked={c.published} variant="outlined" readOnly />

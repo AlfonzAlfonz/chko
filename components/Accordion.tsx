@@ -16,10 +16,15 @@ import { Chevron } from "./icons/Chevron";
 interface Props {
   children: ReactNode;
   className?: string;
+  defaultOpen?: boolean;
 }
 
-export const Accordion = ({ children, className }: Props) => {
-  const s = useState<State>({ open: false });
+export const Accordion = ({
+  children,
+  className,
+  defaultOpen = false,
+}: Props) => {
+  const s = useState<State>({ open: defaultOpen });
   return (
     <div className={className}>
       <AccordionContext.Provider value={s}>

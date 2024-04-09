@@ -13,7 +13,10 @@ const getData = async (chko: number) => {
       .selectFrom("cities")
       .select(["id", "metadata", "published"])
       .where("chko", "=", chko)
-      .execute(),
+      .execute()
+      .then((x) =>
+        x.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
+      ),
     db
       .selectFrom("chkos")
       .select(["id", "name", "published", "data"])
@@ -48,10 +51,12 @@ const ObecList = async ({ params: { id } }: { params: { id: string } }) => {
       </AdminHeader>
       <Container>
         <Card className="mt-8">
-          <Table borderAxis="xBetween" sx={{ whiteSpace: "nowrap" }}>
+          <Table
+            borderAxis="xBetween"
+            sx={{ whiteSpace: "nowrap", tableLayout: "auto" }}
+          >
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Obec</th>
                 <th>Okres</th>
                 <th>Publikováno</th>
@@ -61,7 +66,6 @@ const ObecList = async ({ params: { id } }: { params: { id: string } }) => {
             <tbody>
               {obecs.map((c) => (
                 <tr key={c.id}>
-                  <td>{c.id}</td>
                   <td>{c.metadata.name}</td>
                   <td>{c.metadata.okres}</td>
                   <td>

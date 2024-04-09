@@ -92,6 +92,8 @@ const emptyObec: DeepPartial<ObecTable> = {
     characteristics: [],
     buildings: [],
     terms: [],
+    termsText:
+      "Je dobré si předem zjistit, zda zamýšlený stavební záměr je v souladu s územním plánem (viz webové stránky obce). Zároveň doporučujeme ještě před započetím projekčních prací konzultovat svůj záměr na Správě CHKO – je vhodné mít s sebou alespoň zákres půdorysu do situace, tj. umístění stavby v katastrální mapě, a hmotovou skicu, tj. siluetu stavby ve vybrané fotografii z charakteristického pohledu ukazujícího její působení v krajině.",
     termsButton: [],
     links: [],
   },

@@ -115,18 +115,22 @@ const Detail = async ({ params }: { params: { id: string } }) => {
               <td>Kraj</td>
               <td>{obec.metadata.kraj}</td>
             </tr>
-            <tr>
-              <td>První písemná zmínka</td>
-              <td>{obec.data.foundedYear}</td>
-            </tr>
-            {obec.data.censuses.map(([year, people, houses]) => (
-              <tr key={year}>
-                <td>POČET OBYVATEL/DOMŮ V R. {year}</td>
-                <td>
-                  {people}/{houses}
-                </td>
+            {obec.data.foundedYear && (
+              <tr>
+                <td>První písemná zmínka</td>
+                <td>{obec.data.foundedYear}</td>
               </tr>
-            ))}
+            )}
+            {obec.data.censuses
+              .filter((x) => x.every(Boolean))
+              .map(([year, people, houses]) => (
+                <tr key={year}>
+                  <td>POČET OBYVATEL/DOMŮ V R. {year}</td>
+                  <td>
+                    {people}/{houses}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -140,18 +144,22 @@ const Detail = async ({ params }: { params: { id: string } }) => {
             <td>Kraj</td>
             <td>{obec.metadata.kraj}</td>
           </tr>
-          <tr>
-            <td>První písemná zmínka</td>
-            <td>{obec.data.foundedYear}</td>
-          </tr>
-          {obec.data.censuses.map(([year, people, houses]) => (
-            <tr key={year}>
-              <td>POČET OBYVATEL/DOMŮ V R. {year}</td>
-              <td>
-                {people}/{houses}
-              </td>
+          {obec.data.foundedYear && (
+            <tr>
+              <td>První písemná zmínka</td>
+              <td>{obec.data.foundedYear}</td>
             </tr>
-          ))}
+          )}
+          {obec.data.censuses
+            .filter((x) => x.every(Boolean))
+            .map(([year, people, houses]) => (
+              <tr key={year}>
+                <td>POČET OBYVATEL/DOMŮ V R. {year}</td>
+                <td>
+                  {people}/{houses}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div className="container">
@@ -243,7 +251,7 @@ const Detail = async ({ params }: { params: { id: string } }) => {
         </Accordion>
       )}
       {(obec.data.terms.length || obec.data.termsText) && (
-        <Accordion className="container">
+        <Accordion className="container" defaultOpen>
           <div className="container-inner flex flex-col bg-[rgba(46,204,113,0.25)] border-b-[1px] border-black">
             <AccordionButton className="text-left">
               <h2 className="leading-none">
