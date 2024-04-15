@@ -3,22 +3,28 @@ import { AdminHeader } from "@/components/admin/layout/AdminHeader";
 import { AdminLayout } from "@/components/admin/layout/AdminLayout";
 import { db } from "@/lib/db";
 import { ObecTable } from "@/lib/obec";
-import { Container } from "@mui/joy";
+import { Chip, Container } from "@mui/joy";
 import { notFound } from "next/navigation";
 
 const getData = async (id: number) => {
-  if (!id) return undefined;
+  if (!id) return { result: undefined, chkoName: undefined };
 
   const result = await db
     .selectFrom("cities")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
-  return result;
+  const chkoName = await db
+    .selectFrom("chkos")
+    .where("id", "=", result!.chko)
+    .select("chkos.name")
+    .executeTakeFirst();
+
+  return { result, chkoName };
 };
 
 const ObecDetail = async ({ params }: { params: { id: string } }) => {
-  const data = await getData(+params.id);
+  const { result: data, chkoName } = await getData(+params.id);
 
   if (!data) notFound();
 
@@ -34,7 +40,12 @@ const ObecDetail = async ({ params }: { params: { id: string } }) => {
 
   return (
     <AdminLayout>
-      <AdminHeader>{data.metadata.name}</AdminHeader>
+      <AdminHeader>
+        <div className="w-full flex gap-4 justify-between">
+          <span>{data.metadata.name}</span>
+          {chkoName?.name && <Chip color="success">CHKO: {chkoName.name}</Chip>}
+        </div>
+      </AdminHeader>
       <Container>
         <ObecForm value={data} onSubmit={saveData} />
       </Container>

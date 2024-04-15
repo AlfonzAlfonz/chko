@@ -56,7 +56,7 @@ export const obecScheme = v.object({
     name: v.string([requiredSchema]),
     okres: v.string([requiredSchema]),
     kraj: v.string([requiredSchema]),
-    position: v.tuple([number(), number()]),
+    position: v.tuple([number(48.5, 51), number(12, 19)]),
     category: v.array(
       v.union([
         v.literal("I"),

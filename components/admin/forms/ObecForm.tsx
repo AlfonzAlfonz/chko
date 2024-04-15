@@ -55,7 +55,7 @@ export const ObecForm = ({
 
   return (
     <Stack
-      className="mt-8"
+      className="mt-8 mb-16"
       gap={4}
       sx={
         state === "posting"
@@ -74,7 +74,7 @@ export const ObecForm = ({
 
         <div className="flex gap-4 w-full">
           <FormControl className="flex-1" error={!!errors?.metadata?.name}>
-            <FormLabel>Název obce</FormLabel>
+            <FormLabel>Název obce *</FormLabel>
             <Input {...fieldProps<string>(["metadata", "name"])} />
             <ErrorMessage>{errors?.metadata?.name}</ErrorMessage>
           </FormControl>
@@ -126,28 +126,24 @@ export const ObecForm = ({
             className="flex-1"
             error={!!errors?.metadata?.position?.[0]}
           >
-            <FormLabel>Zeměpisná délka</FormLabel>
+            <FormLabel>Zeměpisná délka *</FormLabel>
             <NumberInput
               placeholder="48.9441306"
               {...fieldProps<number>(["metadata", "position", "0"])}
             />
-            <FormHelperText>
-              Desetiné číslo s tečkou, v rozmezí 48.5 - 51
-            </FormHelperText>
+            <FormHelperText>Desetiné číslo v rozmezí 48,5 - 51</FormHelperText>
             <ErrorMessage>{errors?.metadata?.position?.[0]}</ErrorMessage>
           </FormControl>
           <FormControl
             className="flex-1"
             error={!!errors?.metadata?.position?.[0]}
           >
-            <FormLabel>Zeměpisná šířka</FormLabel>
+            <FormLabel>Zeměpisná šířka *</FormLabel>
             <NumberInput
               placeholder="16.7348346"
               {...fieldProps<number>(["metadata", "position", "1"])}
             />
-            <FormHelperText>
-              Desetiné číslo s tečkou, v rozmezí 12 - 19
-            </FormHelperText>
+            <FormHelperText>Desetiné číslo v rozmezí 12 - 19</FormHelperText>
             <ErrorMessage>{errors?.metadata?.position?.[1]}</ErrorMessage>
           </FormControl>
         </div>
@@ -158,13 +154,13 @@ export const ObecForm = ({
 
         <div className="flex gap-4 w-full">
           <FormControl className="flex-1" error={!!errors?.metadata?.okres}>
-            <FormLabel>Okres</FormLabel>
+            <FormLabel>Okres *</FormLabel>
             <Input fullWidth {...fieldProps<string>(["metadata", "okres"])} />
             <ErrorMessage>{errors?.metadata?.okres}</ErrorMessage>
           </FormControl>
 
           <FormControl className="flex-1" error={!!errors?.metadata?.kraj}>
-            <FormLabel>Kraj</FormLabel>
+            <FormLabel>Kraj *</FormLabel>
             <Input fullWidth {...fieldProps<string>(["metadata", "kraj"])} />
             <ErrorMessage>{errors?.metadata?.kraj}</ErrorMessage>
           </FormControl>
@@ -252,7 +248,7 @@ export const ObecForm = ({
         </div>
 
         <FormControl error={!!errors?.data?.intro}>
-          <FormLabel>Popis vesnice</FormLabel>
+          <FormLabel>Popis vesnice *</FormLabel>
           <Textarea {...fieldProps<string>(["data", "intro"])} minRows={6} />
           <div className="flex justify-between">
             <ErrorMessage>{errors?.data?.intro}</ErrorMessage>
@@ -445,7 +441,7 @@ export const ObecForm = ({
         </Button>
       </Card>
 
-      <Card className="mb-16 flex flex-col items-center">
+      <Card className="flex flex-col items-center">
         <div className="flex">
           <Checkbox
             label={
@@ -475,6 +471,7 @@ export const ObecForm = ({
           </ErrorMessage>
         )}
       </Card>
+      <i className="text-sm">* Povinné pole</i>
     </Stack>
   );
 };
