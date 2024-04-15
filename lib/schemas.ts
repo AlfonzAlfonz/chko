@@ -4,12 +4,7 @@ export const optional = <T extends v.BaseSchema, U extends v.BaseSchema>(
   x: T
 ) => v.union([v.undefinedType(), x]);
 
-export const number = (
-  minValue?: number,
-  maxValue?: number,
-  minError?: v.ErrorMessage,
-  maxError?: v.ErrorMessage
-) => {
+export const number = (minValue?: number, maxValue?: number) => {
   if (minValue && maxValue)
     return v.coerce(
       v.number("Pole musí obsahovat číslo.", [
@@ -35,7 +30,7 @@ export const number = (
       Number
     );
 
-  return v.coerce(v.number(), Number);
+  return v.coerce(v.number("Pole musí obsahovat číslo."), Number);
 };
 
 export const requiredSchema = v.minLength<string>(1, "Pole je povinné");
