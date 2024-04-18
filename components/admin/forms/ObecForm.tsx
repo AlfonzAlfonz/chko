@@ -70,6 +70,16 @@ export const ObecForm = ({
       }}
     >
       <Card>
+        <Typography level="h3">Interní poznámka</Typography>
+        <div className="flex gap-4 w-full">
+          <FormControl className="flex-1" error={!!errors?.note}>
+            <FormLabel>Poznámka</FormLabel>
+            <Textarea {...fieldProps<string>(["note"])} minRows={6} />
+            <ErrorMessage>{errors?.note}</ErrorMessage>
+          </FormControl>
+        </div>
+      </Card>
+      <Card>
         <Typography level="h3">Obecné informace</Typography>
 
         <div className="flex gap-4 w-full">

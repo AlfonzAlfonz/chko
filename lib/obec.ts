@@ -52,6 +52,7 @@ export type ObecData = {
 
 export const obecScheme = v.object({
   published: v.boolean(),
+  note: v.string(),
   metadata: v.object({
     name: v.string([requiredSchema]),
     okres: v.string([requiredSchema]),
