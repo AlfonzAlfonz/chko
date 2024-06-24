@@ -1,11 +1,16 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["puppeteer-core"],
   },
   images: {
+    imageSizes: [1280],
     remotePatterns: [
       {
         protocol: "https",
@@ -34,3 +39,5 @@ module.exports = withSentryConfig(
     automaticVercelMonitors: true,
   }
 );
+
+module.exports = withBundleAnalyzer(module.exports);

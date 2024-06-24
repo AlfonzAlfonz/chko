@@ -1,3 +1,6 @@
+"use client";
+
+import { loader } from "@/lib/loader";
 import { FigureData } from "@/lib/figure";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
@@ -18,12 +21,15 @@ export const PdfFigureImage = ({
 
   return (
     <figure {...divProps}>
+      <div />
       <Image
         key={figure.url}
         src={figure.url}
+        loader={loader}
         width={figure.width}
         height={figure.height}
         alt={figure.caption}
+        quality={30}
         className={twMerge("w-full object-contain", imgClassName)}
       />
       {figure.caption && (

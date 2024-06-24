@@ -1,17 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import { CategoryBar, categoryItems } from "@/components/CategoryBar";
 import { FigureImage } from "@/components/FigureImage";
-import { PdfFigureImage, PdfImage } from "@/components/PdfFigureImage";
+import { PdfFigureImage } from "@/components/PdfFigureImage";
 import { ProtectionBar, protectionZoneItems } from "@/components/ProtectionBar";
 import { db } from "@/lib/db";
-import imgb1 from "@/public/static/DSC_0497-e1563521368513 1.png";
-import imgb2 from "@/public/static/DSC_0497-e1563521368513 2.png";
-import imgb3 from "@/public/static/DSC_0497-e1563521368513 3.png";
-import imgb4 from "@/public/static/DSC_0497-e1563521368513 4.png";
 import localFont from "next/font/local";
 import QRCode from "qrcode";
-import "./pdf.css";
 import { ReactNode } from "react";
+import "./pdf.css";
+import { ImageLoader } from "next/image";
 
 export const dynamic = "error";
 export const dynamicParams = true;
@@ -97,12 +94,12 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="flex flex-col gap-[18px] mt-[18px]">
           <img
-            src="/static/pdf/Vinarice_nadhled 3.png"
+            src={optimizedUrl("/static/pdf/Vinarice_nadhled 3.png")}
             className="w-full"
             alt=""
           />
           <img
-            src="/static/pdf/Vinarice_nadhled 4.png"
+            src={optimizedUrl("/static/pdf/Vinarice_nadhled 4.png")}
             className="w-full"
             alt=""
           />
@@ -283,17 +280,19 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
           ))}
         </div>
       </div>
-      <div className="page">
-        <Topbar>{obec.metadata.name}</Topbar>
-        <h1 className="page-title border-none">
-          Přítomnost památkově chráněných objektů
-        </h1>
-        <div className="flex flex-col gap-[24px]">
-          {obec.data.buildings.map((f, i) => (
-            <PdfFigureImage key={i} figure={f} />
-          ))}
+      {!!obec.data.buildings.length && (
+        <div className="page">
+          <Topbar>{obec.metadata.name}</Topbar>
+          <h1 className="page-title border-none">
+            Přítomnost památkově chráněných objektů
+          </h1>
+          <div className="flex flex-col gap-[24px]">
+            {obec.data.buildings.map((f, i) => (
+              <PdfFigureImage key={i} figure={f} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       <div className="page exact">
         <Topbar>{obec.metadata.name}</Topbar>
         <div className="bg-[#b9eed0] -mx-8 -mt-[17px] px-[37px] h-[calc(100%-17px)]">
@@ -359,7 +358,7 @@ const Pdf = async ({ params }: { params: { id: string } }) => {
 export default Pdf;
 
 const myFont = localFont({
-  src: "./arial.ttf",
+  src: "./arial.woff2",
   display: "swap",
 });
 
@@ -406,14 +405,14 @@ const Contact = ({ children, chko }: { children: ReactNode; chko: number }) => {
     <div className="relative w-full text-[12px]">
       {chko === 1 && (
         <img
-          src={"/static/pdf/cesky_kras_logo.png"}
+          src={optimizedUrl("/static/pdf/cesky_kras_logo.png")}
           alt="CHKO Český kras logo"
           className="absolute right-0 bottom-0"
         />
       )}
       {chko === 3 && (
         <img
-          src={"/static/krivoklatsko_logo.png"}
+          src={optimizedUrl("/static/krivoklatsko_logo.png")}
           alt="CHKO Český kras logo"
           className="absolute right-0 bottom-0 max-h-[300px]"
         />
@@ -426,3 +425,10 @@ const Contact = ({ children, chko }: { children: ReactNode; chko: number }) => {
 
 const ACCESS_TOKEN =
   "pk.eyJ1IjoiYWxmb256IiwiYSI6ImNsZjZ2MDRoNTFxbTkzeW56a2sxYnk2MHQifQ.bp9byZzeMm71V2pGiLqfNA";
+
+const optimizedUrl = (url: string) => loader({ src: url, width: 640 });
+
+const loader: ImageLoader = ({ src, width }) =>
+  `/pdf/image-loader?url=${encodeURIComponent(src)}&width=${encodeURIComponent(
+    width
+  )}`;
