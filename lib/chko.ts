@@ -1,7 +1,6 @@
 import { FigureData, figureSchema } from "@/lib/figure";
-import { number, optional, requiredSchema } from "@/lib/schemas";
+import { number, normalizedOptional, requiredSchema } from "@/lib/schemas";
 import * as v from "valibot";
-import { ListBlobResultBlob } from "./pdfCache";
 
 export type ChkoTable = {
   id: number;
@@ -24,7 +23,7 @@ export type ChkoTable = {
 export const chkoScheme = v.object({
   name: v.string([v.minLength(1)]),
   data: v.object({
-    kod: optional(number()),
+    kod: normalizedOptional(number()),
     position: v.tuple([number(), number()]),
     list1: v.array(v.string([requiredSchema])),
     list2: v.array(v.string([requiredSchema])),

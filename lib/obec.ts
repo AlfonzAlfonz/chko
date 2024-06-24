@@ -1,5 +1,5 @@
 import { FigureData, figureSchema } from "@/lib/figure";
-import { number, optional, requiredSchema } from "@/lib/schemas";
+import { number, normalizedOptional, requiredSchema } from "@/lib/schemas";
 import * as v from "valibot";
 
 export type ObecTable = {
@@ -71,11 +71,15 @@ export const obecScheme = v.object({
     ),
   }),
   data: v.object({
-    foundedYear: optional(number()),
+    foundedYear: normalizedOptional(number()),
     censuses: v.array(
-      v.tuple([optional(number()), optional(number()), optional(number())])
+      v.tuple([
+        normalizedOptional(number()),
+        normalizedOptional(number()),
+        normalizedOptional(number()),
+      ])
     ),
-    cover: optional(figureSchema),
+    cover: normalizedOptional(figureSchema),
     intro: v.string([requiredSchema, v.maxLength(1380)]),
     characteristics: v.coerce(v.array(figureSchema, [v.maxLength(8)]), (x) =>
       Array.isArray(x) ? x.filter(Boolean) : []
@@ -85,7 +89,7 @@ export const obecScheme = v.object({
     ),
     terms: v.array(v.string([requiredSchema])),
     termsText: v.string(),
-    termsButton: optional(v.array(optional(v.string()))),
+    termsButton: normalizedOptional(v.array(normalizedOptional(v.string()))),
     links: v.array(
       v.tuple([
         v.string([requiredSchema]),

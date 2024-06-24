@@ -1,8 +1,13 @@
 import * as v from "valibot";
 
-export const optional = <T extends v.BaseSchema, U extends v.BaseSchema>(
-  x: T
-) => v.union([v.undefinedType(), x]);
+export const normalizedOptional = <T extends v.BaseSchema>(x: T) =>
+  v.coerce(v.union([v.undefinedType(), x]), (x) => {
+    return x === "" || Object.is(x, NaN) || x === null
+      ? undefined
+      : typeof x === "string"
+      ? x.trim()
+      : x;
+  });
 
 export const number = (minValue?: number, maxValue?: number) => {
   if (minValue && maxValue)
