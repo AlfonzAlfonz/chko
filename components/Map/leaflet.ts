@@ -11,7 +11,7 @@ import {
 } from "react";
 import { ChkoListContext, ObecListContext } from "../contexts";
 import { MapProps } from "./_Map";
-import { ensureSimplifiedChkoGeo } from "./data";
+import { ensurefullChkoGeo } from "./data";
 
 export const useLeaflet = (props: MapProps) => {
   const router = useRouter();
@@ -83,7 +83,7 @@ export const useLeaflet = (props: MapProps) => {
         props.mapRef.current.queue.forEach((cb) => cb());
         props.mapRef.current.queue = [];
 
-        const geoData = await ensureSimplifiedChkoGeo();
+        const geoData = await ensurefullChkoGeo();
 
         const geojson = L.geoJSON(geoData, {
           style: (f) => ({
