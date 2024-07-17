@@ -131,13 +131,7 @@ export const ChkoForm = ({
                 ))}
                 {(value?.length ?? 0) < 4 && (
                   <AddFigureControl
-                    setValue={(s) => {
-                      const fig =
-                        typeof s === "function"
-                          ? s({ width: 0, height: 0 })
-                          : s;
-                      setValue([...value, fig]);
-                    }}
+                    setValue={(s) => setValue([...value, ...s].slice(0, 5))}
                   />
                 )}
               </>

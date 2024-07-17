@@ -2,14 +2,16 @@ import { Button, FormControl, styled } from "@mui/joy";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { FigureControlValue } from "./FigureControl";
 
-export const FileInput = ({
+export const FileInput = <TMulti extends boolean>({
   value,
   error,
   onChange,
+  multiple,
 }: {
   value?: FigureControlValue;
-  onChange: (b: Blob) => unknown;
+  onChange: (b: Blob[]) => unknown;
   error?: unknown;
+  multiple?: TMulti;
 }) => {
   return (
     <FormControl
@@ -26,12 +28,10 @@ export const FileInput = ({
       }}
       onDrop={(e) => {
         e.preventDefault();
-        const file = toArray(e.dataTransfer.items)
-          .find((i) => i.kind === "file")
-          ?.getAsFile();
-        if (file) {
-          onChange(file);
-        }
+        const files = toArray(e.dataTransfer.items)
+          .filter((i) => i.kind === "file")
+          .map((i) => i.getAsFile()!);
+        onChange(files);
       }}
       onDragOver={(e) => {
         e.preventDefault();
@@ -49,7 +49,10 @@ export const FileInput = ({
 
       <VisuallyHiddenInput
         type="file"
-        onChange={(e) => e.target.files?.[0] && onChange(e.target.files?.[0])}
+        multiple={multiple}
+        onChange={(e) =>
+          e.target.files?.[0] && onChange(toArray(e.target.files))
+        }
       />
     </FormControl>
   );

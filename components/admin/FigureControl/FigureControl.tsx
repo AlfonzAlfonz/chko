@@ -27,8 +27,8 @@ export const FigureControl = ({ error, value, setValue, onDelete }: Props) => {
         onChange={(blob) =>
           setValue((s) => ({
             ...s,
-            url: URL.createObjectURL(blob),
-            blob,
+            url: URL.createObjectURL(blob[0]!),
+            blob: blob[0],
           }))
         }
       />
@@ -62,16 +62,23 @@ export const FigureControl = ({ error, value, setValue, onDelete }: Props) => {
   );
 };
 
-export const AddFigureControl = ({ setValue }: Pick<Props, "setValue">) => {
+export const AddFigureControl = ({
+  setValue,
+}: {
+  setValue: Dispatch<FigureControlValue[]>;
+}) => {
   return (
     <div className="relative min-w-[300px] h-full">
       <FileInput
-        onChange={(blob) =>
-          setValue((s) => ({
-            ...(s ?? emptyFigure),
-            url: URL.createObjectURL(blob),
-            blob,
-          }))
+        multiple
+        onChange={(blobs) =>
+          setValue(
+            blobs.map((blob) => ({
+              ...emptyFigure,
+              url: URL.createObjectURL(blob),
+              blob,
+            }))
+          )
         }
       />
     </div>

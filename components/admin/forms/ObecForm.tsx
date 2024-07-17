@@ -291,13 +291,11 @@ export const ObecForm = ({
                     )}
                   />
                 ))}
-                <AddFigureControl
-                  setValue={(s) => {
-                    const fig =
-                      typeof s === "function" ? s({ width: 0, height: 0 }) : s;
-                    setValue([...value, fig]);
-                  }}
-                />
+                {value.length < 8 && (
+                  <AddFigureControl
+                    setValue={(s) => setValue([...value, ...s].slice(0, 8))}
+                  />
+                )}
               </>
             )
           )}
@@ -327,13 +325,11 @@ export const ObecForm = ({
                     )}
                   />
                 ))}
-                <AddFigureControl
-                  setValue={(s) => {
-                    const fig =
-                      typeof s === "function" ? s({ width: 0, height: 0 }) : s;
-                    setValue([...value, fig]);
-                  }}
-                />
+                {value.length < 8 && (
+                  <AddFigureControl
+                    setValue={(s) => setValue([...value, ...s].slice(0, 8))}
+                  />
+                )}
               </>
             )
           )}
